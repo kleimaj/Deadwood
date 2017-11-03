@@ -1,43 +1,107 @@
+/* 
+ * Role.java
+ * 
+ * Contributors: Jacob Kleiman, Eric Eagan, Ryan McGinnis
+ * November 2017
+ */
+import java.util.*;
+import java.io.*;
+
 
 public class Role {
-//Attributes
-String name;
-String dialogue;
-int rank;
-boolean isTaken;
-
-//Role constructor
-public Role(String name,String dialogue,int rank) {
-	this.name = name;
-	this.dialogue = dialogue;
-	this.rank = rank;
-	isTaken = false;
-}
-
-//Getter methods
-public String getName() {
-	return name;
-}
-
-public String getDialogue() {
-	return dialogue;
-}
-
-public int getRank() {
-	return rank;
-}
-
-public boolean isTaken() {
-	return isTaken;
-}
-
-//Setter Methods
-public void roleTaken() {
-	isTaken = true;
-}
-
-public void notTaken() {
-	isTaken = false;
-}
+	
+	// Attributes
+	
+	String name;			// Name of the role
+	String dialogue;		// Dialogue on the role
+	int rank;				// Rank
+	boolean isTaken;		// Returns true if the role is taken, else returns false
+	
+	// Constructor
+	
+	// Role
+	// Preconditions:
+	//
+	//
+	// Postconditions:
+	//
+	//
+	// Notes:
+	//
+	//
+	public Role(String name,String dialogue,int rank) {
+		this.name = name;
+		this.dialogue = dialogue;
+		this.rank = rank;
+		isTaken = false;
+	}
+	
+	// Accessors
+	
+	// getName
+	// Preconditions:
+	//		- none	
+	// Postconditions:
+	//		- Returns name
+	public String getName() {
+		return name;
+	}
+	
+	// getDialogue
+	// Preconditions:
+	//		- none	
+	// Postconditions:
+	//		- Returns dialogue
+	public String getDialogue() {
+		return dialogue;
+	}
+	
+	// getRank
+	// Preconditions:
+	//		- none	
+	// Postconditions:
+	//		- Returns rank
+	public int getRank() {
+		return rank;
+	}
+	
+	// isTaken
+	// Preconditions:
+	//		- none	
+	// Postconditions:
+	//		- Returns true or false
+	public boolean isTaken() {
+		return isTaken;
+	}
+	
+	// Setters
+	
+	// roleTaken
+	// Preconditions:
+	//
+	//
+	// Postconditions:
+	//
+	//
+	// Notes:
+	//
+	//
+	public void roleTaken() {
+		isTaken = true;
+	}
+	
+	// notTaken
+	// Preconditions:
+	//
+	//
+	// Postconditions:
+	//
+	//
+	// Notes:
+	//
+	//
+	public void notTaken() {
+		isTaken = false;
+	}
 }
 

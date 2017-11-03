@@ -1,3 +1,11 @@
+/* 
+ * Deadwood.java
+ * 
+ * Contributors: Jacob Kleiman, Eric Eagan, Ryan McGinnis
+ * November 2017
+ */
+import java.util.*;
+
 
 public class Deadwood {
 
