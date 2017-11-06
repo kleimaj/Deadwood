@@ -72,7 +72,12 @@ public class Deck {
 	//
 	//
 	public void shuffle() {
+		while(discardDeck.size() != 0){
+			//get a random number between 0 and 1 - the number of cards in deck
+			int randomNumber = (int)(discardDeck.size()*Math.random());
+			deck.add(discardDeck.remove(randomNumber));
 		
+		}
 	}
 	
 	// Discard
