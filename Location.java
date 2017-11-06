@@ -106,6 +106,15 @@ public class Location {
 		return neighbors;
 	}
 	
+	// getScene
+		// Preconditions:
+		//		- none	
+		// Postconditions:
+		//		- Returns currentScene
+	public Scene getScene() {
+		return currentScene;
+	}
+	
 	/*
 	public Role[] getRoles() {
 		if (this.isLot == true) {
@@ -141,7 +150,7 @@ public class Location {
 	//
 	//
 	public void setNeighbors(Location[] neighbors) {
-		
+		this.neighbors = neighbors;
 	}
 }
 

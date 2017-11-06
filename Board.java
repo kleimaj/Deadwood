@@ -30,6 +30,7 @@ public class Board {
 	//
 	//
 	public Board(Location[] newLocations, Deck newDeck, Player[] newPlayers) {
+		dayCounter = 0;
 		locations = newLocations;
 		deck = newDeck;
 		players = newPlayers;

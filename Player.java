@@ -117,10 +117,15 @@ public class Player {
 	//		
 	//
 	// Notes:
-	//
+	//	  	- may need boolean to check if the Upgrade was valid
 	//
 	public void Upgrade() {
-		
+		if (CurrentLocation.getName().equals("Casting Office")){
+			
+		}
+		else{
+			System.out.println("Must be in the Casting Office to Upgrade your Rank!");
+		}
 	}
 	
 	// Move
@@ -134,7 +139,29 @@ public class Player {
 	//
 	//
 	public void Move() {
+		Scanner MoveManager = new Scanner(System.in);
+		boolean validMove = false;
+		while (validMove != true){
+			Location[] neighbors = CurrentLocation.getNeighbors();
+			System.out.println("Choose any of these available Locations");
+			for(int i = 0; i < neighbors.length; i++){
+				System.out.println(neighbors[i].getName());
+			}
+			
+			String UserMove = MoveManager.nextLine();
+			
+			for (int i = 0; i < neighbors.length; i++){
+				if (UserMove.equals(neighbors[i].getName())){
+					this.setLocation(neighbors[i]);
+					validMove = true;
+				}
+			}
+			if (validMove==false){
+				System.out.println("Not a valid Location, try again");
+			}
+		}
 		
+		MoveManager.close();
 	}
 	
 	// Act
@@ -153,16 +180,27 @@ public class Player {
 	
 	// Rehearse
 	// Preconditions:
-	//
+	//		- must be in a Role
 	//
 	// Postconditions:
-	//
+	//		- increment RehearsePoints
 	//
 	// Notes:
-	//
+	//		- may want to show Rehearsal points after Rehearse is called?
 	//
 	public void Rehearse() {
-		RehearsePoints++;
+		if (CurrentRole != null)
+		{
+			if (RehearsePoints < CurrentLocation.getScene().budget){
+				RehearsePoints++;
+			}
+			else{
+				System.out.println("Unable to Rehearse anymore!");
+			}
+		}
+		else{
+			System.out.println("Cannot Rehearse if not in a Role!");
+		}
 	}
 	
 	// TakeRole
@@ -219,8 +257,8 @@ public class Player {
 	// Notes:
 	//
 	//
-	public void setLocation(Location newLocation) {
-		
+	private void setLocation(Location newLocation) {
+		CurrentLocation  = newLocation;
 	}
 	
 	
