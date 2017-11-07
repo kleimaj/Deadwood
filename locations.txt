@@ -1,0 +1,118 @@
+Bank
+	$1
+	#2
+	|Flustered Teller|"Would you like a large bill, sir?"|3
+	|Suspicious Gentleman|"Can you be more specific?"|2
+Hotel
+	$3
+	#4
+	|Faro Player|"Hit me!"|1
+	|Sleeping Drunkard|"Zzzzzz... Whiskey!"|1
+	|Australian Bartender|"What'll it be, mate?"|3
+	|Falls from Balcony|"Arrrgghh!!"|2
+Church
+	$2
+	#2
+	|Dead Man|"...."|1
+	|Crying Woman|"Oh, the humanity!"|2
+Main Street
+	$3
+	#4
+	|Railroad Worker|"I'm a steel-drivin' man!"|1
+	|Falls off Roof|"Aaaaiiiigggghh!"|2
+	|Woman in Black Dress."Well, I'll be!"|2
+	|Mayor McGinty|"People of Deadwood!"|4
+Saloon
+	$2
+	#2
+	|Woman in Red Dress|"Come up and see me!"|2
+	|Reluctant Farmer|"I aint so sure about that!"|1
+Ranch
+	$2
+	#3
+	|Man Under Horse|"A little help here!"|3
+	|Shot in Leg|"Ow! Me Leg!"|1
+	|Saucy Fred|"That's what she said!"|2
+Secret Hideout
+	$3
+	#4
+	|Clumsy Pit Fighter|"Hit me!"|1
+	|Thug with Knife|"Meet Suzy, my murderin' knife."|2
+	|Dangerous Tom|"There's two ways we can do this...."|3
+	|Penny, who is Lost|"Oh, woe! For I am lost!"|4
+Jail
+	$1
+	#2
+	|Prisoner in Cell|"Zzzzzzz... Whiskey!"|2
+	|Feller in Irons|"Ah kilt the wrong man!"|3
+General Store
+	$2
+	#2
+	|Man in Overalls|"Looks like a storm's comin' in."|1
+	|Mister Keach|"Howdy, stranger"|3
+Train Station
+	$3
+	#4
+	|Dragged by Train|"Omgeezers!"|1
+	|Crusty Prospector|"Aww, peaches!"|1
+	|Cyrus the Gunfighter|"Git to fightin' or git away!"|4
+	|Preacher with Bag|"The Lord will provide."|2
+Casting Office
+	$0
+	#0
+Trailers
+	$0
+	#0
+/Bank
+	Hotel
+	Church
+	Saloon
+	Ranch
+/Hotel
+	Bank
+	Church
+	Trailers
+/Church
+	Hotel
+	Bank
+	Secret Hideout
+/Trailers
+	Hotel
+	Saloon
+	Main Street
+/Saloon
+	General Store
+	Main Street
+	Trailers
+	Bank
+/Main Street
+	Jail
+	Saloon
+	Trailers
+/Jail
+	Train Station
+	General Store
+	Main Street
+/Train Station
+	Jail
+	General Store
+	Casting Office
+/General Store
+	Jail
+	Train Station
+	Saloon
+	Ranch
+/Casting Office
+	Train Station
+	Ranch
+	Secret Hideout
+/Ranch
+	Casting Office
+	General Store
+	Secret Hideout
+	Bank
+/Secret Hideout
+	Casting Office
+	Ranch
+	Church
+	
