@@ -97,6 +97,20 @@ public class Location {
 		return name;
 	}
 	
+	public boolean isWrappedUp() {
+		if (isLot) {
+			if (ShotMax == ShotsTaken) {
+				return true;
+			}
+			else {
+				return false;
+			}
+		}
+		else {
+			return false;
+		}
+	}
+	
 	// getNeighbors
 	// Preconditions:
 	//		- none	

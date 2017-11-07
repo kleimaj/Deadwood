@@ -5,7 +5,6 @@
  * November 2017
  */
 import java.util.*;
-import java.io.*;
 
 
 public class Player {
@@ -130,52 +129,82 @@ public class Player {
 	
 	// Move
 	// Preconditions:
-	//
-	//
+	//	CurrentLocation has neighbors
+	//  Player is not in a role
 	// Postconditions:
-	//
+	//	CurrentLocation has been set to new Location
 	//
 	// Notes:
-	//
+	//	Scanner MoveManager interacts with User prompting which neighbor they'd like to move to
 	//
 	public void Move() {
-		Scanner MoveManager = new Scanner(System.in);
-		boolean validMove = false;
-		while (validMove != true){
-			Location[] neighbors = CurrentLocation.getNeighbors();
-			System.out.println("Choose any of these available Locations");
-			for(int i = 0; i < neighbors.length; i++){
-				System.out.println(neighbors[i].getName());
-			}
-			
-			String UserMove = MoveManager.nextLine();
-			
-			for (int i = 0; i < neighbors.length; i++){
-				if (UserMove.equals(neighbors[i].getName())){
-					this.setLocation(neighbors[i]);
-					validMove = true;
+		
+		if (CurrentRole != null)
+			{
+			Scanner MoveManager = new Scanner(System.in);
+			boolean validMove = false;
+			while (validMove != true){
+				Location[] neighbors = CurrentLocation.getNeighbors();
+				System.out.println("Choose any of these available Locations");
+				for(int i = 0; i < neighbors.length; i++){
+					System.out.println(neighbors[i].getName());
+				}
+				
+				String UserMove = MoveManager.nextLine();
+				
+				for (int i = 0; i < neighbors.length; i++){
+					if (UserMove.equals(neighbors[i].getName())){
+						this.setLocation(neighbors[i]);
+						validMove = true;
+					}
+				}
+				if (validMove==false){
+					System.out.println("Not a valid Location, try again");
 				}
 			}
-			if (validMove==false){
-				System.out.println("Not a valid Location, try again");
+			
+			MoveManager.close();
 			}
+		else {
+			System.out.println("Cannot move while currently in a role!");
 		}
-		
-		MoveManager.close();
-	}
+		}
 	
 	// Act
 	// Preconditions:
-	//
+	//	-player is in a role
 	//
 	// Postconditions:
-	//
+	//	
 	//
 	// Notes:
 	//
 	//
 	public void Act() {
-		
+		if (CurrentRole != null) {
+			int budget = CurrentLocation.getScene().getBudget();
+			System.out.println("Must roll greater than or equal to " + budget +"!");
+			
+			int diceRoll = 1+(int)(6*Math.random());
+			
+			System.out.println("You rolled a " + diceRoll);
+			System.out.println("Along with your Rehearsal Points: "+ RehearsePoints);
+			System.out.println("Your overall dice roll = "+RehearsePoints+diceRoll);
+			
+			//if they don't roll higher
+			if (diceRoll+RehearsePoints < budget) {
+				//off card earns dollar, on cards earn nothing
+				
+				
+			}
+			//if they roll equal to or higher
+			else {
+				
+			}
+		}
+		else {
+			System.out.println("You must Take a Role to Act!");
+		}
 	}
 	
 	// Rehearse
