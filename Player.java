@@ -193,13 +193,42 @@ public class Player {
 			
 			//if they don't roll higher
 			if (diceRoll+RehearsePoints < budget) {
+				System.out.println("You did not roll at least a "+budget);
 				//off card earns dollar, on cards earn nothing
-				
+				if (CurrentRole.isOnCard()==false) {
+					System.out.println("you earned $1 !");
+					setCurrency(1+this.getCurrency()); //increments currency
+					System.out.println("you now have $"+this.getCurrency());
+				}
+				else {
+					System.out.println("Sorry, you don't win anything");
+				}
 				
 			}
 			//if they roll equal to or higher
 			else {
-				
+				System.out.println("You succeeded in rolling greater than or equal to "+budget+"!");
+				//if they're an extra
+				if (CurrentRole.isOnCard() == false) {
+					System.out.println("You earned yourself $1 and 1 Fame!");
+					setCurrency(1+this.getCurrency());
+					setFame(1+this.getFame());
+					System.out.println("You now have $"+this.getCurrency()+" and "+this.getFame()+" Fame!");
+				}
+				else { //they're an on-card actor
+					System.out.println("You earned yourself 2 Fame!");
+					setFame(2+this.getFame());
+					System.out.println("You now have "+this.getFame()+" Fame!");
+				}
+				// increment shot token and check if scene needs to be wrapped up
+				//first check for max shots
+				if (CurrentLocation.getShotsMax()-1 == CurrentLocation.getShotsTaken()) {
+					CurrentLocation.addShot();
+					//wrap scene somehow
+				}
+				else { //scene doesn't have to be wrapped up
+					CurrentLocation.addShot();
+				}
 			}
 		}
 		else {
@@ -274,6 +303,14 @@ public class Player {
 	//
 	private void setRole(Role newRole) {
 		CurrentRole = newRole;
+	}
+	
+	private void setCurrency(int newCurrency) {
+		currency = newCurrency;
+	}
+	
+	private void setFame(int newFame) {
+		fame = newFame;
 	}
 	
 	// SetLocation

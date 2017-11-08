@@ -27,8 +27,8 @@ public class Deck {
 	// Notes:
 	//
 	//
-	public Deck() {
-		
+	public Deck(LinkedList<Scene> cards) {
+		deck = cards;
 	}
 	
 	// Draw
@@ -42,7 +42,7 @@ public class Deck {
 	//
 	//
 	public Scene draw() {
-		return deck.removeFirst();
+		return deck.remove((int)(deck.size()*Math.random()));
 	}
 	
 	// resetDeck
@@ -67,18 +67,18 @@ public class Deck {
 	//
 	// Postconditions:
 	//
-	//
-	// Notes:
-	//
-	//
-	public void shuffle() {
-		while(discardDeck.size() != 0){
-			//get a random number between 0 and 1 - the number of cards in deck
-			int randomNumber = (int)(discardDeck.size()*Math.random());
-			deck.add(discardDeck.remove(randomNumber));
-		
-		}
-	}
+//	//
+//	// Notes:
+//	//
+//	//
+//	public void shuffle() {
+//		while(discardDeck.size() != 0){
+//			//get a random number between 0 and 1 - the number of cards in deck
+//			int randomNumber = (int)(discardDeck.size()*Math.random());
+//			deck.add(discardDeck.remove(randomNumber));
+//		
+//		}
+//	}
 	
 	// Discard
 	// Preconditions:
