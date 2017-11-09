@@ -16,7 +16,7 @@ public class Role {
 	String dialogue;		// Dialogue on the role
 	int rank;				// Rank
 	boolean isTaken;		// Returns true if the role is taken, else returns false
-	boolean OnCard		//Returns true if the role is a "On-Card" Role
+	boolean OnCard;			//Returns true if the role is a "On-Card" Role
 	
 	// Constructor
 	

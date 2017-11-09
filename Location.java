@@ -5,7 +5,6 @@
  * November 2017
  */
 import java.util.*;
-import java.io.*;
 
 
 public class Location {
@@ -129,15 +128,22 @@ public class Location {
 		return currentScene;
 	}
 	
-	/*
-	public Role[] getRoles() {
+	//returns all available off card roles and on card roles
+	public ArrayList<Role> getRoles() {
 		if (this.isLot == true) {
-			
+			ArrayList<Role> roles = new ArrayList<Role>();
+			for (int i = 0; i < offCard.length; i++) {
+				 if (offCard[i].isTaken() == false) {
+					 roles.add(offCard[i]);
+				 }
+			 }
+			 return roles;
 		}
 		else {
-			
+			System.out.println("This should never happen");
+			return null;
 		}
-	}*/
+	}
 	
 	// addShot
 	// Preconditions:

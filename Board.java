@@ -59,7 +59,7 @@ public class Board {
 	//
 	//
 	// Notes:
-	//
+	// will call Bonus if anyone is on-card
 	//
 	public void WrapScene() {
 		
@@ -115,7 +115,7 @@ public class Board {
 	//
 	//
 	// Notes:
-	//
+	// maybe should be private
 	//
 	public void Bonus() {
 		

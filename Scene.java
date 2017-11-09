@@ -79,16 +79,14 @@ public class Scene {
 	//		- none	
 	// Postconditions:
 	//		- Returns a linked list of available roles
-	public Role[] getAvailableRoles() {
-		LinkedList<Role> list = new LinkedList<Role>();
-		int count = 0;
+	public ArrayList<Role> getAvailableRoles() {
+		ArrayList<Role> roles = new ArrayList<Role>();
 		for (int i = 0; i < onCard.length; i++) {
-			if (onCard[i].isTaken() == false) {
-				list.add(onCard[i]);
-				count+=1;
-			}
+			 if (onCard[i].isTaken() == false) {
+				 roles.add(onCard[i]);
+			 }
 		}
-		Role[] result = list.toArray(new Role[count]);
-		return result;
-		}
+		return roles;
+
+	}
 }

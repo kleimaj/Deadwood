@@ -136,8 +136,8 @@ public class Player {
 	//
 	// Notes:
 	//	Scanner MoveManager interacts with User prompting which neighbor they'd like to move to
-	//
-	public void Move() {
+	//   is action selection method (NOTE, if player selects MOVE and they CAN move, they must move.
+	public boolean Move() {
 		
 		if (CurrentRole != null)
 			{
@@ -164,9 +164,11 @@ public class Player {
 			}
 			
 			MoveManager.close();
+			return true;
 			}
 		else {
 			System.out.println("Cannot move while currently in a role!");
+			return false;
 		}
 		}
 	
@@ -180,7 +182,7 @@ public class Player {
 	// Notes:
 	//
 	//
-	public void Act() {
+	public boolean Act() {
 		if (CurrentRole != null) {
 			int budget = CurrentLocation.getScene().getBudget();
 			System.out.println("Must roll greater than or equal to " + budget +"!");
@@ -199,9 +201,11 @@ public class Player {
 					System.out.println("you earned $1 !");
 					setCurrency(1+this.getCurrency()); //increments currency
 					System.out.println("you now have $"+this.getCurrency());
+					return true;
 				}
 				else {
 					System.out.println("Sorry, you don't win anything");
+					return true;
 				}
 				
 			}
@@ -220,19 +224,14 @@ public class Player {
 					setFame(2+this.getFame());
 					System.out.println("You now have "+this.getFame()+" Fame!");
 				}
-				// increment shot token and check if scene needs to be wrapped up
-				//first check for max shots
-				if (CurrentLocation.getShotsMax()-1 == CurrentLocation.getShotsTaken()) {
+				// increment shot token, Deadwood.java will check for scene wrap up at end of player's turn
 					CurrentLocation.addShot();
-					//wrap scene somehow
-				}
-				else { //scene doesn't have to be wrapped up
-					CurrentLocation.addShot();
-				}
+					return true;
 			}
 		}
 		else {
 			System.out.println("You must Take a Role to Act!");
+			return false;
 		}
 	}
 	
@@ -246,18 +245,21 @@ public class Player {
 	// Notes:
 	//		- may want to show Rehearsal points after Rehearse is called?
 	//
-	public void Rehearse() {
+	public boolean Rehearse() {
 		if (CurrentRole != null)
 		{
 			if (RehearsePoints < CurrentLocation.getScene().budget){
 				RehearsePoints++;
+				return true;
 			}
 			else{
 				System.out.println("Unable to Rehearse anymore!");
+				return false;
 			}
 		}
 		else{
 			System.out.println("Cannot Rehearse if not in a Role!");
+			return false;
 		}
 	}
 	
@@ -269,10 +271,42 @@ public class Player {
 	//
 	//
 	// Notes:
+	//	Scanner RoleManager interacts with User prompting which Role they'd like to take
 	//
-	//
-	public void TakeRole() {
-		
+	public boolean TakeRole() {
+		if (CurrentLocation.isLot) {
+			if(CurrentRole==null) {
+				ArrayList<Role> offCard = new ArrayList<Role>();
+				offCard = CurrentLocation.getRoles();
+				ArrayList<Role> onCard = new ArrayList<Role>();
+				onCard = CurrentLocation.getScene().getAvailableRoles();
+				
+				Scanner RoleManager = new Scanner(System.in);
+				System.out.println("Please choose one of the following roles by entering the index: ");
+				while(this.CurrentRole == null) {
+					System.out.println("Off Card:");
+					for (int i = 1; i <= offCard.size(); i++) {
+						System.out.println(i + ". " + "'"+ offCard.get(i).getName() + "' - Rank: " + offCard.get(i).getRank() + ".");
+					}
+					System.out.println();
+					System.out.println("On Card:");
+					int idx = offCard.size();
+					for (int i = idx; i < onCard.size() + idx; i++) {
+						System.out.println(i + ". " + "'"+ onCard.get(i - idx).getName() + "' - Rank is: " + onCard.get(i - idx).getRank() + ".");
+					}
+				}
+				
+				RoleManager.close();
+			}
+			else {
+				System.out.println("You cannot Take a Role if you are already in a Role!");
+				return false;
+			}
+		}
+		else {
+			System.out.println("You must be in a lot to Take a Role!");
+			return false;
+		}
 	}
 	
 	// Setters
@@ -323,7 +357,7 @@ public class Player {
 	// Notes:
 	//
 	//
-	private void setLocation(Location newLocation) {
+	public void setLocation(Location newLocation) {
 		CurrentLocation  = newLocation;
 	}
 	
