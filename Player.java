@@ -118,12 +118,98 @@ public class Player {
 	// Notes:
 	//	  	- may need boolean to check if the Upgrade was valid
 	//
-	public void Upgrade() {
+	public boolean Upgrade() {
+		boolean returnValue = false;
 		if (CurrentLocation.getName().equals("Casting Office")){
-			
+			rank = this.getRank();
+			if (rank == 6) {
+				System.out.println("You cannot Upgrade anymore!");
+				return false;
+			}
+			else {
+				Scanner UpgradeManager = new Scanner(System.in);
+				System.out.println("New Rank:      2    3    4    5    6");
+				System.out.println("Price (Money): 4   10   18   28   40");
+				System.out.println("Price (Fame):  5   10   15   20   25");
+				
+				int[] moneyUp = {4,10,18,28,40}; 
+				int[] fameUp = {5,10,15,20,25};
+				
+				if(this.currency >= moneyUp[rank - 1] || this.fame >= fameUp[rank - 1]) {
+					System.out.print("With money you can upgrade to ranks: ");
+					for(int i = rank - 1; i < 5; i++) {
+						if(this.currency >= moneyUp[i]) {
+							System.out.print(i+2 + " ");
+						}
+					}
+					System.out.println();
+					System.out.print("With fame you can upgrade to ranks: ");
+					for(int i = rank - 1; i < 5; i++) {
+						if(this.fame >= fameUp[i]) {
+							System.out.print(i+2 + " ");
+						}
+					}
+					System.out.println();
+					while(true) {
+						System.out.println("What rank would you like to Upgrade to? (Select your rank, "+rank+", to quit)");
+						int desiredRank;
+						int paymentMethod;
+						
+						while(true) {
+							desiredRank = UpgradeManager.nextInt();
+							
+							if (desiredRank > rank && desiredRank <= 6) {
+								break;
+							}
+							else if(desiredRank == rank) {
+								returnValue = true;
+								break;
+							}
+							else {
+								System.out.println(desiredRank + " is not a valid rank. Select a new one from the options given.");
+							}
+						}
+						
+						if(returnValue == true) {
+							returnValue = false;
+							break;
+						}
+						
+						System.out.println("Please select your payment method. 1 for money, 2 for fame.");
+						while(true) {
+							paymentMethod = UpgradeManager.nextInt();
+							
+							if (paymentMethod == 1 || paymentMethod == 2) {
+								break;
+							}
+							else {
+								System.out.println(paymentMethod + " is not a valid payment method. Select a new one from the options given.");
+							}
+						
+						}
+						
+						if(paymentMethod == 1 && this.currency >= moneyUp[desiredRank-2] || paymentMethod == 2 && this.fame >= fameUp[desiredRank - 2]) {
+							//do stuff, update info
+							returnValue = true;
+							break;
+						}
+					}
+					UpgradeManager.close();
+					return returnValue;
+					
+				}
+				else {
+					System.out.println("You do not have enough money nor enough fame to upgrade.");
+					return false;
+				}
+				
+				
+				
+			}
 		}
 		else{
 			System.out.println("Must be in the Casting Office to Upgrade your Rank!");
+			return false;
 		}
 	}
 	
@@ -273,7 +359,7 @@ public class Player {
 	// Notes:
 	//	Scanner RoleManager interacts with User prompting which Role they'd like to take
 	//
-	public boolean TakeRole() {
+	public void TakeRole() {
 		if (CurrentLocation.isLot) {
 			if(CurrentRole==null) {
 				ArrayList<Role> offCard = new ArrayList<Role>();
@@ -286,13 +372,36 @@ public class Player {
 				while(this.CurrentRole == null) {
 					System.out.println("Off Card:");
 					for (int i = 1; i <= offCard.size(); i++) {
-						System.out.println(i + ". " + "'"+ offCard.get(i).getName() + "' - Rank: " + offCard.get(i).getRank() + ".");
+						System.out.println(i + ". " + "'"+ offCard.get(i-1).getName() + "' - Rank: " + offCard.get(i-1).getRank() + ".");
 					}
 					System.out.println();
 					System.out.println("On Card:");
-					int idx = offCard.size();
-					for (int i = idx; i < onCard.size() + idx; i++) {
+					int idx = offCard.size()+1;
+					for (int i = idx; i <= onCard.size() + idx; i++) {
 						System.out.println(i + ". " + "'"+ onCard.get(i - idx).getName() + "' - Rank is: " + onCard.get(i - idx).getRank() + ".");
+					}
+					
+					int playerIndex = RoleManager.nextInt();
+					
+					if (playerIndex >= 1 && playerIndex <=onCard.size()+idx) {
+						//check if oncard or off card
+						Role chosenRole = null;
+						if (playerIndex < idx) { //it's off card
+							 chosenRole = offCard.get(playerIndex-1);
+							
+						}
+						else { //it's on card
+							 chosenRole = onCard.get(playerIndex - idx);
+						}
+						if (this.rank >= chosenRole.getRank()) {
+							setRole(chosenRole);
+						}
+						else {
+							System.out.println("You are not a high enough rank, try again");
+						}
+					}
+					else {
+						System.out.println("Not a valid index, try again");
 					}
 				}
 				
@@ -300,12 +409,10 @@ public class Player {
 			}
 			else {
 				System.out.println("You cannot Take a Role if you are already in a Role!");
-				return false;
 			}
 		}
 		else {
 			System.out.println("You must be in a lot to Take a Role!");
-			return false;
 		}
 	}
 	
