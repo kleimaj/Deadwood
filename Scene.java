@@ -16,6 +16,7 @@ public class Scene {
 	String description;			// Description of the scene
 	int budget;					// Budget (requirement) of the scene
 	Role[] onCard;				// An array of roles on the card
+	boolean isWrappedUp;		//flag notifying if scene is wrapped up
 	
 	// Constructor
 	
@@ -34,6 +35,7 @@ public class Scene {
 		this.description = desc;
 		this.budget = budget;
 		this.onCard = onCard;
+		isWrappedUp = false;
 	}
 	
 	// Accessors
@@ -63,6 +65,33 @@ public class Scene {
 	//		- Returns budget
 	public int getBudget() {
 		return budget;
+	}
+	
+	// isWrappedUp
+	// Preconditions:
+	// 		-none
+	// Postconditions:
+	//		-returns attribute isWrappedUp
+	public boolean isWrappedUp() {
+		return isWrappedUp();
+	}
+	
+	// wrapUp
+	// Preconditions:
+	// 		-none
+	// Postconditions:
+	//		-sets boolean isWrappedUp to true
+	public void wrapUp() {
+		isWrappedUp = true;
+	}
+	
+	// unWrap
+	// Preconditions:
+	// 		-none
+	// Postconditions:
+	//		-sets isWrappedUp to false
+	public void unWrap() {
+		isWrappedUp = false;
 	}
 	
 	// getAllRoles

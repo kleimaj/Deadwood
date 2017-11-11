@@ -59,6 +59,9 @@ public class Deck {
 		while(discardDeck.size() != 0) {
 			deck.add(discardDeck.removeFirst());
 		}
+		for (int i = 0; i < deck.size(); i++) { //unwraps all scenes
+			deck.get(i).unWrap();
+		}
 	}
 	
 	// Shuffle

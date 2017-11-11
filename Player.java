@@ -106,6 +106,16 @@ public class Player {
 		return RehearsePoints;
 	}
 	
+	//returns true if player is in role, false if player isn't in role
+	public boolean isInRole() {
+		if (CurrentRole == null) {
+			return false;
+		}
+		else {
+			return true;
+		}
+	}
+	
 	
 	
 	// Upgrade
@@ -113,13 +123,13 @@ public class Player {
 	//		- Player is in Casting office
 	//
 	// Postconditions:
-	//		
+	//	 	-returns true if the move was valid, false if invalid	
 	//
 	// Notes:
-	//	  	- may need boolean to check if the Upgrade was valid
+	//	 
 	//
 	public boolean Upgrade() {
-		boolean returnValue = false;
+		boolean validMove = false;
 		if (CurrentLocation.getName().equals("Casting Office")){
 			rank = this.getRank();
 			if (rank == 6) {
@@ -128,6 +138,7 @@ public class Player {
 			}
 			else {
 				Scanner UpgradeManager = new Scanner(System.in);
+				//display all ranks
 				System.out.println("New Rank:      2    3    4    5    6");
 				System.out.println("Price (Money): 4   10   18   28   40");
 				System.out.println("Price (Fame):  5   10   15   20   25");
@@ -158,11 +169,16 @@ public class Player {
 						while(true) {
 							desiredRank = UpgradeManager.nextInt();
 							
-							if (desiredRank > rank && desiredRank <= 6) {
+							if (desiredRank > rank && desiredRank <= 6) { //it's a valid rank, need to check if they can afford it, or else they will be stuck
+								if (this.currency >= moneyUp[desiredRank - 2] || this.fame >= fameUp[desiredRank -2]) {
 								break;
+								}
+								else {
+									System.out.println("You lack the amount of currency and fame to Upgrade to this rank, Select a new one from options given.");
+								}
 							}
 							else if(desiredRank == rank) {
-								returnValue = true;
+								validMove = true;
 								break;
 							}
 							else {
@@ -170,8 +186,8 @@ public class Player {
 							}
 						}
 						
-						if(returnValue == true) {
-							returnValue = false;
+						if(validMove == true) {
+							validMove = false;
 							break;
 						}
 						
@@ -190,16 +206,27 @@ public class Player {
 						
 						if(paymentMethod == 1 && this.currency >= moneyUp[desiredRank-2] || paymentMethod == 2 && this.fame >= fameUp[desiredRank - 2]) {
 							//do stuff, update info
-							returnValue = true;
+							if (paymentMethod == 1) {
+								this.setCurrency(this.currency - moneyUp[desiredRank-2]);
+								this.setRank(desiredRank);
+								System.out.println("You are now rank: "+this.rank+" and have $+"+this.currency);
+							}
+							else {
+								this.setFame(this.fame - fameUp[desiredRank-2]);
+								this.setRank(desiredRank);
+								System.out.println("You are now rank: "+this.rank+" and have "+this.fame+" fame");
+							}
+							validMove = true;
 							break;
 						}
 					}
 					UpgradeManager.close();
-					return returnValue;
+					return validMove;
 					
 				}
 				else {
 					System.out.println("You do not have enough money nor enough fame to upgrade.");
+					UpgradeManager.close();
 					return false;
 				}
 				
@@ -440,15 +467,36 @@ public class Player {
 	//
 	//
 	// Notes:
-	//		- Will be called in TakeRole()
+	//		- Will be called in TakeRole(), is also called in GameBoard's WrapScene
 	//
-	private void setRole(Role newRole) {
+	public void setRole(Role newRole) {
 		CurrentRole = newRole;
 	}
+	// SetCurrency
+	// Preconditions:
+	//
+	//
+	// Postconditions:
+	//		-sets this player's currency to a new value
+	//
+	// Notes:
+	//		
+	//
 	
-	private void setCurrency(int newCurrency) {
+	public void setCurrency(int newCurrency) {
 		currency = newCurrency;
 	}
+	
+	// SetFame
+	// Preconditions:
+	//
+	//
+	// Postconditions:
+	//		-sets this player's fame to a new value
+	//
+	// Notes:
+	//		
+	//
 	
 	private void setFame(int newFame) {
 		fame = newFame;

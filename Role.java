@@ -5,7 +5,6 @@
  * November 2017
  */
 import java.util.*;
-import java.io.*;
 
 
 public class Role {
@@ -75,18 +74,21 @@ public class Role {
 		return isTaken;
 	}
 	
+	// isOnCard
+	// Preconditions:
+	//		- none	
+	// Postconditions:
+	//		- Returns true if the role is a on-card role, false if not
 	public boolean isOnCard() {
 		return OnCard;
 	}
-	
-	// Setters
 	
 	// roleTaken
 	// Preconditions:
 	//
 	//
 	// Postconditions:
-	//
+	//		-returns attribute isTaken
 	//
 	// Notes:
 	//
@@ -100,7 +102,7 @@ public class Role {
 	//
 	//
 	// Postconditions:
-	//
+	//	-sets variable isTaken to false
 	//
 	// Notes:
 	//

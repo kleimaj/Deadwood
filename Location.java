@@ -96,6 +96,11 @@ public class Location {
 		return name;
 	}
 	
+	// isWrappedUp
+	// Preconditions:
+	//
+	// PostConditions:
+	//		-returns true if scene is wrapped up, false if not
 	public boolean isWrappedUp() {
 		if (isLot) {
 			if (ShotMax == ShotsTaken) {
@@ -119,16 +124,37 @@ public class Location {
 		return neighbors;
 	}
 	
-	// getScene
-		// Preconditions:
-		//		- none	
-		// Postconditions:
-		//		- Returns currentScene
+    // getScene
+	// Preconditions:
+	//		- none	
+	// Postconditions:
+	//		- Returns currentScene
 	public Scene getScene() {
 		return currentScene;
 	}
+	// setScene
+	// Preconditions:
+	//		- none	
+	// Postconditions:
+	//		- sets CurrentScene to a new scene
+	public void setScene(Scene newScene) {
+		currentScene = newScene;
+	}
 	
-	//returns all available off card roles and on card roles
+	// getAllRoles
+	// Preconditions:
+	//		- none	
+	// Postconditions:
+	//		- Returns all offCard roles in this location
+	public Role[] getAllRoles() {
+		return offCard;
+	}
+	
+	// getRoles
+	// Preconditions:
+	//		- none	
+	// Postconditions:
+	//		- Returns all available offCard roles
 	public ArrayList<Role> getRoles() {
 		if (this.isLot == true) {
 			ArrayList<Role> roles = new ArrayList<Role>();
