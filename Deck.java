@@ -19,13 +19,10 @@ public class Deck {
 	
 	// Deck
 	// Preconditions:
-	//
+	//		- scenes (cards) have been created from the XML parse
 	//
 	// Postconditions:
-	//
-	//
-	// Notes:
-	//
+	//		- the array of cards are assigned as the deck
 	//
 	public Deck(LinkedList<Scene> cards) {
 		deck = cards;
@@ -33,13 +30,9 @@ public class Deck {
 	
 	// Draw
 	// Preconditions:
-	//
-	//
+	//		- lot needs a new scene
 	// Postconditions:
-	//
-	//
-	// Notes:
-	//
+	//		- the top card is removed and returned
 	//
 	public Scene draw() {
 		return deck.remove((int)(deck.size()*Math.random()));
@@ -47,13 +40,11 @@ public class Deck {
 	
 	// resetDeck
 	// Preconditions:
-	//
+	//		- deck has run out
 	//
 	// Postconditions:
-	//
-	//
-	// Notes:
-	//
+	//		- discard deck is emptied
+	//		- regular deck is filled
 	//
 	public void resetDeck() {
 		while(discardDeck.size() != 0) {
@@ -85,13 +76,10 @@ public class Deck {
 	
 	// Discard
 	// Preconditions:
-	//
+	//		- scene is wrapped
 	//
 	// Postconditions:
-	//
-	//
-	// Notes:
-	//
+	//		- scene is added to the discard deck
 	//
 	public void discard(Scene newScene) {
 		discardDeck.add(newScene);

@@ -24,14 +24,13 @@ public class Location {
 	
 	// Location
 	// Preconditions:
-	//		- Location is not a lot
-	//		- (i.e Trailier, Casting office)
+	//		- location is not a lot
+	//		 (i.e Trailier, Casting office)
+	//		- location is created during the XML parse
 	// Postconditions:
-	//		- Name is assigned, neighbors are found? and assigned
+	//		- name is assigned, neighbors are found? and assigned
 	//		- isLot is false
-	// Notes:
-	//
-	//
+	// 
 	public Location(String name){
 		this.name = name;
 		//this.neighbors = neighbors;
@@ -40,14 +39,11 @@ public class Location {
 	
 	// Location
 	// Preconditions:
-	//		- Location is a lot
-	//		
+	//		- location is a lot
+	//		- location is created during the XML parse
 	// Postconditions:
-	//		- 
 	//		- isLot is true
-	// Notes:
-	//
-	//
+	// 
 	public Location(String name, int shotMax,int shotsTaken, Scene currScene, Role[] offCard) {
 		this.name = name;
 		//this.neighbors = neighbors;
@@ -73,7 +69,7 @@ public class Location {
 	// Preconditions:
 	//		- none	
 	// Postconditions:
-	//		- Returns ShotsTaken
+	//		- returns ShotsTaken
 	public int getShotsTaken() {
 		return ShotsTaken;
 	}
@@ -82,7 +78,7 @@ public class Location {
 	// Preconditions:
 	//		- none	
 	// Postconditions:
-	//		- Returns ShotMax
+	//		- returns ShotMax
 	public int getShotsMax() {
 		return ShotMax;
 	}
@@ -91,14 +87,14 @@ public class Location {
 	// Preconditions:
 	//		- none	
 	// Postconditions:
-	//		- Returns name
+	//		- returns name
 	public String getName() {
 		return name;
 	}
 	
 	// isWrappedUp
 	// Preconditions:
-	//
+	//		- none
 	// PostConditions:
 	//		-returns true if scene is wrapped up, false if not
 	public boolean isWrappedUp() {
@@ -119,7 +115,7 @@ public class Location {
 	// Preconditions:
 	//		- none	
 	// Postconditions:
-	//		- Returns neighbors
+	//		- returns neighbors
 	public Location[] getNeighbors() {
 		return neighbors;
 	}
@@ -128,7 +124,7 @@ public class Location {
 	// Preconditions:
 	//		- none	
 	// Postconditions:
-	//		- Returns currentScene
+	//		- returns currentScene
 	public Scene getScene() {
 		return currentScene;
 	}
@@ -145,7 +141,7 @@ public class Location {
 	// Preconditions:
 	//		- none	
 	// Postconditions:
-	//		- Returns all offCard roles in this location
+	//		- returns all offCard roles in this location
 	public Role[] getAllRoles() {
 		return offCard;
 	}
@@ -154,7 +150,7 @@ public class Location {
 	// Preconditions:
 	//		- none	
 	// Postconditions:
-	//		- Returns all available offCard roles
+	//		- returns all available offCard roles
 	public ArrayList<Role> getRoles() {
 		if (this.isLot == true) {
 			ArrayList<Role> roles = new ArrayList<Role>();
@@ -173,13 +169,9 @@ public class Location {
 	
 	// addShot
 	// Preconditions:
-	//
-	//
+	//		- player wants to add a shot
 	// Postconditions:
-	//
-	//
-	// Notes:
-	//
+	//		- shot is added
 	//
 	public void addShot() {
 		ShotsTaken+=1;

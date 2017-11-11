@@ -15,25 +15,25 @@ public class Role {
 	String dialogue;		// Dialogue on the role
 	int rank;				// Rank
 	boolean isTaken;		// Returns true if the role is taken, else returns false
-	boolean OnCard;			//Returns true if the role is a "On-Card" Role
+	boolean OnCard;			// Returns true if the role is a "On-Card" Role
 	
 	// Constructor
 	
 	// Role
 	// Preconditions:
-	//
+	//		- roles are created during XML parse
 	//
 	// Postconditions:
+	//		- onCard is true if role is from a scene
+	//		- names, dialogue, and ranks are set
+	//		- by default a role is not taken
 	//
-	//
-	// Notes:
-	//
-	//
-	public Role(String name,String dialogue,int rank) {
+	public Role(String name, String dialogue, int rank, boolean onCard) {
 		this.name = name;
 		this.dialogue = dialogue;
 		this.rank = rank;
 		isTaken = false;
+		this.onCard = onCard;
 	}
 	
 	// Accessors
@@ -42,7 +42,7 @@ public class Role {
 	// Preconditions:
 	//		- none	
 	// Postconditions:
-	//		- Returns name
+	//		- returns name
 	public String getName() {
 		return name;
 	}
@@ -51,7 +51,7 @@ public class Role {
 	// Preconditions:
 	//		- none	
 	// Postconditions:
-	//		- Returns dialogue
+	//		- returns dialogue
 	public String getDialogue() {
 		return dialogue;
 	}
@@ -60,7 +60,7 @@ public class Role {
 	// Preconditions:
 	//		- none	
 	// Postconditions:
-	//		- Returns rank
+	//		- returns rank
 	public int getRank() {
 		return rank;
 	}
@@ -69,7 +69,7 @@ public class Role {
 	// Preconditions:
 	//		- none	
 	// Postconditions:
-	//		- Returns true or false
+	//		- returns true or false
 	public boolean isTaken() {
 		return isTaken;
 	}
@@ -78,35 +78,25 @@ public class Role {
 	// Preconditions:
 	//		- none	
 	// Postconditions:
-	//		- Returns true if the role is a on-card role, false if not
+	//		- returns true if the role is a on-card role, false if not
 	public boolean isOnCard() {
 		return OnCard;
 	}
 	
 	// roleTaken
 	// Preconditions:
-	//
-	//
+	//		- none
 	// Postconditions:
-	//		-returns attribute isTaken
-	//
-	// Notes:
-	//
-	//
+	//		- returns attribute isTaken
 	public void roleTaken() {
 		isTaken = true;
 	}
 	
 	// notTaken
 	// Preconditions:
-	//
-	//
+	//		- none
 	// Postconditions:
-	//	-sets variable isTaken to false
-	//
-	// Notes:
-	//
-	//
+	//		- sets variable isTaken to false
 	public void notTaken() {
 		isTaken = false;
 	}

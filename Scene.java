@@ -15,26 +15,24 @@ public class Scene {
 	String name;				// Name of the scene (card)
 	String description;			// Description of the scene
 	int budget;					// Budget (requirement) of the scene
-	Role[] onCard;				// An array of roles on the card
-	boolean isWrappedUp;		//flag notifying if scene is wrapped up
-	
+	Role[] cardRoles;			// An array of roles on the card
+	boolean isWrappedUp;		// Flag notifying if scene is wrapped up
+	 
 	// Constructor
 	
 	// Scene
 	// Preconditions:
-	//
+	//		- scenes are created during XML parse
 	//
 	// Postconditions:
+	//		- the scenes are composed of roles which are also created during the XML parse
+	//		- by default the scene is not wrapped up
 	//
-	//
-	// Notes:
-	//
-	//
-	public Scene(String name, String desc, int budget, Role[] onCard) {
+	public Scene(String name, String desc, int budget, Role[] cardRoles) {
 		this.name = name;
 		this.description = desc;
 		this.budget = budget;
-		this.onCard = onCard;
+		this.cardRoles = cardRoles;
 		isWrappedUp = false;
 	}
 	
@@ -44,7 +42,7 @@ public class Scene {
 	// Preconditions:
 	//		- none	
 	// Postconditions:
-	//		- Returns name
+	//		- returns name
 	public String getName() {
 		return name;
 	}
@@ -53,7 +51,7 @@ public class Scene {
 	// Preconditions:
 	//		- none	
 	// Postconditions:
-	//		- Returns description
+	//		- returns description
 	public String getDesc() {
 		return description;
 	}
@@ -62,16 +60,16 @@ public class Scene {
 	// Preconditions:
 	//		- none	
 	// Postconditions:
-	//		- Returns budget
+	//		- returns budget
 	public int getBudget() {
 		return budget;
 	}
 	
 	// isWrappedUp
 	// Preconditions:
-	// 		-none
+	// 		- none
 	// Postconditions:
-	//		-returns attribute isWrappedUp
+	//		- returns attribute isWrappedUp
 	public boolean isWrappedUp() {
 		return isWrappedUp();
 	}
@@ -87,9 +85,9 @@ public class Scene {
 	
 	// unWrap
 	// Preconditions:
-	// 		-none
+	// 		- none
 	// Postconditions:
-	//		-sets isWrappedUp to false
+	//		- sets isWrappedUp to false
 	public void unWrap() {
 		isWrappedUp = false;
 	}
@@ -98,24 +96,23 @@ public class Scene {
 	// Preconditions:
 	//		- none	
 	// Postconditions:
-	//		- Returns an array of all roles
+	//		- returns an array of all roles
 	public Role[] getAllRoles() {
-		return onCard;
+		return cardRoles;
 	}
 	
 	// getAvailableRoles
 	// Preconditions:
 	//		- none	
 	// Postconditions:
-	//		- Returns a linked list of available roles
+	//		- returns a linked list of available roles
 	public ArrayList<Role> getAvailableRoles() {
 		ArrayList<Role> roles = new ArrayList<Role>();
-		for (int i = 0; i < onCard.length; i++) {
-			 if (onCard[i].isTaken() == false) {
-				 roles.add(onCard[i]);
+		for (int i = 0; i < cardRoles.length; i++) {
+			 if (cardRoles[i].isTaken() == false) {
+				 roles.add(cardRoles[i]);
 			 }
 		}
 		return roles;
-
 	}
 }

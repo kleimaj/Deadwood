@@ -18,20 +18,19 @@ public class Player {
 	int currency;					// Player's money
 	int fame;						// Player's amount of fame
 	int RehearsePoints;				// Player's rehearse points
+	int score;						// Total score at end of game
 	
 	// Constructor
 	
 	// Player
 	// Preconditions:
-	//
+	//		- a user has typed in their name
 	//
 	// Postconditions:
+	//		- player's default location is trailer
+	//		- board is ready to be constructed (when all players are constructed)
 	//
-	//
-	// Notes:
-	//
-	//
-	public Player(String name,Location trailer) {
+	public Player(String name, Location trailer) {
 		this.name = name;
 		CurrentLocation = trailer;
 		CurrentRole = null;
@@ -39,6 +38,7 @@ public class Player {
 		currency = 0;
 		fame = 0;
 		RehearsePoints = 0;
+		score = 0;
 	}
 	
 	// Accessors
@@ -47,7 +47,7 @@ public class Player {
 	// Preconditions:
 	//		- none	
 	// Postconditions:
-	//		- Returns name
+	//		- returns name
 	public String getName() {
 		return name;
 	}
@@ -56,7 +56,7 @@ public class Player {
 	// Preconditions:
 	//		- none	
 	// Postconditions:
-	//		- Returns the current location
+	//		- returns the current location
 	public Location getLocation() {
 		return CurrentLocation;
 	}
@@ -65,7 +65,7 @@ public class Player {
 	// Preconditions:
 	//		- none	
 	// Postconditions:
-	//		- Returns the current role
+	//		- returns the current role
 	public Role getRole() {
 		return CurrentRole;
 	}
@@ -74,7 +74,7 @@ public class Player {
 	// Preconditions:
 	//		- none	
 	// Postconditions:
-	//		- Returns rank
+	//		- returns rank
 	public int getRank() {
 		return rank;
 	}
@@ -83,7 +83,7 @@ public class Player {
 	// Preconditions:
 	//		- none	
 	// Postconditions:
-	//		- Returns currency
+	//		- returns currency
 	public int getCurrency() {
 		return currency;
 	}
@@ -92,7 +92,7 @@ public class Player {
 	// Preconditions:
 	//		- none	
 	// Postconditions:
-	//		- Returns fame
+	//		- returns fame
 	public int getFame() {
 		return fame;
 	}
@@ -101,44 +101,53 @@ public class Player {
 	// Preconditions:
 	//		- none	
 	// Postconditions:
-	//		- Returns RehearsePoints
+	//		- returns RehearsePoints
 	public int getRehearsePoints() {
 		return RehearsePoints;
 	}
 	
-	//returns true if player is in role, false if player isn't in role
+	// getScore
+	// Preconditions:
+	//		- none	
+	// Postconditions:
+	//		- returns score
+	public int getScore {
+		return score;
+	}
+	
+	// isInRole
+	// Preconditions:
+	//		- none	
+	// Postconditions:
+	//		- returns true if player is in role, false if player isn't in role
 	public boolean isInRole() {
 		if (CurrentRole == null) {
 			return false;
-		}
-		else {
+		} else {
 			return true;
 		}
 	}
 	
-	
-	
 	// Upgrade
 	// Preconditions:
-	//		- Player is in Casting office
+	//		- player is in Casting office
 	//
 	// Postconditions:
-	//	 	-returns true if the move was valid, false if invalid	
-	//
+	//	 	- returns true if the move was valid, false if invalid	
+	//		- player's new rank is set if was valid
 	// Notes:
 	//	 
-	//
 	public boolean Upgrade() {
+		
 		boolean validMove = false;
-		if (CurrentLocation.getName().equals("Casting Office")){
+		if (CurrentLocation.getName().equals("Casting Office")) {
 			rank = this.getRank();
 			if (rank == 6) {
 				System.out.println("You cannot Upgrade anymore!");
 				return false;
-			}
-			else {
+			} else {
 				Scanner UpgradeManager = new Scanner(System.in);
-				//display all ranks
+				// display all ranks
 				System.out.println("New Rank:      2    3    4    5    6");
 				System.out.println("Price (Money): 4   10   18   28   40");
 				System.out.println("Price (Fame):  5   10   15   20   25");
@@ -146,72 +155,69 @@ public class Player {
 				int[] moneyUp = {4,10,18,28,40}; 
 				int[] fameUp = {5,10,15,20,25};
 				
-				if(this.currency >= moneyUp[rank - 1] || this.fame >= fameUp[rank - 1]) {
+				if (this.currency >= moneyUp[rank - 1] || this.fame >= fameUp[rank - 1]) {
 					System.out.print("With money you can upgrade to ranks: ");
-					for(int i = rank - 1; i < 5; i++) {
+					for (int i = rank - 1; i < 5; i++) {
 						if(this.currency >= moneyUp[i]) {
 							System.out.print(i+2 + " ");
 						}
 					}
 					System.out.println();
 					System.out.print("With fame you can upgrade to ranks: ");
-					for(int i = rank - 1; i < 5; i++) {
-						if(this.fame >= fameUp[i]) {
+					for (int i = rank - 1; i < 5; i++) {
+						if (this.fame >= fameUp[i]) {
 							System.out.print(i+2 + " ");
 						}
 					}
 					System.out.println();
+					
 					while(true) {
 						System.out.println("What rank would you like to Upgrade to? (Select your rank, "+rank+", to quit)");
 						int desiredRank;
 						int paymentMethod;
 						
-						while(true) {
+						while (true) {
 							desiredRank = UpgradeManager.nextInt();
 							
-							if (desiredRank > rank && desiredRank <= 6) { //it's a valid rank, need to check if they can afford it, or else they will be stuck
+							if (desiredRank > rank && desiredRank <= 6) { 
+								// it's a valid rank, need to check if they can afford it, or else they will be stuck
 								if (this.currency >= moneyUp[desiredRank - 2] || this.fame >= fameUp[desiredRank -2]) {
-								break;
-								}
-								else {
+									break;
+								} else {
 									System.out.println("You lack the amount of currency and fame to Upgrade to this rank, Select a new one from options given.");
 								}
-							}
-							else if(desiredRank == rank) {
+							} else if(desiredRank == rank) {
 								validMove = true;
 								break;
-							}
-							else {
+							} else {
 								System.out.println(desiredRank + " is not a valid rank. Select a new one from the options given.");
 							}
 						}
 						
-						if(validMove == true) {
+						if (validMove == true) {
 							validMove = false;
 							break;
 						}
 						
 						System.out.println("Please select your payment method. 1 for money, 2 for fame.");
-						while(true) {
+						
+						while (true) {
 							paymentMethod = UpgradeManager.nextInt();
 							
 							if (paymentMethod == 1 || paymentMethod == 2) {
 								break;
-							}
-							else {
+							} else {
 								System.out.println(paymentMethod + " is not a valid payment method. Select a new one from the options given.");
 							}
-						
 						}
 						
-						if(paymentMethod == 1 && this.currency >= moneyUp[desiredRank-2] || paymentMethod == 2 && this.fame >= fameUp[desiredRank - 2]) {
-							//do stuff, update info
+						if (paymentMethod == 1 && this.currency >= moneyUp[desiredRank-2] || paymentMethod == 2 && this.fame >= fameUp[desiredRank - 2]) {
+							// do stuff, update info
 							if (paymentMethod == 1) {
 								this.setCurrency(this.currency - moneyUp[desiredRank-2]);
 								this.setRank(desiredRank);
 								System.out.println("You are now rank: "+this.rank+" and have $+"+this.currency);
-							}
-							else {
+							} else {
 								this.setFame(this.fame - fameUp[desiredRank-2]);
 								this.setRank(desiredRank);
 								System.out.println("You are now rank: "+this.rank+" and have "+this.fame+" fame");
@@ -223,18 +229,13 @@ public class Player {
 					UpgradeManager.close();
 					return validMove;
 					
-				}
-				else {
+				} else {
 					System.out.println("You do not have enough money nor enough fame to upgrade.");
 					UpgradeManager.close();
 					return false;
-				}
-				
-				
-				
+				}	
 			}
-		}
-		else{
+		} else {
 			System.out.println("Must be in the Casting Office to Upgrade your Rank!");
 			return false;
 		}
@@ -242,18 +243,18 @@ public class Player {
 	
 	// Move
 	// Preconditions:
-	//	CurrentLocation has neighbors
-	//  Player is not in a role
+	//		- currentLocation has neighbors
+	//		- player is not in a role
 	// Postconditions:
-	//	CurrentLocation has been set to new Location
+	//		- currentLocation has been set to new Location
 	//
 	// Notes:
-	//	Scanner MoveManager interacts with User prompting which neighbor they'd like to move to
-	//   is action selection method (NOTE, if player selects MOVE and they CAN move, they must move.
+	//		- scanner MoveManager interacts with User prompting which neighbor they'd like to move to
+	//   	- is action selection method (NOTE, if player selects MOVE and they CAN move, they must move.
+	//
 	public boolean Move() {
 		
-		if (CurrentRole != null)
-			{
+		if (CurrentRole != null) {
 			Scanner MoveManager = new Scanner(System.in);
 			boolean validMove = false;
 			while (validMove != true){
@@ -278,25 +279,26 @@ public class Player {
 			
 			MoveManager.close();
 			return true;
-			}
-		else {
+		} else {
 			System.out.println("Cannot move while currently in a role!");
 			return false;
 		}
-		}
+	}
 	
 	// Act
 	// Preconditions:
-	//	-player is in a role
+	//		- player is in a role
 	//
 	// Postconditions:
-	//	
-	//
+	//		- player's turn is over
+	//		- player earns potential fame and currency
 	// Notes:
 	//
 	//
 	public boolean Act() {
+		
 		if (CurrentRole != null) {
+			
 			int budget = CurrentLocation.getScene().getBudget();
 			System.out.println("Must roll greater than or equal to " + budget +"!");
 			
@@ -306,33 +308,30 @@ public class Player {
 			System.out.println("Along with your Rehearsal Points: "+ RehearsePoints);
 			System.out.println("Your overall dice roll = "+RehearsePoints+diceRoll);
 			
-			//if they don't roll higher
+			// if they don't roll higher
 			if (diceRoll+RehearsePoints < budget) {
 				System.out.println("You did not roll at least a "+budget);
-				//off card earns dollar, on cards earn nothing
+				// off card earns dollar, on cards earn nothing
 				if (CurrentRole.isOnCard()==false) {
 					System.out.println("you earned $1 !");
 					setCurrency(1+this.getCurrency()); //increments currency
 					System.out.println("you now have $"+this.getCurrency());
 					return true;
-				}
-				else {
+				} else {
 					System.out.println("Sorry, you don't win anything");
 					return true;
 				}
 				
-			}
-			//if they roll equal to or higher
-			else {
+			// if they roll equal to or higher
+			} else {
 				System.out.println("You succeeded in rolling greater than or equal to "+budget+"!");
-				//if they're an extra
+				// if they're an extra
 				if (CurrentRole.isOnCard() == false) {
 					System.out.println("You earned yourself $1 and 1 Fame!");
 					setCurrency(1+this.getCurrency());
 					setFame(1+this.getFame());
 					System.out.println("You now have $"+this.getCurrency()+" and "+this.getFame()+" Fame!");
-				}
-				else { //they're an on-card actor
+				} else { // they're an on-card actor
 					System.out.println("You earned yourself 2 Fame!");
 					setFame(2+this.getFame());
 					System.out.println("You now have "+this.getFame()+" Fame!");
@@ -341,8 +340,7 @@ public class Player {
 					CurrentLocation.addShot();
 					return true;
 			}
-		}
-		else {
+		} else {
 			System.out.println("You must Take a Role to Act!");
 			return false;
 		}
@@ -359,18 +357,16 @@ public class Player {
 	//		- may want to show Rehearsal points after Rehearse is called?
 	//
 	public boolean Rehearse() {
-		if (CurrentRole != null)
-		{
+		
+		if (CurrentRole != null) {
 			if (RehearsePoints < CurrentLocation.getScene().budget){
 				RehearsePoints++;
 				return true;
-			}
-			else{
+			} else {
 				System.out.println("Unable to Rehearse anymore!");
 				return false;
 			}
-		}
-		else{
+		} else {
 			System.out.println("Cannot Rehearse if not in a Role!");
 			return false;
 		}
@@ -378,17 +374,20 @@ public class Player {
 	
 	// TakeRole
 	// Preconditions:
-	//
+	//		- player is not in a role
 	//
 	// Postconditions:
-	//
+	//		- player takes the role entered by index if it is valid
 	//
 	// Notes:
-	//	Scanner RoleManager interacts with User prompting which Role they'd like to take
+	//		- scanner RoleManager interacts with User prompting which Role they'd like to take
 	//
 	public void TakeRole() {
+		
 		if (CurrentLocation.isLot) {
+			
 			if(CurrentRole==null) {
+				
 				ArrayList<Role> offCard = new ArrayList<Role>();
 				offCard = CurrentLocation.getRoles();
 				ArrayList<Role> onCard = new ArrayList<Role>();
@@ -396,13 +395,18 @@ public class Player {
 				
 				Scanner RoleManager = new Scanner(System.in);
 				System.out.println("Please choose one of the following roles by entering the index: ");
-				while(this.CurrentRole == null) {
+				
+				while (this.CurrentRole == null) {
+					
 					System.out.println("Off Card:");
+					
 					for (int i = 1; i <= offCard.size(); i++) {
 						System.out.println(i + ". " + "'"+ offCard.get(i-1).getName() + "' - Rank: " + offCard.get(i-1).getRank() + ".");
 					}
+					
 					System.out.println();
 					System.out.println("On Card:");
+					
 					int idx = offCard.size()+1;
 					for (int i = idx; i <= onCard.size() + idx; i++) {
 						System.out.println(i + ". " + "'"+ onCard.get(i - idx).getName() + "' - Rank is: " + onCard.get(i - idx).getRank() + ".");
@@ -411,34 +415,29 @@ public class Player {
 					int playerIndex = RoleManager.nextInt();
 					
 					if (playerIndex >= 1 && playerIndex <=onCard.size()+idx) {
-						//check if oncard or off card
+						// check if oncard or off card
 						Role chosenRole = null;
 						if (playerIndex < idx) { //it's off card
-							 chosenRole = offCard.get(playerIndex-1);
-							
-						}
-						else { //it's on card
-							 chosenRole = onCard.get(playerIndex - idx);
+							chosenRole = offCard.get(playerIndex-1);	
+						} else { // it's on card
+							chosenRole = onCard.get(playerIndex - idx);
 						}
 						if (this.rank >= chosenRole.getRank()) {
 							setRole(chosenRole);
-						}
-						else {
+						} else {
 							System.out.println("You are not a high enough rank, try again");
 						}
-					}
-					else {
+					} else {
 						System.out.println("Not a valid index, try again");
 					}
-				}
+				} // end of while loop
 				
 				RoleManager.close();
-			}
-			else {
+				
+			} else {
 				System.out.println("You cannot Take a Role if you are already in a Role!");
 			}
-		}
-		else {
+		} else {
 			System.out.println("You must be in a lot to Take a Role!");
 		}
 	}
@@ -447,13 +446,13 @@ public class Player {
 	
 	// Role
 	// Preconditions:
-	//
+	//		- upgrade is valid
 	//
 	// Postconditions:
-	//
+	//		- player's new rank is set
 	//
 	// Notes:
-	//		- Will be called in Upgrade()
+	//		- will be called in Upgrade()
 	//
 	private void setRank(int newRank) {
 		rank = newRank;
@@ -461,60 +460,63 @@ public class Player {
 	
 	// SetRole
 	// Preconditions:
-	//
+	//		- player chooses a role or scene is wrapped
 	//
 	// Postconditions:
-	//
+	//		- new role is assigned or is null
 	//
 	// Notes:
-	//		- Will be called in TakeRole(), is also called in GameBoard's WrapScene
+	//		- will be called in TakeRole(), is also called in GameBoard's WrapScene
 	//
 	public void setRole(Role newRole) {
 		CurrentRole = newRole;
 	}
+	
 	// SetCurrency
 	// Preconditions:
 	//
 	//
 	// Postconditions:
-	//		-sets this player's currency to a new value
+	//		- sets this player's currency to a new value
 	//
-	// Notes:
-	//		
-	//
-	
 	public void setCurrency(int newCurrency) {
 		currency = newCurrency;
 	}
 	
 	// SetFame
 	// Preconditions:
-	//
+	//		- player has earned fame through acting
 	//
 	// Postconditions:
-	//		-sets this player's fame to a new value
+	//		- sets this player's fame to a new value
 	//
 	// Notes:
 	//		
-	//
-	
 	private void setFame(int newFame) {
 		fame = newFame;
 	}
 	
 	// SetLocation
 	// Preconditions:
-	//
+	//		- player moves or day is ended
 	//
 	// Postconditions:
-	//		- Player's location is changed to newLocation
-	//
-	// Notes:
+	//		- player's location is changed to newLocation
 	//
 	//
 	public void setLocation(Location newLocation) {
 		CurrentLocation  = newLocation;
 	}
 	
-	
+	// SetLocation
+	// Preconditions:
+	//		- game is over
+	//
+	// Postconditions:
+	//		- total score is set
+	//
+	public void setScore() {
+		int score = currency + fame + (5 * rank);
+		this.score = score;
+	}
 }
