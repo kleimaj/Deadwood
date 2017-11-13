@@ -6,6 +6,8 @@
  */
 import java.util.*;
 
+import javax.management.relation.Role;
+
 
 public class Board {
 	
@@ -24,12 +26,12 @@ public class Board {
 	//
 	// Postconditions:
 	//		- Game is ready to begin
-	//
-	public Board(Location[] newLocations, Deck newDeck, Player[] newPlayers) {
+	//	
+	public Board(Location[] newLocations, Deck newDeck) { //my need to get rid of the Player[] parameter
 		dayCounter = 0;
 		locations = newLocations;
 		deck = newDeck;
-		players = newPlayers;
+		players = null; //set players to null?
 	}
 	
 	// CycleDay
@@ -113,6 +115,21 @@ public class Board {
 			CycleDay();
 		}
 	}
+	//adds player to players[]
+	public void addPlayer(Player player) {
+		Player[] newPlayers = new Player[players.length+1];
+		
+		for (int i = 0; i < players.length; i++) {
+			newPlayers[i] = players[i];
+		}
+		newPlayers[players.length] = player;
+		
+		players = newPlayers;
+	}
+	
+	public Player[] getPlayers() {
+		return players;
+	}
 	
 	// ResetScenes
 	// Preconditions:
@@ -167,6 +184,42 @@ public class Board {
 		}
 		Arrays.sort(diceRolls); // should be sorted now.
 		Role[] onCard = theScene.getAllRoles();
+		Player[] onActors = new Player[onCard.length];
+		for (int i = 0; i < onCard.length; i++) {
+			
+			for (int j = 0; j < players.length; j++) {
+				if (players[j].isInRole()) {
+					if(players[j].getRole() == onCard[i]) {
+						onActors[i] = players[j];
+						break;
+					}
+
+				}
+			}
+			
+		}
+//		int[] payouts = new int[onActors.length];
+//		for(int i = 0; i < payouts.length; i++) {
+//			payouts[i] = 0;
+//		}
+		
+		//now have array of dice rolls and array of players in roles
+		int count = onActors.length - 1;
+		for (int i = diceRolls.length -1; i >=0; i--) {
+			if(onActor[count] != null) {
+				onActor[count].setCurrency(onActor[count].getCurrency()+diceRolls[i]);	
+			}
+
+			count--;
+			if (count == -1) {
+				count = onActors.length -1;
+			}
+		}
+		for (int i = 0; i < onActor.length; i++) {
+			if (onActor[i] != null) {
+				System.out.println(onActor[i].getName+" now has  currency of "+onActor[i].getCurrency()));
+			}
+		}
 		
 		// offcard player payout (windfall bonus)
 		Role[] offCard = givenLocation.getAllRoles();

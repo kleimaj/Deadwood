@@ -33,8 +33,46 @@ public class Deadwood {
 				break;
 			} else { 
 			System.out.println("Invalid Number of Players, try again");
+			
 			}
 		}
+		System.out.println("Input each player's name");
+		//need to get trailer from xml file or from gameboard, need to change all of this
+		Location trailer = new Location();//need to change this
+		Deck deck = new Deck();
+		Location[] allLocations = new Location[0];
+		
+		Board game = new Board(allLoctions, deck);
+		for (int i = 0; i < numPlayers; i++) {
+			 String name = console.next();
+			 game.addPlayer(new Player(name, trailer));
+			 
+		}
+		//at this point, the first day starts, scenes need to be added to locations
+		Player[] players = game.getPlayers();
+		for (int i = 0; i < 4; i++) { //4 days
+		//each day
+			System.out.println("Day "+i+1);
+			int index = 0;
+			while(game.isEndDay()==false) {
+				if (index == numPlayers) { //cycles through players
+					index = 0;
+				}
+					Player currentPlayer = players[index];
+					System.out.println(currentPlayer.getName()+"'s turn!");
+					
+					System.out.println("Select what you want to do: ")
+					
+					while(true) {
+						if (currentPlayer.isInRole()==false) {
+							System.out.println("Move");
+						}
+				}
+				
+			}
+			game.CycleDay();
+		}
+		
 			
 		console.close();
 	}
