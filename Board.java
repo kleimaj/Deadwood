@@ -124,7 +124,7 @@ public class Board {
 		newPlayers[players.length] = player;
 		
 		players = newPlayers;
-	}r
+	}
 	
 	public Player[] getPlayers() {
 		return players;
@@ -259,6 +259,12 @@ public class Board {
 			if (players[i].getScore() >= winner.getScore()) {
 				winner = players[i];
 			}
+		}
+		Arrays.sort(players);
+		int count = 1;
+		for (int i = 0; i < players.length; i++) {
+			System.out.println("#"+count+" "+players[i].getName()+" Score: "+players[i].getScore());
+			count++;
 		}
 		
 		return winner;

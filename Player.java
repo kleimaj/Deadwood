@@ -10,7 +10,7 @@ import java.util.*;
 //import javax.tools.JavaFileManager.Location;
 
 
-public class Player {
+public class Player implements Comparable<Player> {
 	
 	// Attributes
 	
@@ -522,4 +522,17 @@ public class Player {
 		int score = currency + fame + (5 * rank);
 		this.score = score;
 	}
+	
+	public int compareTo(Player other) { //ordering in descending order
+		if (this.getScore() == other.getScore()) {
+			return 0;
+		}
+		else if (this.getScore() > other.getScore()) {
+			return -1;
+		}
+		else {
+			return 1;
+		}
+	}
+	
 }
