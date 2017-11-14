@@ -17,7 +17,9 @@ public class Deadwood {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		
-		parseXML();
+		File cardsFile = new File(args[0]);
+		File boardFile = new File(args[1]);
+		parseXML(cardsFile);
 		
 		// Scanner
 		Scanner console = new Scanner(System.in);
@@ -25,7 +27,7 @@ public class Deadwood {
 		System.out.println("Welcome to Deadwood!");
 		System.out.println("How many Players do we have today? (maximum of 8)");
 		
-		int numPlayers;
+/*		int numPlayers;
 		// loops until user inputs valid number of players
 		while (true) {
 			numPlayers = console.nextInt();
@@ -39,8 +41,8 @@ public class Deadwood {
 		System.out.println("Input each player's name");
 		//need to get trailer from xml file or from gameboard, need to change all of this
 		Location trailer = new Location();//need to change this
-		Deck deck = new Deck();
-		Location[] allLocations = new Location[0];
+//		Deck deck = new Deck();
+//		Location[] allLocations = new Location[0];
 		
 		Board game = new Board(allLoctions, deck);
 		for (int i = 0; i < numPlayers; i++) {
@@ -61,7 +63,7 @@ public class Deadwood {
 					Player currentPlayer = players[index];
 					System.out.println(currentPlayer.getName()+"'s turn!");
 					
-					System.out.println("Select what you want to do: ")
+					System.out.println("Select what you want to do: ");
 					
 					while(true) {
 						if (currentPlayer.isInRole()==false) {
@@ -74,8 +76,8 @@ public class Deadwood {
 		}
 		
 			
-		console.close();
-	}
+		console.close();				*/
+	} 
 	
 	
 	// Parse XML
@@ -88,18 +90,41 @@ public class Deadwood {
 	// Notes:
 	//
 	//
-	public void parseXML(inputFile) {
+	public void parseXML(File inputFile) {
 		
+		try {
 		// Create a document builder
 		DocumentBuilderFactory dbFactory  = DocumentBuilderFactory.newInstance();
 	    DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
 	    
 	    // Create a document from a file
 	    Document doc = dBuilder.parse(inputFile);    // the .xml file
+	    doc.getDocumentElement().normalize();
 	    
 	    // Extract the root and other elements
 	    Element root = document.getDocumentElement();
-	    	
-	    // Get all elements and attributes
+	    
+	    // if root == cards
+	    NodeList cList = doc.getElementsByTagName("card");
+	    
+	    for (int i = 0; i < clist.getLength(); i++) {
+	    	Node cNode = cList.item(i);
+	    	NodeList scList = doc.getElementsByTagName("scene");
+	    	for (int s = 0; s < scList.getLength(); s++) {
+	    		
+	    		
+	    	}
+	    	Node cNode = cList.item(i);
+	    	if (cNode.getNodeType() == Node.ELEMENT_NODE) {
+	    		Element cElement = (Element) cNode;
+	    		System.out.println("Card name: " + cElement.getAttribute("card"));
+	    		System.out.println("Scene name: " + cElement.getAttribute("scene"));
+	    	}
+	    }
+	    // if root == board
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
 	}
 }
