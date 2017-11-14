@@ -5,6 +5,7 @@
  * November 2017
  */
 import java.util.*;
+import java.io.*;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.DocumentBuilder;
 import org.w3c.dom.Document;
@@ -17,7 +18,9 @@ public class Deadwood {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		
-		parseXML();
+		File cardsFile = new File(args[0]);
+		File boardFile = new File(args[1]);
+		parseXML(cardsFile);
 		
 		// Scanner
 		Scanner console = new Scanner(System.in);
@@ -42,7 +45,7 @@ public class Deadwood {
 		Deck deck = new Deck();
 		Location[] allLocations = new Location[0];
 		
-		Board game = new Board(allLoctions, deck);
+		Board game = new Board(allLocations, deck);
 		for (int i = 0; i < numPlayers; i++) {
 			 String name = console.next();
 			 game.addPlayer(new Player(name, trailer));
@@ -61,9 +64,14 @@ public class Deadwood {
 					Player currentPlayer = players[index];
 					System.out.println(currentPlayer.getName()+"'s turn!");
 					
-					System.out.println("Select what you want to do: ")
+
+					System.out.println("Select what you want to do: ");
 					ArrayList<String> availableActions = new ArrayList<String>();
 					int count = 1;
+					int theNum = 0;
+					//valid move
+					System.out.println("Select (the number) what you want to do: ");
+					
 					while(true) {
 						if (currentPlayer.isInRole()==false) {
 							availableActions.add("move");
@@ -75,26 +83,82 @@ public class Deadwood {
 							System.out.println("Upgrade ("+count+")");
 							count++;
 						}
+						if (currentPlayer.isInRole()) {
+							availableActions.add("act");
+							System.out.println("Act ("+count+")");
+							count++;
+						}
 						if (currentPlayer.isInRole() && currentPlayer.getRehearsePoints() < 6) {
 							availableActions.add("rehearse");
 							System.out.println("Rehearse ("+count+")");
 							count++;
 						}
-						if (currentPlayer.isInRole() == false && currentPlayer.getLocation().isWrappedUp() == false) {
+						if (currentPlayer.isInRole() == false && ((Location) currentPlayer.getLocation()).isWrappedUp() == false) {
 							availableActions.add("take role");
 							System.out.println("Take Role ("+count+")");
 							count++;
 						}
-						if (currentPlayer.isInRole() && )
+						theNum = console.nextInt();
+						
+						if (theNum <= 0 || theNum > count) {
+							System.out.println("Invalid Action, please try again.");
+						}
+						else {
+							break;
+						}
+						
 				}
+					String action = availableActions.get(count-1);
+					if (action.equals("move")) {
+						currentPlayer.Move();
+						if (currentPlayer.getLocation().getName().equals("Casting Office")) { //if the player moves to casting office they can upgrade
+							System.out.println("Would you like to Upgrade? (y/n)");
+							String reply = console.next();
+							if (reply.equals("y")) {
+								currentPlayer.Upgrade();
+							}
+						}
+						if (currentPlayer.getLocation().isLot() && currentPlayer.getLocation().isWrappedUp() == false) {
+							System.out.println("Would you like to Take a Role? (y/n)");
+							String reply = console.next();
+							if (reply.equals("y")) {
+								currentPlayer.TakeRole();
+							}
+						}
+					}
+					if (action.equals("upgrade")) {
+						currentPlayer.Upgrade();
+					}
+					if (action.equals("act")) {
+						currentPlayer.Act();
+					}
+					if (action.equals("rehearse")) {
+						currentPlayer.Rehearse();
+					}
+					if (action.equals("take role")) {
+						currentPlayer.TakeRole();
+					}
+					index++; //end of player's turn
 				
 			}
 			game.CycleDay();
 		}
 		
+		System.out.println("The game is over here are the results: ");
+		Player winner = game.TallyScore();
+		System.out.println("Congratulations, "+winner.getName()+"!!");
+		
+		System.out.println("Would you like to play again? (y/n)"); //need to make loop
+		
+		String playAgain = console.nextLine();
+		
+		if (playAgain.equals("n")) {
+			//break
+		}
+		
 			
-		console.close();
-	}
+		console.close();				
+	} 
 	
 	
 	// Parse XML
@@ -107,18 +171,41 @@ public class Deadwood {
 	// Notes:
 	//
 	//
-	public void parseXML(inputFile) {
+	public static void parseXML(File inputFile) {
 		
+		try {
 		// Create a document builder
 		DocumentBuilderFactory dbFactory  = DocumentBuilderFactory.newInstance();
 	    DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
 	    
 	    // Create a document from a file
 	    Document doc = dBuilder.parse(inputFile);    // the .xml file
+	    doc.getDocumentElement().normalize();
 	    
 	    // Extract the root and other elements
 	    Element root = document.getDocumentElement();
-	    	
-	    // Get all elements and attributes
+	    
+	    // if root == cards
+	    NodeList cList = doc.getElementsByTagName("card");
+	    
+	    for (int i = 0; i < clist.getLength(); i++) {
+	    	Node cNode = cList.item(i);
+	    	NodeList scList = doc.getElementsByTagName("scene");
+	    	for (int s = 0; s < scList.getLength(); s++) {
+	    		
+	    		
+	    	}
+	    	Node cNode = cList.item(i);
+	    	if (cNode.getNodeType() == Node.ELEMENT_NODE) {
+	    		Element cElement = (Element) cNode;
+	    		System.out.println("Card name: " + cElement.getAttribute("card"));
+	    		System.out.println("Scene name: " + cElement.getAttribute("scene"));
+	    	}
+	    }
+	    // if root == board
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
 	}
 }

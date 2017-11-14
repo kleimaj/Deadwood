@@ -6,7 +6,6 @@
  */
 import java.util.*;
 
-import javax.management.relation.Role;
 
 
 public class Board {
@@ -125,7 +124,7 @@ public class Board {
 		newPlayers[players.length] = player;
 		
 		players = newPlayers;
-	}
+	}r
 	
 	public Player[] getPlayers() {
 		return players;
@@ -206,8 +205,8 @@ public class Board {
 		//now have array of dice rolls and array of players in roles
 		int count = onActors.length - 1;
 		for (int i = diceRolls.length -1; i >=0; i--) {
-			if(onActor[count] != null) {
-				onActor[count].setCurrency(onActor[count].getCurrency()+diceRolls[i]);	
+			if(onActors[count] != null) {
+				onActors[count].setCurrency(onActors[count].getCurrency()+diceRolls[i]);	
 			}
 
 			count--;
@@ -215,9 +214,9 @@ public class Board {
 				count = onActors.length -1;
 			}
 		}
-		for (int i = 0; i < onActor.length; i++) {
-			if (onActor[i] != null) {
-				System.out.println(onActor[i].getName+" now has  currency of "+onActor[i].getCurrency()));
+		for (int i = 0; i < onActors.length; i++) {
+			if (onActors[i] != null) {
+				System.out.println(onActors[i].getName()+" now has  currency of "+onActors[i].getCurrency());
 			}
 		}
 		

@@ -5,8 +5,9 @@
  * November 2017
  */
 import java.util.*;
+//import java.io.*;
 
-import javax.tools.JavaFileManager.Location;
+//import javax.tools.JavaFileManager.Location;
 
 
 public class Player {
@@ -14,8 +15,8 @@ public class Player {
 	// Attributes
 	
 	String name;					// Name of the player
-	Location CurrentLocation;		// The Current location of the player
-	Role CurrentRole;				// The current role of the player
+	Location currentLocation;		// The Current location of the player
+	Role currentRole;				// The current role of the player
 	int rank;						// The player's rank
 	int currency;					// Player's money
 	int fame;						// Player's amount of fame
@@ -34,8 +35,8 @@ public class Player {
 	//
 	public Player(String name, Location trailer) {
 		this.name = name;
-		CurrentLocation = trailer;
-		CurrentRole = null;
+		currentLocation = trailer;
+		currentRole = null;
 		rank = 0;
 		currency = 0;
 		fame = 0;
@@ -60,7 +61,7 @@ public class Player {
 	// Postconditions:
 	//		- returns the current location
 	public Location getLocation() {
-		return CurrentLocation;
+		return currentLocation;
 	}
 	
 	// getRole
@@ -69,7 +70,7 @@ public class Player {
 	// Postconditions:
 	//		- returns the current role
 	public Role getRole() {
-		return CurrentRole;
+		return currentRole;
 	}
 	
 	// getRank
@@ -113,7 +114,7 @@ public class Player {
 	//		- none	
 	// Postconditions:
 	//		- returns score
-	public int getScore {
+	public int getScore() {
 		return score;
 	}
 	
@@ -123,7 +124,7 @@ public class Player {
 	// Postconditions:
 	//		- returns true if player is in role, false if player isn't in role
 	public boolean isInRole() {
-		if (CurrentRole == null) {
+		if (currentRole == null) {
 			return false;
 		} else {
 			return true;
@@ -131,7 +132,7 @@ public class Player {
 	}
 	
 	public boolean isInCastingOffice() {
-		if (CurrentLocation.getName().equals("Casting Office")) {
+		if (currentLocation.getName().equals("Casting Office")) {
 			return true;
 		}
 		else {
@@ -146,12 +147,12 @@ public class Player {
 	// Postconditions:
 	//	 	- returns true if the move was valid, false if invalid	
 	//		- player's new rank is set if was valid
-	// Notes:
+	// Notes:currentLocation
 	//	 
 	public boolean Upgrade() {
 		
 		boolean validMove = false;
-		if (CurrentLocation.getName().equals("Casting Office")) {
+		if (currentLocation.getName().equals("Casting Office")) {
 			rank = this.getRank();
 			if (rank == 6) {
 				System.out.println("You cannot Upgrade anymore!");
@@ -263,13 +264,13 @@ public class Player {
 	//		- scanner MoveManager interacts with User prompting which neighbor they'd like to move to
 	//   	- is action selection method (NOTE, if player selects MOVE and they CAN move, they must move.
 	//
-	public boolean Move() {
+	public void Move() {
 		
-		if (CurrentRole != null) {
+		if (currentRole != null) {
 			Scanner MoveManager = new Scanner(System.in);
 			boolean validMove = false;
 			while (validMove != true){
-				Location[] neighbors = CurrentLocation.getNeighbors();
+				Location[] neighbors = currentLocation.getNeighbors();
 				System.out.println("Choose any of these available Locations");
 				for(int i = 0; i < neighbors.length; i++){
 					System.out.println(neighbors[i].getName());
@@ -289,10 +290,8 @@ public class Player {
 			}
 			
 			MoveManager.close();
-			return true;
-		} else {
+		} else { //never get here
 			System.out.println("Cannot move while currently in a role!");
-			return false;
 		}
 	}
 	
@@ -306,11 +305,11 @@ public class Player {
 	// Notes:
 	//
 	//
-	public boolean Act() {
+	public void Act() {
 		
-		if (CurrentRole != null) {
+		if (currentRole != null) {
 			
-			int budget = CurrentLocation.getScene().getBudget();
+			int budget = this.currentLocation.getScene().getBudget();
 			System.out.println("Must roll greater than or equal to " + budget +"!");
 			
 			int diceRoll = 1+(int)(6*Math.random());
@@ -323,21 +322,19 @@ public class Player {
 			if (diceRoll+RehearsePoints < budget) {
 				System.out.println("You did not roll at least a "+budget);
 				// off card earns dollar, on cards earn nothing
-				if (CurrentRole.isOnCard()==false) {
+				if (currentRole.isOnCard()==false) {
 					System.out.println("you earned $1 !");
 					setCurrency(1+this.getCurrency()); //increments currency
 					System.out.println("you now have $"+this.getCurrency());
-					return true;
 				} else {
 					System.out.println("Sorry, you don't win anything");
-					return true;
 				}
 				
 			// if they roll equal to or higher
 			} else {
 				System.out.println("You succeeded in rolling greater than or equal to "+budget+"!");
 				// if they're an extra
-				if (CurrentRole.isOnCard() == false) {
+				if (currentRole.isOnCard() == false) {
 					System.out.println("You earned yourself $1 and 1 Fame!");
 					setCurrency(1+this.getCurrency());
 					setFame(1+this.getFame());
@@ -348,12 +345,10 @@ public class Player {
 					System.out.println("You now have "+this.getFame()+" Fame!");
 				}
 				// increment shot token, Deadwood.java will check for scene wrap up at end of player's turn
-					CurrentLocation.addShot();
-					return true;
+					this.currentLocation.addShot();
 			}
-		} else {
-			System.out.println("You must Take a Role to Act!");
-			return false;
+		} else { //never get here
+			System.out.println("You must Take a Role to Act!"); //should never happen
 		}
 	}
 	
@@ -367,19 +362,16 @@ public class Player {
 	// Notes:
 	//		- may want to show Rehearsal points after Rehearse is called?
 	//
-	public boolean Rehearse() {
+	public void Rehearse() {
 		
-		if (CurrentRole != null) {
-			if (RehearsePoints < CurrentLocation.getScene().budget){
+		if (currentRole != null) {
+			if (RehearsePoints < currentLocation.getScene().budget){
 				RehearsePoints++;
-				return true;
 			} else {
-				System.out.println("Unable to Rehearse anymore!");
-				return false;
+				System.out.println("Unable to Rehearse anymore!"); //should never happen
 			}
 		} else {
-			System.out.println("Cannot Rehearse if not in a Role!");
-			return false;
+			System.out.println("Cannot Rehearse if not in a Role!"); //should never happen
 		}
 	}
 	
@@ -395,19 +387,19 @@ public class Player {
 	//
 	public void TakeRole() {
 		
-		if (CurrentLocation.isLot) {
+		if (currentLocation.isLot()) {
 			
-			if(CurrentRole==null) {
+			if(currentRole==null) {
 				
 				ArrayList<Role> offCard = new ArrayList<Role>();
-				offCard = CurrentLocation.getRoles();
+				offCard = currentLocation.getRoles();
 				ArrayList<Role> onCard = new ArrayList<Role>();
-				onCard = CurrentLocation.getScene().getAvailableRoles();
+				onCard = currentLocation.getScene().getAvailableRoles();
 				
 				Scanner RoleManager = new Scanner(System.in);
 				System.out.println("Please choose one of the following roles by entering the index: ");
 				
-				while (this.CurrentRole == null) {
+				while (this.currentRole == null) {
 					
 					System.out.println("Off Card:");
 					
@@ -480,7 +472,7 @@ public class Player {
 	//		- will be called in TakeRole(), is also called in GameBoard's WrapScene
 	//
 	public void setRole(Role newRole) {
-		CurrentRole = newRole;
+		currentRole = newRole;
 	}
 	
 	// SetCurrency
@@ -516,7 +508,7 @@ public class Player {
 	//
 	//
 	public void setLocation(Location newLocation) {
-		CurrentLocation  = newLocation;
+		currentLocation  = newLocation;
 	}
 	
 	// SetLocation
