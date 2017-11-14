@@ -88,12 +88,12 @@ public class Deadwood {
 							System.out.println("Act ("+count+")");
 							count++;
 						}
-						if (currentPlayer.isInRole() && currentPlayer.getRehearsePoints() < 6) {
+						if (currentPlayer.isInRole() && currentPlayer.getRehearsePoints()+1 < currentPlayer.getLocation().getScene().getBudget()) {
 							availableActions.add("rehearse");
 							System.out.println("Rehearse ("+count+")");
 							count++;
 						}
-						if (currentPlayer.isInRole() == false && ((Location) currentPlayer.getLocation()).isWrappedUp() == false) {
+						if (currentPlayer.isInRole() == false && currentPlayer.getLocation().isWrappedUp() == false) {
 							availableActions.add("take role");
 							System.out.println("Take Role ("+count+")");
 							count++;
