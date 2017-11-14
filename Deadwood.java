@@ -64,16 +64,16 @@ public class Deadwood {
 					Player currentPlayer = players[index];
 					System.out.println(currentPlayer.getName()+"'s turn!");
 					
-
+						//Start loop 1
 					System.out.println("Select what you want to do: ");
 					ArrayList<String> availableActions = new ArrayList<String>();
 					int count = 1;
 					int theNum = 0;
 					//valid move
 					System.out.println("Select (the number) what you want to do: ");
-					
+					// + Boolean variables endTurn, hasMoved
 					while(true) {
-						if (currentPlayer.isInRole()==false) {
+						if (currentPlayer.isInRole()==false) {//+condition hasMoved == false && endTurn == false
 							availableActions.add("move");
 							System.out.println("Move ("+count+")");
 							count++;
@@ -83,12 +83,12 @@ public class Deadwood {
 							System.out.println("Upgrade ("+count+")");
 							count++;
 						}
-						if (currentPlayer.isInRole()) {
+						if (currentPlayer.isInRole()) {//+condition hasMoved == false
 							availableActions.add("act");
 							System.out.println("Act ("+count+")");
 							count++;
 						}
-						if (currentPlayer.isInRole() && currentPlayer.getRehearsePoints()+1 < currentPlayer.getLocation().getScene().getBudget()) {
+						if (currentPlayer.isInRole() && currentPlayer.getRehearsePoints()+1 < currentPlayer.getLocation().getScene().getBudget()) {//+ condition hasMoved == false
 							availableActions.add("rehearse");
 							System.out.println("Rehearse ("+count+")");
 							count++;
@@ -110,7 +110,7 @@ public class Deadwood {
 				}
 					String action = availableActions.get(count-1);
 					if (action.equals("move")) {
-						currentPlayer.Move();
+						currentPlayer.Move();//effect hasMoved = ...
 						if (currentPlayer.getLocation().getName().equals("Casting Office")) { //if the player moves to casting office they can upgrade
 							System.out.println("Would you like to Upgrade? (y/n)");
 							String reply = console.next();
@@ -127,17 +127,19 @@ public class Deadwood {
 						}
 					}
 					if (action.equals("upgrade")) {
-						currentPlayer.Upgrade();
+						currentPlayer.Upgrade();//effect endTurn = ...
 					}
 					if (action.equals("act")) {
-						currentPlayer.Act();
+						currentPlayer.Act();//effect endTurn = ...
 					}
 					if (action.equals("rehearse")) {
-						currentPlayer.Rehearse();
+						currentPlayer.Rehearse();//effect endTurn = ...
 					}
 					if (action.equals("take role")) {
 						currentPlayer.TakeRole();
 					}
+					
+					//End Loop 1
 					index++; //end of player's turn
 				
 			}

@@ -397,7 +397,7 @@ public class Player implements Comparable<Player> {
 				onCard = currentLocation.getScene().getAvailableRoles();
 				
 				Scanner RoleManager = new Scanner(System.in);
-				System.out.println("Please choose one of the following roles by entering the index: ");
+				System.out.println("Please choose one of the following roles by entering the index (0 if none): ");
 				
 				while (this.currentRole == null) {
 					
@@ -430,7 +430,11 @@ public class Player implements Comparable<Player> {
 						} else {
 							System.out.println("You are not a high enough rank, try again");
 						}
-					} else {
+					} 
+					else if(playerIndex == 0) {
+						break;
+					}
+					else {
 						System.out.println("Not a valid index, try again");
 					}
 				} // end of while loop
