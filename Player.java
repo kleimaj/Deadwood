@@ -6,6 +6,8 @@
  */
 import java.util.*;
 
+import javax.tools.JavaFileManager.Location;
+
 
 public class Player {
 	
@@ -125,6 +127,15 @@ public class Player {
 			return false;
 		} else {
 			return true;
+		}
+	}
+	
+	public boolean isInCastingOffice() {
+		if (CurrentLocation.getName().equals("Casting Office")) {
+			return true;
+		}
+		else {
+			return false;
 		}
 	}
 	

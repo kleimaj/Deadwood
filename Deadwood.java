@@ -62,11 +62,30 @@ public class Deadwood {
 					System.out.println(currentPlayer.getName()+"'s turn!");
 					
 					System.out.println("Select what you want to do: ")
-					
+					ArrayList<String> availableActions = new ArrayList<String>();
+					int count = 1;
 					while(true) {
 						if (currentPlayer.isInRole()==false) {
-							System.out.println("Move");
+							availableActions.add("move");
+							System.out.println("Move ("+count+")");
+							count++;
 						}
+						if (currentPlayer.isInCastingOffice()) {
+							availableActions.add("upgrade");
+							System.out.println("Upgrade ("+count+")");
+							count++;
+						}
+						if (currentPlayer.isInRole() && currentPlayer.getRehearsePoints() < 6) {
+							availableActions.add("rehearse");
+							System.out.println("Rehearse ("+count+")");
+							count++;
+						}
+						if (currentPlayer.isInRole() == false && currentPlayer.getLocation().isWrappedUp() == false) {
+							availableActions.add("take role");
+							System.out.println("Take Role ("+count+")");
+							count++;
+						}
+						if (currentPlayer.isInRole() && )
 				}
 				
 			}
