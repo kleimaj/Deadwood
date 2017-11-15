@@ -33,7 +33,7 @@ public class Role {
 		this.dialogue = dialogue;
 		this.rank = rank;
 		isTaken = false;
-		this.onCard = onCard;
+		this.OnCard = onCard;
 	}
 	
 	// Accessors

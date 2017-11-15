@@ -20,7 +20,7 @@ public class Deadwood {
 		
 		File cardsFile = new File(args[0]);
 		File boardFile = new File(args[1]);
-		parseXML(cardsFile);
+		parseXML(boardFile);
 		
 		// Scanner
 		Scanner console = new Scanner(System.in);
@@ -41,11 +41,11 @@ public class Deadwood {
 		}
 		System.out.println("Input each player's name");
 		//need to get trailer from xml file or from gameboard, need to change all of this
-		Location trailer = new Location();//need to change this
-		Deck deck = new Deck();
-		Location[] allLocations = new Location[0];
+		//Location trailer = new Location();//need to change this
+		//Deck deck = new Deck();
+		//Location[] allLocations = new Location[0];
 		
-		Board game = new Board(allLocations, deck);
+	/*	Board game = new Board(allLocations, deck);
 		for (int i = 0; i < numPlayers; i++) {
 			 String name = console.next();
 			 game.addPlayer(new Player(name, trailer));
@@ -159,7 +159,7 @@ public class Deadwood {
 		}
 		
 			
-		console.close();				
+		console.close();	 */			
 	} 
 	
 	
@@ -176,6 +176,7 @@ public class Deadwood {
 	public static void parseXML(File inputFile) {
 		
 		try {
+			
 		// Create a document builder
 		DocumentBuilderFactory dbFactory  = DocumentBuilderFactory.newInstance();
 	    DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
@@ -185,25 +186,175 @@ public class Deadwood {
 	    doc.getDocumentElement().normalize();
 	    
 	    // Extract the root and other elements
-	    Element root = document.getDocumentElement();
+	    Element root = doc.getDocumentElement();
 	    
-	    // if root == cards
-	    NodeList cList = doc.getElementsByTagName("card");
-	    
-	    for (int i = 0; i < clist.getLength(); i++) {
-	    	Node cNode = cList.item(i);
-	    	NodeList scList = doc.getElementsByTagName("scene");
-	    	for (int s = 0; s < scList.getLength(); s++) {
-	    		
-	    		
+	    if (root.getNodeName() == "cards") {
+		    NodeList cardList = doc.getElementsByTagName("card"); 
+		    // make it a single variable each time instead of lists
+		    
+		    int budget = 0;
+		    int scene_num = 0;
+		    String name = "";
+		    String scene_desc = "";
+		    String p_name;
+		    String p_line = "";
+		    int p_lvl;
+		    LinkedList<Scene> scenes = new LinkedList<Scene>();
+		    
+		    for (int i = 0; i < cardList.getLength(); i++) {
+		    	
+		    	Node cardNode = cardList.item(i); 
+		    	ArrayList<Role> roles = new ArrayList<Role>();
+		    	
+		    	if (cardNode.getNodeType() == Node.ELEMENT_NODE) {		
+		    		Element cardElement = (Element) cardNode;
+		    		//System.out.println("Card name: " + cardElement.getAttribute("name"));
+		    		name = cardElement.getAttribute("name");
+		    		budget = Integer.parseInt(cardElement.getAttribute("budget"));
+			    	NodeList pList = cardNode.getChildNodes(); 
+			    	
+			    	for (int p = 0; p < pList.getLength(); p++) {
+			    		
+			    		Node pNode = pList.item(p);
+			    		if (pNode.getNodeType() == Node.ELEMENT_NODE) {
+			    			Element pElement = (Element) pNode;
+				    		switch (pNode.getNodeName()) {
+				    		case "scene": 
+				    			//System.out.println("Scene num: " + pElement.getAttribute("number"));
+				    			scene_num = Integer.parseInt(pElement.getAttribute("number"));
+				    			//System.out.println("Scene desc: " + cardElement.getElementsByTagName("scene").item(0).getTextContent());
+				    			scene_desc = cardElement.getElementsByTagName("scene").item(0).getTextContent();
+				    			break;
+				    		case "part":
+				    			NodeList pList2 = pNode.getChildNodes();
+				    			//System.out.println("Part name: " + pElement.getAttribute("name"));
+				    			p_name = pElement.getAttribute("name");
+				    			//System.out.println("Part level: " + pElement.getAttribute("level"));
+				    			p_lvl = Integer.parseInt(pElement.getAttribute("level"));
+				    			for (int q = 0; q < pList2.getLength(); q++) {
+				    				Node qNode = pList2.item(q);		
+				    				if (qNode.getNodeType() == Node.ELEMENT_NODE) {
+				    					Element qElement = (Element) qNode;
+				    					switch (qNode.getNodeName()) {
+				    					case "line":
+				    						//System.out.println("Part line: " + pElement.getElementsByTagName("line").item(0).getTextContent());
+				    						p_line = pElement.getElementsByTagName("line").item(0).getTextContent();
+				    						break;
+				    					case "area":
+				    						break;
+				    					}
+				    				}
+				    			}
+				    			//System.out.println(p_name + "-" + p_line + "-" + p_lvl);
+				    			Role newRole = new Role(p_name, p_line, p_lvl, true);
+				    			roles.add(newRole);
+				    		}	
+			    		}
+			    	}
+		    	}
+		    	Role[] parts = new Role[roles.size()];
+		    	parts = roles.toArray(parts);
+		    	Scene newScene = new Scene(name, scene_desc, budget, scene_num, parts);
+		    	scenes.add(newScene);
+		    }
+		    Deck deck = new Deck(scenes);
+	    } else {
+	    	// root is board
+	    	// loop through sets first
+	    	
+	    	ArrayList<Location> locations = new ArrayList<Location>();
+	    	
+	    	NodeList setList = doc.getElementsByTagName("set");
+	    	
+	    	String set_name;
+	    	String neighbor;
+	    	ArrayList<String> neighbors = new ArrayList<String>();
+	    	ArrayList<Role> roles = new ArrayList<Role>();
+	    	int takeNum = 0; // shot max
+	    	Role[] parts;
+	    	
+	    	for (int i = 0; i < setList.getLength(); i++) {
+	    		Node setNode = setList.item(i);
+	    		if (setNode.getNodeType() == Node.ELEMENT_NODE) {
+	    			Element setElement = (Element) setNode;
+	    			System.out.println("Set name: " + setElement.getAttribute("name"));
+	    			set_name = setElement.getAttribute("name");
+	    			NodeList bigList = setNode.getChildNodes();
+	    			
+	    			for (int j = 0; j < bigList.getLength(); j++) {
+	    				Node tNode = bigList.item(j);
+	    				if (tNode.getNodeType() == Node.ELEMENT_NODE) {
+	    					Element tElement = (Element) tNode;
+	    					switch (tNode.getNodeName()) {
+	    					case "neighbors":
+	    						NodeList nList = tNode.getChildNodes();
+	    						for (int n = 0; n < nList.getLength(); n++) {
+	    							Node nNode = nList.item(n);
+	    							if (nNode.getNodeType() == Node.ELEMENT_NODE) {
+				    					Element nElement = (Element) nNode;
+				    					neighbor = nElement.getAttribute("name");
+				    					System.out.println("Neighbor name: " + neighbor);
+				    					neighbors.add(neighbor);
+	    							}
+	    						}
+	    						String[] _neighbors = new String[neighbors.size()];
+	    						_neighbors = neighbors.toArray(_neighbors);
+	    						break;
+	    					case "takes":
+	    						NodeList takeList = tNode.getChildNodes();
+	    						for (int k = 0; k < takeList.getLength(); k++)
+	    							takeNum++;
+	    						System.out.println("Number of takes: " + takeNum);
+	    						break;
+	    						
+	    					case "parts":
+	    						NodeList partsList = tNode.getChildNodes();
+	    						int p_lvl = 0;
+	    						String p_name = "";
+	    						String p_line = "";
+	    						for (int p = 0; p < partsList.getLength(); p++) {
+	    							Node partNode = partsList.item(p);
+	    							if (partNode.getNodeType() == Node.ELEMENT_NODE) {
+	    								Element pElement = (Element) partNode;
+	    								p_name = pElement.getAttribute("name");
+	    								p_lvl = Integer.parseInt(pElement.getAttribute("level"));
+	    								NodeList partList2 = partNode.getChildNodes();	
+	    								for (int q = 0; q < partList2.getLength(); q++) {
+	    									Node qNode = partList2.item(q);		
+	    				    				if (qNode.getNodeType() == Node.ELEMENT_NODE) {
+	    				    					Element qElement = (Element) qNode;
+	    				    					switch (qNode.getNodeName()) {
+	    				    					case "line":
+	    				    						p_line = pElement.getElementsByTagName("line").item(0).getTextContent();
+	    				    						break;
+	    				    					case "area":
+	    				    						break;
+	    				    					}
+	    				    				}
+	    								}
+	    							}
+	    							System.out.println("Role is: " + p_name + ". Level is: " + p_lvl + ". Line is: " + p_line);
+	    							Role newRole = new Role(p_name, p_line, p_lvl, false);
+	    							roles.add(newRole);
+	    						}
+	    						parts = new Role[roles.size()];
+	    				    	parts = roles.toArray(parts);
+	    					}
+	    				}
+	    			}
+
+	    			Location newLocation = new Location(set_name, takeNum, 0, null, null);
+	    			locations.add(newLocation);
+		    		takeNum = 0;
+	    		}
 	    	}
-	    	Node cNode = cList.item(i);
-	    	if (cNode.getNodeType() == Node.ELEMENT_NODE) {
-	    		Element cElement = (Element) cNode;
-	    		System.out.println("Card name: " + cElement.getAttribute("card"));
-	    		System.out.println("Scene name: " + cElement.getAttribute("scene"));
-	    	}
+	    	
+	    	
+	    	// node office
+	    	// then trailer and office
 	    }
+	    
+	    
 	    // if root == board
 		} catch (Exception e) {
 			e.printStackTrace();

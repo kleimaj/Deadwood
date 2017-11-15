@@ -15,6 +15,7 @@ public class Scene {
 	String name;				// Name of the scene (card)
 	String description;			// Description of the scene
 	int budget;					// Budget (requirement) of the scene
+	int number;					// Number displayed on the card
 	Role[] cardRoles;			// An array of roles on the card
 	boolean isWrappedUp;		// Flag notifying if scene is wrapped up
 	 
@@ -28,10 +29,11 @@ public class Scene {
 	//		- the scenes are composed of roles which are also created during the XML parse
 	//		- by default the scene is not wrapped up
 	//
-	public Scene(String name, String desc, int budget, Role[] cardRoles) {
+	public Scene(String name, String desc, int budget, int number, Role[] cardRoles) {
 		this.name = name;
 		this.description = desc;
 		this.budget = budget;
+		this.number = number;
 		this.cardRoles = cardRoles;
 		isWrappedUp = false;
 	}
