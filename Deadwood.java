@@ -45,7 +45,8 @@ public class Deadwood {
 		//Deck deck = new Deck();
 		//Location[] allLocations = new Location[0];
 		
-	/*	Board game = new Board(allLocations, deck);
+	//begin comment here
+		Board game = new Board(allLocations, deck);
 		for (int i = 0; i < numPlayers; i++) {
 			 String name = console.next();
 			 game.addPlayer(new Player(name, trailer));
@@ -65,6 +66,7 @@ public class Deadwood {
 					System.out.println(currentPlayer.getName()+"'s turn!");
 					
 						//Start loop 1
+				while(true) {
 					System.out.println("Select what you want to do: ");
 					ArrayList<String> availableActions = new ArrayList<String>();
 					int count = 1;
@@ -107,7 +109,7 @@ public class Deadwood {
 							break;
 						}
 						
-				}
+					}
 					String action = availableActions.get(count-1);
 					if (action.equals("move")) {
 						currentPlayer.Move();//effect hasMoved = ...
@@ -117,28 +119,48 @@ public class Deadwood {
 							if (reply.equals("y")) {
 								currentPlayer.Upgrade();
 							}
+							break;
 						}
 						if (currentPlayer.getLocation().isLot() && currentPlayer.getLocation().isWrappedUp() == false) {
 							System.out.println("Would you like to Take a Role? (y/n)");
 							String reply = console.next();
 							if (reply.equals("y")) {
-								currentPlayer.TakeRole();
+								currentPlayer.TakeRole();	//can a player move, take a role, and act all in one move? right now no
+								break;
 							}
 						}
 					}
 					if (action.equals("upgrade")) {
-						currentPlayer.Upgrade();//effect endTurn = ...
+						currentPlayer.Upgrade();//effect endTurn = ...    //can player upgrade then move? if yes, can they take a role after?
+						break;
 					}
 					if (action.equals("act")) {
 						currentPlayer.Act();//effect endTurn = ...
+						break;
 					}
 					if (action.equals("rehearse")) {
 						currentPlayer.Rehearse();//effect endTurn = ...
+						break;
 					}
 					if (action.equals("take role")) {
 						currentPlayer.TakeRole();
+						if (currentPlayer.isInRole() == true) {
+							System.out.println("Would you like to Act (1) or Rehearse? (2) ");
+							int reply = console.nextInt();
+							if (reply == 1) {
+								currentPlayer.Act();
+								break;
+							}
+							else if (reply == 2) {
+								currentPlayer.Rehearse();
+								break;
+							}
+							else {
+								break;
+							}
+						}
 					}
-					
+				}
 					//End Loop 1
 					index++; //end of player's turn
 				
@@ -159,7 +181,7 @@ public class Deadwood {
 		}
 		
 			
-		console.close();	 */			
+		console.close();	 //end comment here			
 	} 
 	
 	
