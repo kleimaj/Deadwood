@@ -20,6 +20,7 @@ public class Deadwood {
 		
 		File cardsFile = new File(args[0]);
 		File boardFile = new File(args[1]);
+		//parseXML(cardsFile);
 		parseXML(boardFile);
 		
 		// Scanner
@@ -44,7 +45,7 @@ public class Deadwood {
 		//Location trailer = new Location();//need to change this
 		//Deck deck = new Deck();
 		//Location[] allLocations = new Location[0];
-		
+	/*	
 	//begin comment here
 		Board game = new Board(allLocations, deck);
 		for (int i = 0; i < numPlayers; i++) {
@@ -181,7 +182,7 @@ public class Deadwood {
 		}
 		
 			
-		console.close();	 //end comment here			
+		console.close();	 //end comment here		*/	
 	} 
 	
 	
@@ -230,7 +231,6 @@ public class Deadwood {
 		    	
 		    	if (cardNode.getNodeType() == Node.ELEMENT_NODE) {		
 		    		Element cardElement = (Element) cardNode;
-		    		//System.out.println("Card name: " + cardElement.getAttribute("name"));
 		    		name = cardElement.getAttribute("name");
 		    		budget = Integer.parseInt(cardElement.getAttribute("budget"));
 			    	NodeList pList = cardNode.getChildNodes(); 
@@ -242,16 +242,12 @@ public class Deadwood {
 			    			Element pElement = (Element) pNode;
 				    		switch (pNode.getNodeName()) {
 				    		case "scene": 
-				    			//System.out.println("Scene num: " + pElement.getAttribute("number"));
 				    			scene_num = Integer.parseInt(pElement.getAttribute("number"));
-				    			//System.out.println("Scene desc: " + cardElement.getElementsByTagName("scene").item(0).getTextContent());
 				    			scene_desc = cardElement.getElementsByTagName("scene").item(0).getTextContent();
 				    			break;
 				    		case "part":
 				    			NodeList pList2 = pNode.getChildNodes();
-				    			//System.out.println("Part name: " + pElement.getAttribute("name"));
 				    			p_name = pElement.getAttribute("name");
-				    			//System.out.println("Part level: " + pElement.getAttribute("level"));
 				    			p_lvl = Integer.parseInt(pElement.getAttribute("level"));
 				    			for (int q = 0; q < pList2.getLength(); q++) {
 				    				Node qNode = pList2.item(q);		
@@ -259,7 +255,6 @@ public class Deadwood {
 				    					Element qElement = (Element) qNode;
 				    					switch (qNode.getNodeName()) {
 				    					case "line":
-				    						//System.out.println("Part line: " + pElement.getElementsByTagName("line").item(0).getTextContent());
 				    						p_line = pElement.getElementsByTagName("line").item(0).getTextContent();
 				    						break;
 				    					case "area":
@@ -291,15 +286,21 @@ public class Deadwood {
 	    	String set_name;
 	    	String neighbor;
 	    	ArrayList<String> neighbors = new ArrayList<String>();
-	    	ArrayList<Role> roles = new ArrayList<Role>();
+	    //	ArrayList<Role> roles = new ArrayList<Role>();
 	    	int takeNum = 0; // shot max
-	    	Role[] parts;
-	    	
+	    	Role[] parts = null;
+			int p_lvl = 0;
+			String p_name = "";
+			String p_line = "";
+			
 	    	for (int i = 0; i < setList.getLength(); i++) {
+	    		takeNum = 0;
+	    		parts = null;
+	    		ArrayList<Role> roles = new ArrayList<Role>();
 	    		Node setNode = setList.item(i);
 	    		if (setNode.getNodeType() == Node.ELEMENT_NODE) {
 	    			Element setElement = (Element) setNode;
-	    			System.out.println("Set name: " + setElement.getAttribute("name"));
+	    			//System.out.println("Set name: " + setElement.getAttribute("name"));
 	    			set_name = setElement.getAttribute("name");
 	    			NodeList bigList = setNode.getChildNodes();
 	    			
@@ -315,7 +316,7 @@ public class Deadwood {
 	    							if (nNode.getNodeType() == Node.ELEMENT_NODE) {
 				    					Element nElement = (Element) nNode;
 				    					neighbor = nElement.getAttribute("name");
-				    					System.out.println("Neighbor name: " + neighbor);
+				    					//System.out.println("Neighbor name: " + neighbor);
 				    					neighbors.add(neighbor);
 	    							}
 	    						}
@@ -324,16 +325,17 @@ public class Deadwood {
 	    						break;
 	    					case "takes":
 	    						NodeList takeList = tNode.getChildNodes();
-	    						for (int k = 0; k < takeList.getLength(); k++)
-	    							takeNum++;
-	    						System.out.println("Number of takes: " + takeNum);
+	    						for (int k = 0; k < takeList.getLength(); k++) {
+	    							// create take objects here (GUI)
+	    							Node takeNode = takeList.item(k);
+	    							if (takeNode.getNodeType() == Node.ELEMENT_NODE) {
+		    							takeNum++;
+	    							}
+	    						}
 	    						break;
 	    						
 	    					case "parts":
 	    						NodeList partsList = tNode.getChildNodes();
-	    						int p_lvl = 0;
-	    						String p_name = "";
-	    						String p_line = "";
 	    						for (int p = 0; p < partsList.getLength(); p++) {
 	    							Node partNode = partsList.item(p);
 	    							if (partNode.getNodeType() == Node.ELEMENT_NODE) {
@@ -354,20 +356,23 @@ public class Deadwood {
 	    				    					}
 	    				    				}
 	    								}
+	        							//System.out.println("Role is: " + p_name + ". Level is: " + p_lvl + ". Line is: " + p_line);
+		    							Role newRole = new Role(p_name, p_line, p_lvl, false);
+		    							roles.add(newRole);
 	    							}
-	    							System.out.println("Role is: " + p_name + ". Level is: " + p_lvl + ". Line is: " + p_line);
-	    							Role newRole = new Role(p_name, p_line, p_lvl, false);
-	    							roles.add(newRole);
 	    						}
-	    						parts = new Role[roles.size()];
-	    				    	parts = roles.toArray(parts);
 	    					}
 	    				}
+						parts = new Role[roles.size()];
+				    	parts = roles.toArray(parts);
 	    			}
-
-	    			Location newLocation = new Location(set_name, takeNum, 0, null, null);
+	    			System.out.println("SET: " + set_name + " " + takeNum + " ");
+	    			System.out.println("ROLES:");
+	    			for (int z = 0; z < parts.length; z++) {
+	    				System.out.println(parts[z].getName());
+	    			}
+	    			Location newLocation = new Location(set_name, takeNum, 0, null, parts);
 	    			locations.add(newLocation);
-		    		takeNum = 0;
 	    		}
 	    	}
 	    	
