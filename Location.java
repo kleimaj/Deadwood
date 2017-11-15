@@ -12,7 +12,7 @@ public class Location {
 	// Attributes 
 	
 	String name;				// (All Locations) Name of the location - ie. church, lot, hotel...
-	Location[] neighbors;		// (All Locations) Array of neighbors
+	String[] neighbors;		// (All Locations) Array of neighbors
 	boolean isLot;				// (All locations) 1 if the location's name == lot
 
 	int ShotMax;				// (Lot only)
@@ -33,7 +33,6 @@ public class Location {
 	// 
 	public Location(String name){
 		this.name = name;
-		//this.neighbors = neighbors;
 		isLot = false;
 	}
 	
@@ -46,7 +45,6 @@ public class Location {
 	// 
 	public Location(String name, int shotMax,int shotsTaken, Scene currScene, Role[] offCard) {
 		this.name = name;
-		//this.neighbors = neighbors;
 		ShotMax = shotMax;
 		ShotsTaken=shotsTaken;
 		currentScene = currScene;
@@ -116,7 +114,7 @@ public class Location {
 	//		- none	
 	// Postconditions:
 	//		- returns neighbors
-	public Location[] getNeighbors() {
+	public String[] getNeighbors() {
 		return neighbors;
 	}
 	
@@ -187,7 +185,7 @@ public class Location {
 	// Notes:
 	//
 	//
-	public void setNeighbors(Location[] neighbors) {
+	public void setNeighbors(String[] neighbors) {
 		this.neighbors = neighbors;
 	}
 }

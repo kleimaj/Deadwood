@@ -45,7 +45,7 @@ public class Deadwood {
 		//Location trailer = new Location();//need to change this
 		//Deck deck = new Deck();
 		//Location[] allLocations = new Location[0];
-	/*	
+		
 	//begin comment here
 		Board game = new Board(allLocations, deck);
 		for (int i = 0; i < numPlayers; i++) {
@@ -182,7 +182,7 @@ public class Deadwood {
 		}
 		
 			
-		console.close();	 //end comment here		*/	
+		console.close();	 //end comment here			
 	} 
 	
 	
@@ -205,7 +205,7 @@ public class Deadwood {
 	    DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
 	    
 	    // Create a document from a file
-	    Document doc = dBuilder.parse(inputFile);    // the .xml file
+	    Document doc = dBuilder.parse(inputFile);   
 	    doc.getDocumentElement().normalize();
 	    
 	    // Extract the root and other elements
@@ -213,7 +213,6 @@ public class Deadwood {
 	    
 	    if (root.getNodeName() == "cards") {
 		    NodeList cardList = doc.getElementsByTagName("card"); 
-		    // make it a single variable each time instead of lists
 		    
 		    int budget = 0;
 		    int scene_num = 0;
@@ -285,10 +284,9 @@ public class Deadwood {
 	    	
 	    	String set_name;
 	    	String neighbor;
-	    	ArrayList<String> neighbors = new ArrayList<String>();
-	    //	ArrayList<Role> roles = new ArrayList<Role>();
 	    	int takeNum = 0; // shot max
 	    	Role[] parts = null;
+	    	String[] _neighbors = null;
 			int p_lvl = 0;
 			String p_name = "";
 			String p_line = "";
@@ -297,10 +295,11 @@ public class Deadwood {
 	    		takeNum = 0;
 	    		parts = null;
 	    		ArrayList<Role> roles = new ArrayList<Role>();
+		    	ArrayList<String> neighbors = new ArrayList<String>();
+		    	
 	    		Node setNode = setList.item(i);
 	    		if (setNode.getNodeType() == Node.ELEMENT_NODE) {
 	    			Element setElement = (Element) setNode;
-	    			//System.out.println("Set name: " + setElement.getAttribute("name"));
 	    			set_name = setElement.getAttribute("name");
 	    			NodeList bigList = setNode.getChildNodes();
 	    			
@@ -316,11 +315,10 @@ public class Deadwood {
 	    							if (nNode.getNodeType() == Node.ELEMENT_NODE) {
 				    					Element nElement = (Element) nNode;
 				    					neighbor = nElement.getAttribute("name");
-				    					//System.out.println("Neighbor name: " + neighbor);
 				    					neighbors.add(neighbor);
 	    							}
 	    						}
-	    						String[] _neighbors = new String[neighbors.size()];
+	    						_neighbors = new String[neighbors.size()];
 	    						_neighbors = neighbors.toArray(_neighbors);
 	    						break;
 	    					case "takes":
@@ -366,23 +364,74 @@ public class Deadwood {
 						parts = new Role[roles.size()];
 				    	parts = roles.toArray(parts);
 	    			}
-	    			System.out.println("SET: " + set_name + " " + takeNum + " ");
+	    	/*		System.out.println("SET: " + set_name + " " + takeNum + " ");
 	    			System.out.println("ROLES:");
 	    			for (int z = 0; z < parts.length; z++) {
 	    				System.out.println(parts[z].getName());
 	    			}
+	    			System.out.println("NEIGHBORS:");
+	    			for (int w = 0; w < _neighbors.length; w++) {
+	    				System.out.println(_neighbors[w]);
+	    			} */
 	    			Location newLocation = new Location(set_name, takeNum, 0, null, parts);
+	    			newLocation.setNeighbors(_neighbors);
 	    			locations.add(newLocation);
 	    		}
 	    	}
+	    	// TRAILER ----------------------------------------------------------------->
+	 /*   	NodeList trailer = doc.getElementsByTagName("trailer");
+	    	Node trailerNode = trailer.item(0);
+	    	ArrayList<String> neighbors = new ArrayList<String>();
+	    	_neighbors = null;
 	    	
+	    	NodeList neighborList = trailerNode.getChildNodes();
+	    	for (int temp = 0; temp < neighborList.getLength(); temp++) {
+	    		Node _nNode = neighborList.item(temp); 
+	    		if (_nNode.getNodeType() == Node.ELEMENT_NODE) {
+					Element nElement = (Element) _nNode;
+					neighbor = nElement.getAttribute("name");
+					neighbors.add(neighbor);
+				}
+			}
+	    	_neighbors = new String[neighbors.size()];
+			_neighbors = neighbors.toArray(_neighbors);
 	    	
-	    	// node office
-	    	// then trailer and office
-	    }
+	    	Location newLocation = new Location("Trailer");
+	    	newLocation.setNeighbors(_neighbors);
+	    	locations.add(newLocation);
+	    	
+	    	// CASTING OFFICE ---------------------------------------------------------->
+	    	NodeList office = doc.getElementsByTagName("office");
+	    	Node officeNode = trailer.item(0);
+	    	ArrayList<String> neighbors = new ArrayList<String>();
+	    	_neighbors = null;
+	    	
+	    	NodeList officeList = officeNode.getChildNodes();
+	    	for (int temp = 0; temp < officeList.getLength(); temp++) {
+	    		Node oNode = officeList.item(temp);
+	    		if (oNode.getNodeType() == Node.ELEMENT_NODE) {
+	    			Element office_e = (Element) office;
+	    			switch (oNode.getNodeName()){
+	    			case "neighbors":
+	    				NodeList nList2 = oNode.getChildNodes();
+						for (int n = 0; n < nList2.getLength(); n++) {
+							Node n_Node = nList2.item(n);
+							if (n_Node.getNodeType() == Node.ELEMENT_NODE) {
+		    					Element n_Element = (Element) n_Node;
+		    					neighbor = n_Element.getAttribute("name");
+		    					neighbors.add(neighbor);
+							}
+						}
+						_neighbors = new String[neighbors.size()];
+						_neighbors = neighbors.toArray(_neighbors);
+		    			break;
+	    			case "upgrades":
+	    				break;
+	    			}
+	    		}
+	    	} */
+	    } 
 	    
-	    
-	    // if root == board
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
