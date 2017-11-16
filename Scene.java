@@ -73,7 +73,7 @@ public class Scene {
 	// Postconditions:
 	//		- returns attribute isWrappedUp
 	public boolean isWrappedUp() {
-		return isWrappedUp();
+		return isWrappedUp;
 	}
 	
 	// wrapUp

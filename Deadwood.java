@@ -5,6 +5,7 @@
  * November 2017
  */
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 import java.io.*;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.DocumentBuilder;
@@ -12,22 +13,34 @@ import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 import org.w3c.dom.Node;
 import org.w3c.dom.Element;
+import java.util.concurrent.TimeUnit;
 
 public class Deadwood {
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws InterruptedException {
 		// TODO Auto-generated method stub
 		
 		File cardsFile = new File(args[0]);
 		File boardFile = new File(args[1]);
-		//parseXML(cardsFile);
-		parseXML(boardFile);
+		Deck deck = getDeck(cardsFile);
+		ArrayList<Location> locations = getLocations(boardFile);
 		
+		//need to give locations scenes
+		
+		for (int i = 0; i < locations.size(); i++) {
+			locations.get(i).setScene(deck.draw());
+		}
 		// Scanner
 		Scanner console = new Scanner(System.in);
 		
 		System.out.println("Welcome to Deadwood!");
+	//	TimeUnit.SECONDS.sleep(2);
 		System.out.println("How many Players do we have today? (maximum of 8)");
+		
+		Location[] allLocations = new Location[locations.size()];
+		for (int i = 0; i < locations.size(); i++) {
+			allLocations[i] = locations.get(i);
+		}
 		
 		int numPlayers;
 		// loops until user inputs valid number of players
@@ -47,7 +60,8 @@ public class Deadwood {
 		//Location[] allLocations = new Location[0];
 		
 	//begin comment here
-/*		Board game = new Board(allLocations, deck);
+		Board game = new Board(allLocations, deck);
+		Location trailer = game.getTrailer();
 		for (int i = 0; i < numPlayers; i++) {
 			 String name = console.next();
 			 game.addPlayer(new Player(name, trailer));
@@ -58,6 +72,7 @@ public class Deadwood {
 		for (int i = 0; i < 4; i++) { //4 days
 		//each day
 			System.out.println("Day "+i+1);
+	//		TimeUnit.SECONDS.sleep(2);
 			int index = 0;
 			while(game.isEndDay()==false) {
 				if (index == numPlayers) { //cycles through players
@@ -65,21 +80,26 @@ public class Deadwood {
 				}
 					Player currentPlayer = players[index];
 					System.out.println(currentPlayer.getName()+"'s turn!");
+	//				TimeUnit.SECONDS.sleep(1);
 					System.out.println("Player: "+currentPlayer.getName()+" ($"+currentPlayer.getCurrency()+", "+currentPlayer.getFame()+" Fame)");
 					if (currentPlayer.getRole() != null) {
 						System.out.println("Working as "+currentPlayer.getRole().getName()+", '"+currentPlayer.getRole().getDialogue()+"'");
 					}
-					System.out.println(currentPlayer.name+" is currently in "+currentPlayer.getLocation().getName());
+					if (currentPlayer.getLocation().isLot()) {
+					System.out.print(currentPlayer.name+" is currently in "+currentPlayer.getLocation().getName());
+					System.out.println(" which has "+currentPlayer.currentLocation.getShotsTaken()+"/"+currentPlayer.currentLocation.getShotsMax()+" Shots Completed");
+					}
+					if (currentPlayer.getLocation().isLot()==false) {
+						System.out.println(currentPlayer.name+" is currently in "+currentPlayer.getLocation().getName());
+					}
 					
 						//Start loop 1
 				while(true) {
-					System.out.println("Select what you want to do: ");
+					//System.out.println("Select what you want to do: ");
 					ArrayList<String> availableActions = new ArrayList<String>();
 					int count = 1;
 					int theNum = 0;
-					//valid move
 					System.out.println("Select (the number) what you want to do: ");
-					// + Boolean variables endTurn, hasMoved
 					while(true) {
 						if (currentPlayer.isInRole()==false) {//+condition hasMoved == false && endTurn == false
 							availableActions.add("move");
@@ -101,7 +121,7 @@ public class Deadwood {
 							System.out.println("Rehearse ("+count+")");
 							count++;
 						}
-						if (currentPlayer.isInRole() == false && currentPlayer.getLocation().isWrappedUp() == false) {
+						if (currentPlayer.isInRole() == false && currentPlayer.getLocation().isWrappedUp() == false && currentPlayer.getLocation().isLot()==true) {
 							availableActions.add("take role");
 							System.out.println("Take Role ("+count+")");
 							count++;
@@ -116,9 +136,9 @@ public class Deadwood {
 						}
 						
 					}
-					String action = availableActions.get(count-1);
+					String action = availableActions.get(theNum-1);
 					if (action.equals("move")) {
-						currentPlayer.Move();//effect hasMoved = ...
+						currentPlayer.Move(locations);//effect hasMoved = ...
 						if (currentPlayer.getLocation().getName().equals("Casting Office")) { //if the player moves to casting office they can upgrade
 							System.out.println("Would you like to Upgrade? (y/n)");
 							String reply = console.next();
@@ -462,7 +482,7 @@ public class Deadwood {
 
 	}
 	
-	public Deck getDeck(File input) {
+	public static Deck getDeck(File input) {
 		try {
 			
 			// Create a document builder
@@ -548,9 +568,9 @@ public class Deadwood {
 		return null;
 	}
 	
-	public Location[] getLocations(File input) {
+	public static ArrayList<Location> getLocations(File input) {
 		
-		Location[] allLocations = null;
+		//Location[] allLocations = null;
 		try {
 			
 		// Create a document builder
@@ -736,7 +756,7 @@ public class Deadwood {
 		newLocation = new Location("Office");
     	newLocation.setNeighbors(_neighbors);
     	locations.add(newLocation);
-    	allLocations = locations.toArray(allLocations);
+    	return locations;
     	
     	
    
@@ -744,6 +764,6 @@ public class Deadwood {
 	} catch (Exception e) {
 		e.printStackTrace();
 	}
-		return allLocations;
+		return null;
 	}
 }

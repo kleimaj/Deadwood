@@ -15,7 +15,7 @@ public class Board {
 	int dayCounter;				// The number of days played in the game
 	Location[] locations;		// Array of all locations on the board
 	Deck deck;					// Deck that contains the discard pile and active pile
-	Player[] players;			// Array of all active players. SORTED IN TURN ORDER.
+	ArrayList<Player> players;			// Array of all active players. SORTED IN TURN ORDER.
 	
 	// Constructor
 	
@@ -30,7 +30,7 @@ public class Board {
 		dayCounter = 0;
 		locations = newLocations;
 		deck = newDeck;
-		players = null; //set players to null?
+		players = new ArrayList<Player>(); //set players to null?
 	}
 	
 	// CycleDay
@@ -58,8 +58,8 @@ public class Board {
 		}
 		
 		// change all player locations to trailer
-		for (int i = 0; i < players.length; i++) { 
-			players[i].setLocation(trailer);
+		for (int i = 0; i < players.size(); i++) { 
+			players.get(i).setLocation(trailer);
 		}
 		
 		UpdateDayCount();
@@ -101,10 +101,10 @@ public class Board {
 		theScene.wrapUp();
 		
 		// take all players in this scene out of their roles
-		for (int i = 0; i < players.length; i++) {
-			if (players[i].getLocation().getName().equals(givenLocation.getName()) && players[i].isInRole()) {
-				players[i].getRole().notTaken();
-				players[i].setRole(null);
+		for (int i = 0; i < players.size(); i++) {
+			if (players.get(i).getLocation().getName().equals(givenLocation.getName()) && players.get(i).isInRole()) {
+				players.get(i).getRole().notTaken();
+				players.get(i).setRole(null);
 			}
 		}
 		
@@ -116,18 +116,29 @@ public class Board {
 	}
 	//adds player to players[]
 	public void addPlayer(Player player) {
-		Player[] newPlayers = new Player[players.length+1];
+		//Player[] newPlayers = new Player[players.size()+1];
 		
-		for (int i = 0; i < players.length; i++) {
-			newPlayers[i] = players[i];
-		}
-		newPlayers[players.length] = player;
-		
-		players = newPlayers;
+		players.add(player);
 	}
 	
 	public Player[] getPlayers() {
-		return players;
+		Player[] returnPlayers = new Player[players.size()];
+		for (int i = 0; i < players.size(); i++) {
+			returnPlayers[i] = players.get(i);
+		}
+		return returnPlayers;
+	}
+	
+	public Location getTrailer() {
+		Location trailer = null;
+		for (int i = 0; i < locations.length; i++) {
+			//System.out.println(locations[i].getName());
+			if (locations[i].getName().equals("Trailer")) {
+				trailer = locations[i];
+				break;
+			}
+		}
+		return trailer;
 	}
 	
 	// ResetScenes
@@ -157,6 +168,7 @@ public class Board {
 	//returns true if all scenes are wrapped
 	public boolean isEndDay() {
 		for (int i = 0 ; i < locations.length; i++) {
+			//System.out.println(locations[i].getScene().getName());
 			if (locations[i].getScene().isWrappedUp()==false) {
 				return false;
 			}
@@ -186,10 +198,10 @@ public class Board {
 		Player[] onActors = new Player[onCard.length];
 		for (int i = 0; i < onCard.length; i++) {
 			
-			for (int j = 0; j < players.length; j++) {
-				if (players[j].isInRole()) {
-					if(players[j].getRole() == onCard[i]) {
-						onActors[i] = players[j];
+			for (int j = 0; j < players.size(); j++) {
+				if (players.get(j).isInRole()) {
+					if(players.get(j).getRole() == onCard[i]) {
+						onActors[i] = players.get(j);
 						break;
 					}
 
@@ -225,13 +237,13 @@ public class Board {
 		
 		// iterate through off card roles
 		for (int i = 0; i < offCard.length; i++) { 
-			for (int j = 0; j < players.length; j++) { 
+			for (int j = 0; j < players.size(); j++) { 
 				// if one of these roles is equal to a player's, pay them
-				if (players[j].getRole().getName().equals(offCard[i].getName())) {
+				if (players.get(j).getRole().getName().equals(offCard[i].getName())) {
 					int payout = offCard[i].getRank();
-					System.out.println(players[j].getName()+" earns a bonus of $"+payout);
-					players[j].setCurrency(payout+players[j].getCurrency());
-					System.out.println(players[j].getName()+" now has a currency of $"+players[j].getCurrency());
+					System.out.println(players.get(j).getName()+" earns a bonus of $"+payout);
+					players.get(j).setCurrency(payout+players.get(j).getCurrency());
+					System.out.println(players.get(j).getName()+" now has a currency of $"+players.get(j).getCurrency());
 				}
 			}
 		}
@@ -249,21 +261,21 @@ public class Board {
 	//
 	public Player TallyScore() {
 		
-		for (int i = 0; i < players.length; i++) {
-			players[i].setScore();
+		for (int i = 0; i < players.size(); i++) {
+			players.get(i).setScore();
 		}
 		
 		Player winner = null;
 		
-		for (int i = 0; i < players.length; i++) {
-			if (players[i].getScore() >= winner.getScore()) {
-				winner = players[i];
+		for (int i = 0; i < players.size(); i++) {
+			if (players.get(i).getScore() >= winner.getScore()) {
+				winner = players.get(i);
 			}
 		}
-		Arrays.sort(players);
+		Collections.sort(players);
 		int count = 1;
-		for (int i = 0; i < players.length; i++) {
-			System.out.println("#"+count+" "+players[i].getName()+" Score: "+players[i].getScore());
+		for (int i = 0; i < players.size(); i++) {
+			System.out.println("#"+count+" "+players.get(i).getName()+" Score: "+players.get(i).getScore());
 			count++;
 		}
 		
