@@ -215,6 +215,12 @@ public class Deadwood {
 	} 
 	
 	
+	// getDeck
+	// Preconditions:
+	//		- File is the cards XML file
+	// Postconditions:
+	//		- Returns a deck object of all the scenes as a linked list
+	//
 	public static Deck getDeck(File input) {
 		
 		try {
@@ -300,6 +306,12 @@ public class Deadwood {
 	}
 	
 	
+	// getLocations
+	// Preconditions:
+	//		- File is the board XML file
+	// Postconditions:
+	//		- Returns an arraylist of location objects- all of them on the board
+	//
 	public static ArrayList<Location> getLocations(File input) {
 		
 		try {
