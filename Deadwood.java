@@ -34,7 +34,8 @@ public class Deadwood {
 		Scanner console = new Scanner(System.in);
 		
 		System.out.println("Welcome to Deadwood!");
-	//	TimeUnit.SECONDS.sleep(2);
+		TimeUnit.SECONDS.sleep(1);
+		while(true) { //want to play again loop
 		System.out.println("How many Players do we have today? (maximum of 8)");
 		
 		Location[] allLocations = new Location[locations.size()];
@@ -72,25 +73,26 @@ public class Deadwood {
 		for (int i = 0; i < 4; i++) { //4 days
 		//each day
 			System.out.println("Day "+i+1);
-	//		TimeUnit.SECONDS.sleep(2);
+			TimeUnit.SECONDS.sleep(1);
 			int index = 0;
 			while(game.isEndDay()==false) {
 				if (index == numPlayers) { //cycles through players
 					index = 0;
 				}
 					Player currentPlayer = players[index];
+					System.out.println();
 					System.out.println(currentPlayer.getName()+"'s turn!");
-	//				TimeUnit.SECONDS.sleep(1);
+					TimeUnit.SECONDS.sleep(1);
 					System.out.println("Player: "+currentPlayer.getName()+" ($"+currentPlayer.getCurrency()+", "+currentPlayer.getFame()+" Fame)");
 					if (currentPlayer.getRole() != null) {
-						System.out.println("Working as "+currentPlayer.getRole().getName()+", '"+currentPlayer.getRole().getDialogue()+"'");
+						System.out.println("Working as "+currentPlayer.getRole().getName()+", '"+currentPlayer.getRole().getDialogue()+"' at Scene "+currentPlayer.getLocation().getScene().getNumber());
 					}
 					if (currentPlayer.getLocation().isLot()) {
-					System.out.print(currentPlayer.name+" is currently in "+currentPlayer.getLocation().getName());
+					System.out.print(currentPlayer.name+" is currently in the "+currentPlayer.getLocation().getName());
 					System.out.println(" which has "+currentPlayer.currentLocation.getShotsTaken()+"/"+currentPlayer.currentLocation.getShotsMax()+" Shots Completed");
 					}
 					if (currentPlayer.getLocation().isLot()==false) {
-						System.out.println(currentPlayer.name+" is currently in "+currentPlayer.getLocation().getName());
+						System.out.println(currentPlayer.name+" is currently in the "+currentPlayer.getLocation().getName());
 					}
 					
 						//Start loop 1
@@ -139,7 +141,7 @@ public class Deadwood {
 					String action = availableActions.get(theNum-1);
 					if (action.equals("move")) {
 						currentPlayer.Move(locations);//effect hasMoved = ...
-						if (currentPlayer.getLocation().getName().equals("Casting Office")) { //if the player moves to casting office they can upgrade
+						if (currentPlayer.getLocation().getName().equals("Office")) { //if the player moves to casting office they can upgrade
 							System.out.println("Would you like to Upgrade? (y/n)");
 							String reply = console.next();
 							if (reply.equals("y")) {
@@ -154,7 +156,9 @@ public class Deadwood {
 								currentPlayer.TakeRole();	//can a player move, take a role, and act all in one move? right now no
 								break;
 							}
+							break;
 						}
+						break; //??
 					}
 					if (action.equals("upgrade")) {
 						currentPlayer.Upgrade();//effect endTurn = ...    //can player upgrade then move? if yes, can they take a role after?
@@ -162,6 +166,9 @@ public class Deadwood {
 					}
 					if (action.equals("act")) {
 						currentPlayer.Act();//effect endTurn = ...
+						if (currentPlayer.getLocation().getShotsTaken() == currentPlayer.getLocation().getShotsMax()) {
+							game.WrapScene(currentPlayer.getLocation());
+						}
 						break;
 					}
 					if (action.equals("rehearse")) {
@@ -193,20 +200,22 @@ public class Deadwood {
 			}
 			game.CycleDay();
 		}
-		
+		//players[1].setCurrency(1); testing purposes
 		System.out.println("The game is over here are the results: ");
+		TimeUnit.SECONDS.sleep(1);
 		Player winner = game.TallyScore();
+		TimeUnit.SECONDS.sleep(1);
 		System.out.println("Congratulations, "+winner.getName()+"!!");
-		
+		TimeUnit.SECONDS.sleep(1);
 		System.out.println("Would you like to play again? (y/n)"); //need to make loop
 		
-		String playAgain = console.nextLine();
+		String playAgain = console.next();
 		
-		if (playAgain.equals("n")) {
-			//breaklocations
+		if (!playAgain.equals("y")) {
+			break;
 		}
 		
-			
+		}//end while loop here	
 		console.close();	 //end comment here	*/		
 	} 
 	

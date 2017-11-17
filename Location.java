@@ -81,6 +81,10 @@ public class Location {
 		return ShotMax;
 	}
 	
+	public void resetShots() {
+		ShotsTaken = 0;
+	}
+	
 	// getName
 	// Preconditions:
 	//		- none	

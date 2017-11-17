@@ -5,6 +5,8 @@
  * November 2017
  */
 import java.util.*;
+import java.util.concurrent.TimeUnit;
+
 //import java.io.*;
 
 //import javax.tools.JavaFileManager.Location;
@@ -109,6 +111,10 @@ public class Player implements Comparable<Player> {
 		return RehearsePoints;
 	}
 	
+	public void resetRehearsePoints() {
+		this.RehearsePoints = 0;
+	}
+	
 	// getScore
 	// Preconditions:
 	//		- none	
@@ -132,7 +138,7 @@ public class Player implements Comparable<Player> {
 	}
 	
 	public boolean isInCastingOffice() {
-		if (currentLocation.getName().equals("Casting Office")) {
+		if (currentLocation.getName().equals("Office")) {
 			return true;
 		}
 		else {
@@ -149,10 +155,10 @@ public class Player implements Comparable<Player> {
 	//		- player's new rank is set if was valid
 	// Notes:currentLocation
 	//	 
-	public boolean Upgrade() {
+	public boolean Upgrade() throws InterruptedException {
 		
 		boolean validMove = false;
-		if (currentLocation.getName().equals("Casting Office")) {
+		if (currentLocation.getName().equals("Office")) {
 			rank = this.getRank();
 			if (rank == 6) {
 				System.out.println("You cannot Upgrade anymore!");
@@ -168,14 +174,14 @@ public class Player implements Comparable<Player> {
 				int[] fameUp = {5,10,15,20,25};
 				
 				if (this.currency >= moneyUp[rank - 1] || this.fame >= fameUp[rank - 1]) {
-					System.out.print("With money you can upgrade to ranks: ");
+					System.out.print("With money ($"+this.getCurrency()+") you can upgrade to ranks: ");
 					for (int i = rank - 1; i < 5; i++) {
 						if(this.currency >= moneyUp[i]) {
 							System.out.print(i+2 + " ");
 						}
 					}
 					System.out.println();
-					System.out.print("With fame you can upgrade to ranks: ");
+					System.out.print("With fame ("+this.getFame()+") you can upgrade to ranks: ");
 					for (int i = rank - 1; i < 5; i++) {
 						if (this.fame >= fameUp[i]) {
 							System.out.print(i+2 + " ");
@@ -228,22 +234,26 @@ public class Player implements Comparable<Player> {
 							if (paymentMethod == 1) {
 								this.setCurrency(this.currency - moneyUp[desiredRank-2]);
 								this.setRank(desiredRank);
-								System.out.println("You are now rank: "+this.rank+" and have $+"+this.currency);
+								System.out.println("You are now rank: "+this.rank+" and have $"+this.currency);
+								TimeUnit.SECONDS.sleep(1);
+
 							} else {
 								this.setFame(this.fame - fameUp[desiredRank-2]);
 								this.setRank(desiredRank);
 								System.out.println("You are now rank: "+this.rank+" and have "+this.fame+" fame");
+								TimeUnit.SECONDS.sleep(1);
+
 							}
 							validMove = true;
 							break;
 						}
 					}
-					UpgradeManager.close();
+					//UpgradeManager.close();
 					return validMove;
 					
 				} else {
 					System.out.println("You do not have enough money nor enough fame to upgrade.");
-					UpgradeManager.close();
+					//UpgradeManager.close();
 					return false;
 				}	
 			}
@@ -264,7 +274,7 @@ public class Player implements Comparable<Player> {
 	//		- scanner MoveManager interacts with User prompting which neighbor they'd like to move to
 	//   	- is action selection method (NOTE, if player selects MOVE and they CAN move, they must move.
 	//
-	public void Move(ArrayList<Location> locations) {
+	public void Move(ArrayList<Location> locations) throws InterruptedException {
 		
 		if (this.currentRole == null) {
 			Scanner MoveManager = new Scanner(System.in);
@@ -272,28 +282,37 @@ public class Player implements Comparable<Player> {
 			while (validMove != true){
 				String[] neighbors = currentLocation.getNeighbors();
 				int count = 0;
-				System.out.println("Choose any of these available Locations");
+				System.out.println("Choose any of these available Locations (#)");
+				TimeUnit.SECONDS.sleep(1);
+
 				for(int i = 0; i < neighbors.length; i++){
-					System.out.println(neighbors[i]+" ("+count+")");
+					System.out.println(neighbors[i]+" ("+(count+1)+")");
+					count++;
 				}
 				
-				String UserMove = MoveManager.next();
+				int UserMove = MoveManager.nextInt()-1; //index of neighbor
 				Location neighbor = null;
-				for (int i = 0; i < neighbors.length; i++){
-					if (UserMove.equals(neighbors[i])){//have correct name of neighbor, need to get neighbor
-						
-						//System.out.println(locations.size());
-						for (int j = 0; j < locations.size(); j++) {
-							if (locations.get(j).getName().equals(neighbors[i])) {
-								neighbor = locations.get(j);
-							}
-						}
+				for (int i = 0; i < locations.size(); i++){
+					if(neighbors[UserMove].equals("trailer")&&locations.get(i).getName().equals("Trailer")) {//for lowercase trailer
+						neighbor = locations.get(i);
+						this.setLocation(neighbor);
+						validMove = true;
+					}
+					if (neighbors[UserMove].equals("office")&&locations.get(i).getName().equals("Office")) {
+						neighbor = locations.get(i);
+						this.setLocation(neighbor);
+						validMove = true;
+					}
+					if (neighbors[UserMove].equals(locations.get(i).getName())){//have correct name of neighbor, need to get neighbor
+						neighbor = locations.get(i);
 						this.setLocation(neighbor);
 						validMove = true;
 					}
 				}
 				if (validMove==false){
 					System.out.println("Not a valid Location, try again");
+					TimeUnit.SECONDS.sleep(2);
+
 				}
 			}
 			
@@ -313,44 +332,67 @@ public class Player implements Comparable<Player> {
 	// Notes:
 	//
 	//
-	public void Act() {
+	public void Act() throws InterruptedException {
 		
 		if (currentRole != null) {
 			
 			int budget = this.currentLocation.getScene().getBudget();
 			System.out.println("Must roll greater than or equal to " + budget +"!");
+			TimeUnit.SECONDS.sleep(1);
+
 			
 			int diceRoll = 1+(int)(6*Math.random());
 			
 			System.out.println("You rolled a " + diceRoll);
+			TimeUnit.SECONDS.sleep(1);
+
 			System.out.println("Along with your Rehearsal Points: "+ RehearsePoints);
 			System.out.println("Your overall dice roll = "+(RehearsePoints+diceRoll));
+			TimeUnit.SECONDS.sleep(1);
+
 			
 			// if they don't roll higher
 			if (diceRoll+RehearsePoints < budget) {
 				System.out.println("You did not roll at least a "+budget);
+				TimeUnit.SECONDS.sleep(1);
+
 				// off card earns dollar, on cards earn nothing
 				if (currentRole.isOnCard()==false) {
 					System.out.println("Because you are an Off-Card Actor, you've earned $1 !");
+					TimeUnit.SECONDS.sleep(1);
 					setCurrency(1+this.getCurrency()); //increments currency
 					System.out.println("you now have $"+this.getCurrency());
+					TimeUnit.SECONDS.sleep(1);
+
 				} else {
 					System.out.println("Sorry, you don't win anything");
+					TimeUnit.SECONDS.sleep(1);
+
 				}
 				
 			// if they roll equal to or higher
 			} else {
 				System.out.println("You succeeded in rolling greater than or equal to "+budget+"!");
+				TimeUnit.SECONDS.sleep(1);
+
 				// if they're an extra
 				if (currentRole.isOnCard() == false) {
 					System.out.println("You earned yourself $1 and 1 Fame!");
+					TimeUnit.SECONDS.sleep(1);
+
 					setCurrency(1+this.getCurrency());
 					setFame(1+this.getFame());
 					System.out.println("You now have $"+this.getCurrency()+" and "+this.getFame()+" Fame!");
+					TimeUnit.SECONDS.sleep(1);
+
 				} else { // they're an on-card actor
 					System.out.println("You earned yourself 2 Fame!");
+					TimeUnit.SECONDS.sleep(1);
+
 					setFame(2+this.getFame());
 					System.out.println("You now have "+this.getFame()+" Fame!");
+					TimeUnit.SECONDS.sleep(1);
+
 				}
 				// increment shot token, Deadwood.java will check for scene wrap up at end of player's turn
 					this.currentLocation.addShot();
@@ -375,6 +417,8 @@ public class Player implements Comparable<Player> {
 		if (currentRole != null) {
 			if (RehearsePoints < currentLocation.getScene().budget){
 				RehearsePoints++;
+				System.out.println(this.name+" now has "+this.RehearsePoints+" Rehearse Points");
+				
 			} else {
 				System.out.println("Unable to Rehearse anymore!"); //should never happen
 			}
@@ -393,7 +437,7 @@ public class Player implements Comparable<Player> {
 	// Notes:
 	//		- scanner RoleManager interacts with User prompting which Role they'd like to take
 	//
-	public void TakeRole() {
+	public void TakeRole() throws InterruptedException {
 		
 		if (currentLocation.isLot()) {
 			
@@ -409,6 +453,8 @@ public class Player implements Comparable<Player> {
 				
 				while (this.currentRole == null) {
 					System.out.println("Please choose one of the following roles by entering the index (0 if none): ");
+					TimeUnit.SECONDS.sleep(1);
+
 					System.out.println("Off Card:");
 					
 					for (int i = 1; i <= offCard.size(); i++) {
@@ -436,8 +482,11 @@ public class Player implements Comparable<Player> {
 						}
 						if (this.rank >= chosenRole.getRank()) {
 							setRole(chosenRole);
+							chosenRole.roleTaken();
 						} else {
 							System.out.println("You are not a high enough rank, try again");
+							TimeUnit.SECONDS.sleep(1);
+
 						}
 					} 
 					else if(playerIndex == 0) {
@@ -445,6 +494,8 @@ public class Player implements Comparable<Player> {
 					}
 					else {
 						System.out.println("Not a valid index, try again");
+						TimeUnit.SECONDS.sleep(2);
+
 					}
 				} // end of while loop
 				
@@ -520,11 +571,13 @@ public class Player implements Comparable<Player> {
 	//		- player's location is changed to newLocation
 	//
 	//
-	public void setLocation(Location newLocation) {
+	public void setLocation(Location newLocation) throws InterruptedException {
 		//System.out.println(currentLocation.getName());
 		this.currentLocation  = newLocation;
 		//System.out.println(currentLocation.getName());
 		System.out.println(name+" is now in "+newLocation.getName());
+		TimeUnit.SECONDS.sleep(1);
+
 	}
 	
 	// SetLocation

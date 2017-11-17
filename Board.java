@@ -5,6 +5,7 @@
  * November 2017
  */
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 
 
@@ -12,7 +13,7 @@ public class Board {
 	
 	// Attributes
 	
-	int dayCounter;				// The number of days played in the game
+	//int dayCounter;				// The number of days played in the game
 	Location[] locations;		// Array of all locations on the board
 	Deck deck;					// Deck that contains the discard pile and active pile
 	ArrayList<Player> players;			// Array of all active players. SORTED IN TURN ORDER.
@@ -27,7 +28,7 @@ public class Board {
 	//		- Game is ready to begin
 	//	
 	public Board(Location[] newLocations, Deck newDeck) { //my need to get rid of the Player[] parameter
-		dayCounter = 0;
+	//	dayCounter = 0;
 		locations = newLocations;
 		deck = newDeck;
 		players = new ArrayList<Player>(); //set players to null?
@@ -41,7 +42,7 @@ public class Board {
 	//		- Players are moved to Trailer
 	//		- Scenes are reset
 	//
-	public void CycleDay() {
+	public void CycleDay() throws InterruptedException {
 		
 		System.out.println("The day is over");
 		// need to get trailer location
@@ -53,7 +54,9 @@ public class Board {
 			}
 			if (locations[i].isLot()) { // reset scenes
 				deck.discard(locations[i].getScene()); // discards currentScene in Location
-				locations[i].setScene(deck.draw()); // sets a new random scene in Location
+				locations[i].setScene(deck.draw());// sets a new random scene in Location
+				locations[i].resetShots();
+				locations[i].getScene().unWrap();
 			}
 		}
 		
@@ -62,8 +65,10 @@ public class Board {
 			players.get(i).setLocation(trailer);
 		}
 		
-		UpdateDayCount();
+		//UpdateDayCount();
 		System.out.println("A new day is dawning...");
+		TimeUnit.SECONDS.sleep(2);
+
 	}
 	
 
@@ -80,7 +85,7 @@ public class Board {
 	// Notes:
 	// 		- will call Bonus if anyone is on-card
 	//
-	public void WrapScene(Location givenLocation) {
+	public void WrapScene(Location givenLocation) throws InterruptedException {
 		
 		// check if any player is onCard
 		Scene theScene = givenLocation.getScene();
@@ -105,11 +110,14 @@ public class Board {
 			if (players.get(i).getLocation().getName().equals(givenLocation.getName()) && players.get(i).isInRole()) {
 				players.get(i).getRole().notTaken();
 				players.get(i).setRole(null);
+				players.get(i).resetRehearsePoints();
 			}
 		}
 		
 		if (isEndDay()==false) {
-		System.out.println("Scene is Over! All Players participating in "+ theScene.getName()+ " must Move!");
+		System.out.println("Scene is Over! All Players participating in '"+ theScene.getName()+ "' must Move!");
+		TimeUnit.SECONDS.sleep(2);
+
 		} else {
 			CycleDay();
 		}
@@ -161,15 +169,15 @@ public class Board {
 	//		- day is cycled
 	// Postconditions:
 	// 		- dayCounter is incremented by 1
-	private void UpdateDayCount() {
-		dayCounter++;
-	}
+//	private void UpdateDayCount() {
+//		dayCounter++;
+//	}
 	
 	//returns true if all scenes are wrapped
 	public boolean isEndDay() {
 		for (int i = 0 ; i < locations.length; i++) {
 			//System.out.println(locations[i].getScene().getName());
-			if (locations[i].getScene().isWrappedUp()==false) {
+			if (locations[i].isLot() == true && locations[i].getScene().isWrappedUp() == false) {
 				return false;
 			}
 		}
@@ -183,9 +191,11 @@ public class Board {
 	// Postconditions:
 	//		- players receive bonus payout
 	// 
-	private void Bonus(Location givenLocation,Scene theScene ) {
+	private void Bonus(Location givenLocation,Scene theScene ) throws InterruptedException {
 		
 		System.out.println("Bonus Time!");
+		TimeUnit.SECONDS.sleep(1);
+
 		// oncard player payout
 		int budget = theScene.getBudget();
 		int diceRolls[] = new int[budget];
@@ -228,7 +238,9 @@ public class Board {
 		}
 		for (int i = 0; i < onActors.length; i++) {
 			if (onActors[i] != null) {
-				System.out.println(onActors[i].getName()+" now has  currency of "+onActors[i].getCurrency());
+				System.out.println(onActors[i].getName()+" now has currency of "+onActors[i].getCurrency());
+				TimeUnit.SECONDS.sleep(1);
+
 			}
 		}
 		
@@ -242,8 +254,11 @@ public class Board {
 				if (players.get(j).getRole().getName().equals(offCard[i].getName())) {
 					int payout = offCard[i].getRank();
 					System.out.println(players.get(j).getName()+" earns a bonus of $"+payout);
+					TimeUnit.SECONDS.sleep(1);
 					players.get(j).setCurrency(payout+players.get(j).getCurrency());
 					System.out.println(players.get(j).getName()+" now has a currency of $"+players.get(j).getCurrency());
+					TimeUnit.SECONDS.sleep(1);
+
 				}
 			}
 		}
@@ -265,7 +280,7 @@ public class Board {
 			players.get(i).setScore();
 		}
 		
-		Player winner = null;
+		Player winner = players.get(0);
 		
 		for (int i = 0; i < players.size(); i++) {
 			if (players.get(i).getScore() >= winner.getScore()) {

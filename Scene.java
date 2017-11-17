@@ -67,6 +67,10 @@ public class Scene {
 		return budget;
 	}
 	
+	public int getNumber() {
+		return number;
+	}
+	
 	// isWrappedUp
 	// Preconditions:
 	// 		- none
