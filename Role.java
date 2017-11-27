@@ -16,6 +16,7 @@ public class Role {
 	int rank;				// Rank
 	boolean isTaken;		// Returns true if the role is taken, else returns false
 	boolean OnCard;			// Returns true if the role is a "On-Card" Role
+	int[] dims;
 	
 	// Constructor
 	
@@ -28,12 +29,13 @@ public class Role {
 	//		- names, dialogue, and ranks are set
 	//		- by default a role is not taken
 	//
-	public Role(String name, String dialogue, int rank, boolean onCard) {
+	public Role(String name, String dialogue, int rank, boolean onCard, int[] dims) {
 		this.name = name;
 		this.dialogue = dialogue;
 		this.rank = rank;
 		isTaken = false;
 		this.OnCard = onCard;
+		this.dims = dims;
 	}
 	
 	// Accessors

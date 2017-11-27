@@ -240,9 +240,11 @@ public class Deadwood {
 	    int budget = 0;
 	    int scene_num = 0;
 	    String name = "";
+	    String filename = "";
 	    String scene_desc = "";
 	    String p_name;
 	    String p_line = "";
+	    int[] dims = new int[4];
 	    int p_lvl;
 	    LinkedList<Scene> scenes = new LinkedList<Scene>();
 	    
@@ -255,6 +257,7 @@ public class Deadwood {
 	    		Element cardElement = (Element) cardNode;
 	    		name = cardElement.getAttribute("name");
 	    		budget = Integer.parseInt(cardElement.getAttribute("budget"));
+	    		filename = cardElement.getAttribute("img");
 		    	NodeList pList = cardNode.getChildNodes(); 
 		    	
 		    	for (int p = 0; p < pList.getLength(); p++) {
@@ -280,11 +283,16 @@ public class Deadwood {
 			    						p_line = pElement.getElementsByTagName("line").item(0).getTextContent();
 			    						break;
 			    					case "area":
+			    						dims[0] = Integer.parseInt(qElement.getAttribute("x"));
+			    						System.out.println(dims[0]);
+			    						dims[1] = Integer.parseInt(qElement.getAttribute("y"));
+			    						dims[2] = Integer.parseInt(qElement.getAttribute("h"));
+			    						dims[3] = Integer.parseInt(qElement.getAttribute("w"));
 			    						break;
 			    					}
 			    				}
 			    			}
-			    			Role newRole = new Role(p_name, p_line, p_lvl, true);
+			    			Role newRole = new Role(p_name, p_line, p_lvl, true, dims);
 			    			roles.add(newRole);
 			    		}	
 		    		}
@@ -292,7 +300,7 @@ public class Deadwood {
 	    	}
 	    	Role[] parts = new Role[roles.size()];
 	    	parts = roles.toArray(parts);
-	    	Scene newScene = new Scene(name, scene_desc, budget, scene_num, parts);
+	    	Scene newScene = new Scene(name, scene_desc, budget, scene_num, parts, filename);
 	    	scenes.add(newScene);
 	
 	    }
@@ -394,7 +402,7 @@ public class Deadwood {
     				    					}
     				    				}
     								}
-	    							Role newRole = new Role(p_name, p_line, p_lvl, false);
+	    							Role newRole = new Role(p_name, p_line, p_lvl, false, null);
 	    							roles.add(newRole);
     							}
     						}
