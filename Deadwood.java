@@ -284,7 +284,6 @@ public class Deadwood {
 			    						break;
 			    					case "area":
 			    						dims[0] = Integer.parseInt(qElement.getAttribute("x"));
-			    						System.out.println(dims[0]);
 			    						dims[1] = Integer.parseInt(qElement.getAttribute("y"));
 			    						dims[2] = Integer.parseInt(qElement.getAttribute("h"));
 			    						dims[3] = Integer.parseInt(qElement.getAttribute("w"));
@@ -341,6 +340,8 @@ public class Deadwood {
 		int p_lvl = 0;
 		String p_name = "";
 		String p_line = "";
+	    int[] dims = new int[4];
+	    int[] area = new int[4];
 		
     	for (int i = 0; i < setList.getLength(); i++) {
     		takeNum = 0;
@@ -357,6 +358,9 @@ public class Deadwood {
     			for (int j = 0; j < bigList.getLength(); j++) {
     				Node tNode = bigList.item(j);
     				if (tNode.getNodeType() == Node.ELEMENT_NODE) {
+    					
+    					//Element ffElement = (Element) tNode; //this is what i did
+    					
     					switch (tNode.getNodeName()) {
     					case "neighbors":
     						NodeList nList = tNode.getChildNodes();
@@ -393,11 +397,16 @@ public class Deadwood {
     								for (int q = 0; q < partList2.getLength(); q++) {
     									Node qNode = partList2.item(q);		
     				    				if (qNode.getNodeType() == Node.ELEMENT_NODE) {
+    				    					Element qElement = (Element) qNode;
     				    					switch (qNode.getNodeName()) {
     				    					case "line":
     				    						p_line = pElement.getElementsByTagName("line").item(0).getTextContent();
     				    						break;
     				    					case "area":
+    				    						dims[0] = Integer.parseInt(qElement.getAttribute("x"));
+    				    						dims[1] = Integer.parseInt(qElement.getAttribute("y"));
+    				    						dims[2] = Integer.parseInt(qElement.getAttribute("h"));
+    				    						dims[3] = Integer.parseInt(qElement.getAttribute("w"));
     				    						break;
     				    					}
     				    				}
@@ -406,12 +415,17 @@ public class Deadwood {
 	    							roles.add(newRole);
     							}
     						}
+    					case "area":
+    						if (tNode.getNodeType() == Node.ELEMENT_NODE) { //might not need
+    							Element ffElement = (Element) tNode;
+    						System.out.println(ffElement.getAttribute("x")); //here is the area of the location
+    						}
     					}
     				}
 					parts = new Role[roles.size()];
 			    	parts = roles.toArray(parts);
     			}
-    			Location newLocation = new Location(set_name, takeNum, 0, null, parts);
+    			Location newLocation = new Location(set_name, takeNum, 0, null, parts, dims);
     			newLocation.setNeighbors(_neighbors);
     			locations.add(newLocation);
     		}

@@ -14,6 +14,7 @@ public class Location {
 	String name;				// (All Locations) Name of the location - ie. church, lot, hotel...
 	String[] neighbors;		// (All Locations) Array of neighbors
 	boolean isLot;				// (All locations) 1 if the location's name == lot
+	int dims[];
 
 	int ShotMax;				// (Lot only)
 	int ShotsTaken;				// (Lot only)
@@ -43,13 +44,14 @@ public class Location {
 	// Postconditions:
 	//		- isLot is true
 	// 
-	public Location(String name, int shotMax,int shotsTaken, Scene currScene, Role[] offCard) {
+	public Location(String name, int shotMax,int shotsTaken, Scene currScene, Role[] offCard, int[] dims) {
 		this.name = name;
 		ShotMax = shotMax;
 		ShotsTaken=shotsTaken;
 		currentScene = currScene;
 		this.offCard = offCard;
 		isLot = true;
+		this.dims = dims;
 	}
 	
 	// Accessors
