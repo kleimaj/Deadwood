@@ -1,6 +1,6 @@
-/* 
+/*
  * Location.java
- * 
+ *
  * Contributors: Jacob Kleiman, Eric Eagan, Ryan McGinnis
  * November 2017
  */
@@ -8,21 +8,22 @@ import java.util.*;
 
 
 public class Location {
-	
-	// Attributes 
-	
+
+	// Attributes
+
 	String name;				// (All Locations) Name of the location - ie. church, lot, hotel...
 	String[] neighbors;		// (All Locations) Array of neighbors
 	boolean isLot;				// (All locations) 1 if the location's name == lot
 	int dims[];
 
 	int ShotMax;				// (Lot only)
+	int takeDims[][];
 	int ShotsTaken;				// (Lot only)
 	Scene currentScene;			// (Lot only)
 	Role[] offCard;				// (Lot only)
-	
+
 	// Constructors
-	
+
 	// Location
 	// Preconditions:
 	//		- location is not a lot
@@ -31,20 +32,20 @@ public class Location {
 	// Postconditions:
 	//		- name is assigned, neighbors are found? and assigned
 	//		- isLot is false
-	// 
+	//
 	public Location(String name){
 		this.name = name;
 		isLot = false;
 	}
-	
+
 	// Location
 	// Preconditions:
 	//		- location is a lot
 	//		- location is created during the XML parse
 	// Postconditions:
 	//		- isLot is true
-	// 
-	public Location(String name, int shotMax,int shotsTaken, Scene currScene, Role[] offCard, int[] dims) {
+	//
+	public Location(String name, int shotMax,int shotsTaken, Scene currScene, Role[] offCard, int[] dims, int[][] takeDims) {
 		this.name = name;
 		ShotMax = shotMax;
 		ShotsTaken=shotsTaken;
@@ -53,49 +54,49 @@ public class Location {
 		isLot = true;
 		this.dims = dims;
 	}
-	
+
 	// Accessors
-	
+
 	// isLot
 	// Preconditions:
-	//		- none	
+	//		- none
 	// Postconditions:
 	//		- Returns isLot
 	public boolean isLot() {
 		return isLot;
 	}
-	
+
 	// getShotsTaken
 	// Preconditions:
-	//		- none	
+	//		- none
 	// Postconditions:
 	//		- returns ShotsTaken
 	public int getShotsTaken() {
 		return ShotsTaken;
 	}
-	
+
 	// getShotsMax
 	// Preconditions:
-	//		- none	
+	//		- none
 	// Postconditions:
 	//		- returns ShotMax
 	public int getShotsMax() {
 		return ShotMax;
 	}
-	
+
 	public void resetShots() {
 		ShotsTaken = 0;
 	}
-	
+
 	// getName
 	// Preconditions:
-	//		- none	
+	//		- none
 	// Postconditions:
 	//		- returns name
 	public String getName() {
 		return name;
 	}
-	
+
 	// isWrappedUp
 	// Preconditions:
 	//		- none
@@ -114,19 +115,19 @@ public class Location {
 			return false;
 		}
 	}
-	
+
 	// getNeighbors
 	// Preconditions:
-	//		- none	
+	//		- none
 	// Postconditions:
 	//		- returns neighbors
 	public String[] getNeighbors() {
 		return neighbors;
 	}
-	
+
     // getScene
 	// Preconditions:
-	//		- none	
+	//		- none
 	// Postconditions:
 	//		- returns currentScene
 	public Scene getScene() {
@@ -134,25 +135,25 @@ public class Location {
 	}
 	// setScene
 	// Preconditions:
-	//		- none	
+	//		- none
 	// Postconditions:
 	//		- sets CurrentScene to a new scene
 	public void setScene(Scene newScene) {
 		currentScene = newScene;
 	}
-	
+
 	// getAllRoles
 	// Preconditions:
-	//		- none	
+	//		- none
 	// Postconditions:
 	//		- returns all offCard roles in this location
 	public Role[] getAllRoles() {
 		return offCard;
 	}
-	
+
 	// getRoles
 	// Preconditions:
-	//		- none	
+	//		- none
 	// Postconditions:
 	//		- returns all available offCard roles
 	public ArrayList<Role> getRoles() {
@@ -170,7 +171,7 @@ public class Location {
 			return null;
 		}
 	}
-	
+
 	// addShot
 	// Preconditions:
 	//		- player wants to add a shot
@@ -180,7 +181,7 @@ public class Location {
 	public void addShot() {
 		ShotsTaken+=1;
 	}
-	
+
 	// setNeighbors
 	// Preconditions:
 	//
@@ -195,4 +196,3 @@ public class Location {
 		this.neighbors = neighbors;
 	}
 }
-
