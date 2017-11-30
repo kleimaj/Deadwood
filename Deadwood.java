@@ -379,6 +379,7 @@ public class Deadwood {
   						break;
   					case "takes":
   						NodeList takeList = tNode.getChildNodes();
+							int col = 0;
   						for (int k = 0; k < takeList.getLength(); k++) {
   							// create take objects here (GUI)
   							Node takeNode = takeList.item(k);
@@ -387,6 +388,7 @@ public class Deadwood {
 									if (takeNum == 0){
 										takeNum = Integer.parseInt(firstEl.getAttribute("number"));
 										takeDims = new int[4][takeNum];
+										col = takeNum - 1;
 									// get area
 									}
 									NodeList takeList2 = takeNode.getChildNodes();
@@ -395,13 +397,12 @@ public class Deadwood {
 				    				if (takeNode2.getNodeType() == Node.ELEMENT_NODE) {
 											Element takeElement = (Element) takeNode2;
 											if (takeNode2.getNodeName() == "area"){
-												//takeDims[0][k] = Integer.parseInt(takeElement.getAttribute("x"));
+												takeDims[0][col] = Integer.parseInt(takeElement.getAttribute("x"));
 												//System.out.println(Integer.parseInt(takeElement.getAttribute("x")));
-				    					//	takeDims[1][k] = Integer.parseInt(takeElement.getAttribute("y"));
-				    						//takeDims[2][k] = Integer.parseInt(takeElement.getAttribute("h"));
-				    						//takeDims[3][k] = Integer.parseInt(takeElement.getAttribute("w"));
-												System.out.println(k);
-												//k is not always a node so its too high
+				    						takeDims[1][col] = Integer.parseInt(takeElement.getAttribute("y"));
+				    						takeDims[2][col] = Integer.parseInt(takeElement.getAttribute("h"));
+				    						takeDims[3][col] = Integer.parseInt(takeElement.getAttribute("w"));
+												col -= 1;
 											}
 										}
 									}
@@ -441,14 +442,14 @@ public class Deadwood {
   					case "area":
   						if (tNode.getNodeType() == Node.ELEMENT_NODE) { //might not need
   							Element ffElement = (Element) tNode;
-  							//System.out.println(ffElement.getAttribute("x")); //here is the area of the location
+  							System.out.println(set_name + "x is "+ ffElement.getAttribute("x")); //here is the area of the location
   						}
   					}
   				}
 				parts = new Role[roles.size()];
 		    parts = roles.toArray(parts);
   			}
-  			Location newLocation = new Location(set_name, takeNum, 0, null, parts, dims, takeDims);
+  			Location newLocation = new Location(set_name, takeNum, 0, null, parts, area, takeDims);
   			newLocation.setNeighbors(_neighbors);
   			locations.add(newLocation);
   		}
