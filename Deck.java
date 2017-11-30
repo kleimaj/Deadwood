@@ -1,6 +1,6 @@
 /* 
  * Deck.java
- * 
+ *
  * Contributors: Jacob Kleiman, Eric Eagan, Ryan McGinnis
  * November 2017
  */
@@ -9,14 +9,14 @@ import java.io.*;
 
 
 public class Deck {
-	
+
 	// Attributes
-	
+
 	LinkedList<Scene> deck = new LinkedList<Scene>();			// The active deck as a linked list of scene objects
 	LinkedList<Scene> discardDeck = new LinkedList<Scene>();	// The discard deck of used (inactive) scene objects
-	
+
 	// Constructor
-	
+
 	// Deck
 	// Preconditions:
 	//		- scenes (cards) have been created from the XML parse
@@ -27,7 +27,7 @@ public class Deck {
 	public Deck(LinkedList<Scene> cards) {
 		deck = cards;
 	}
-	
+
 	// Draw
 	// Preconditions:
 	//		- lot needs a new scene
@@ -37,7 +37,7 @@ public class Deck {
 	public Scene draw() {
 		return deck.remove((int)(deck.size()*Math.random()));
 	}
-	
+
 	// resetDeck
 	// Preconditions:
 	//		- deck has run out
@@ -54,7 +54,7 @@ public class Deck {
 			deck.get(i).unWrap();
 		}
 	}
-	
+
 	// Shuffle
 	// Preconditions:
 	//
@@ -70,10 +70,10 @@ public class Deck {
 //			//get a random number between 0 and 1 - the number of cards in deck
 //			int randomNumber = (int)(discardDeck.size()*Math.random());
 //			deck.add(discardDeck.remove(randomNumber));
-//		
+//
 //		}
 //	}
-	
+
 	// Discard
 	// Preconditions:
 	//		- scene is wrapped
