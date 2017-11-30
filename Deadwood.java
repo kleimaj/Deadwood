@@ -304,6 +304,7 @@ public class Deadwood {
 
     }
     Deck deck = new Deck(scenes);
+
 		return deck;
 
 		} catch (Exception e) {
@@ -360,9 +361,6 @@ public class Deadwood {
   			for (int j = 0; j < bigList.getLength(); j++) {
   				Node tNode = bigList.item(j);
   				if (tNode.getNodeType() == Node.ELEMENT_NODE) {
-
-  					//Element ffElement = (Element) tNode; //this is what i did
-
   					switch (tNode.getNodeName()) {
   					case "neighbors":
   						NodeList nList = tNode.getChildNodes();
@@ -398,7 +396,6 @@ public class Deadwood {
 											Element takeElement = (Element) takeNode2;
 											if (takeNode2.getNodeName() == "area"){
 												takeDims[0][col] = Integer.parseInt(takeElement.getAttribute("x"));
-												//System.out.println(Integer.parseInt(takeElement.getAttribute("x")));
 				    						takeDims[1][col] = Integer.parseInt(takeElement.getAttribute("y"));
 				    						takeDims[2][col] = Integer.parseInt(takeElement.getAttribute("h"));
 				    						takeDims[3][col] = Integer.parseInt(takeElement.getAttribute("w"));
@@ -439,11 +436,14 @@ public class Deadwood {
     							roles.add(newRole);
   							}
   						}
+							break;
   					case "area":
-  						if (tNode.getNodeType() == Node.ELEMENT_NODE) { //might not need
   							Element ffElement = (Element) tNode;
-  							System.out.println(set_name + "x is "+ ffElement.getAttribute("x")); //here is the area of the location
-  						}
+								area[0] = Integer.parseInt(ffElement.getAttribute("x"));
+								area[1] = Integer.parseInt(ffElement.getAttribute("y"));
+								area[2] = Integer.parseInt(ffElement.getAttribute("h"));
+								area[3] = Integer.parseInt(ffElement.getAttribute("w"));
+								break;
   					}
   				}
 				parts = new Role[roles.size()];
@@ -465,7 +465,7 @@ public class Deadwood {
   	for (int temp = 0; temp < neighborList.getLength(); temp++) {
   		Node _nNode = neighborList.item(temp);
   		if (_nNode.getNodeType() == Node.ELEMENT_NODE) {
-				//Element nElement = (Element) _nNode;
+
 				switch (_nNode.getNodeName()) {
 				case "neighbors":
 					NodeList dList = _nNode.getChildNodes();
@@ -477,13 +477,20 @@ public class Deadwood {
 	    					neighbors.add(neighbor);
 						}
 					}
+					break;
+				case "area":
+					Element aElement = (Element) _nNode;
+					area[0] = Integer.parseInt(aElement.getAttribute("x"));
+					area[1] = Integer.parseInt(aElement.getAttribute("y"));
+					area[2] = Integer.parseInt(aElement.getAttribute("h"));
+					area[3] = Integer.parseInt(aElement.getAttribute("w"));
 				}
 			}
 		}
   	_neighbors = new String[neighbors.size()];
 		_neighbors = neighbors.toArray(_neighbors);
 
-  	Location newLocation = new Location("Trailer");
+  	Location newLocation = new Location("Trailer", area);
   	newLocation.setNeighbors(_neighbors);
   	locations.add(newLocation);
 
@@ -511,9 +518,13 @@ public class Deadwood {
 				_neighbors = new String[neighbors.size()];
 				_neighbors = neighbors.toArray(_neighbors);
     			break;
-  			case "upgrades":
-  				// Create GUI objects here
-  				break;
+				case "area":
+					Element aElement = (Element) oNode;
+					area[0] = Integer.parseInt(aElement.getAttribute("x"));
+					area[1] = Integer.parseInt(aElement.getAttribute("y"));
+					area[2] = Integer.parseInt(aElement.getAttribute("h"));
+					area[3] = Integer.parseInt(aElement.getAttribute("w"));
+					break;
   			}
   		}
   	}
@@ -521,9 +532,10 @@ public class Deadwood {
   	_neighbors = new String[neighbors.size()];
 		_neighbors = neighbors.toArray(_neighbors);
 
-		newLocation = new Location("Office");
+		newLocation = new Location("Office", area);
   	newLocation.setNeighbors(_neighbors);
   	locations.add(newLocation);
+
   	return locations;
 
 		} catch (Exception e) {

@@ -14,11 +14,12 @@ public class Location {
 	String name;				// (All Locations) Name of the location - ie. church, lot, hotel...
 	String[] neighbors;		// (All Locations) Array of neighbors
 	boolean isLot;				// (All locations) 1 if the location's name == lot
-	int dims[];
+	int dims[];						// area of the location: x, y, h, w
 
-	int shotMax;				// (Lot only)
-	int takeDims[][];
-	int shotsTaken;				// (Lot only)
+
+	int shotMax;				// (Lot only) Total amount of shot markers
+	int takeDims[][];			// (Lot only) Area of the shot markers, in order
+	int shotsTaken;				// (Lot only) Amount of used shot markers 
 	Scene currentScene;			// (Lot only)
 	Role[] offCard;				// (Lot only)
 
@@ -33,9 +34,10 @@ public class Location {
 	//		- name is assigned, neighbors are found? and assigned
 	//		- isLot is false
 	//
-	public Location(String name){
+	public Location(String name, int[] dims){
 		this.name = name;
 		isLot = false;
+		this.dims = dims;
 	}
 
 	// Location
@@ -53,6 +55,7 @@ public class Location {
 		this.offCard = offCard;
 		isLot = true;
 		this.dims = dims;
+		this.takeDims = takeDims;
 	}
 
 	// Accessors
