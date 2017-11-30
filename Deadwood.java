@@ -335,7 +335,7 @@ public class Deadwood {
   	String set_name;
   	String neighbor;
   	int takeNum = 0;
-		int[][] takeDims = new int[4][3];
+		int[][] takeDims = null;
   	Role[] parts = null;
   	String[] _neighbors = null;
 		int p_lvl = 0;
@@ -383,21 +383,28 @@ public class Deadwood {
   							// create take objects here (GUI)
   							Node takeNode = takeList.item(k);
   							if (takeNode.getNodeType() == Node.ELEMENT_NODE) {
+									Element firstEl = (Element) takeNode;
+									if (takeNum == 0){
+										takeNum = Integer.parseInt(firstEl.getAttribute("number"));
+										takeDims = new int[4][takeNum];
+									// get area
+									}
 									NodeList takeList2 = takeNode.getChildNodes();
 									for (int t = 0; t < takeList2.getLength(); t++) {
 				    				Node takeNode2 = takeList2.item(t);
 				    				if (takeNode2.getNodeType() == Node.ELEMENT_NODE) {
 											Element takeElement = (Element) takeNode2;
 											if (takeNode2.getNodeName() == "area"){
-												takeDims[0][3-takeNum] = Integer.parseInt(takeElement.getAttribute("x"));
-												System.out.println(takeDims[0][3-takeNum]);
-				    						takeDims[1][3-takeNum] = Integer.parseInt(takeElement.getAttribute("y"));
-				    						takeDims[2][3-takeNum] = Integer.parseInt(takeElement.getAttribute("h"));
-				    						takeDims[3][3-takeNum] = Integer.parseInt(takeElement.getAttribute("w"));
+												//takeDims[0][k] = Integer.parseInt(takeElement.getAttribute("x"));
+												//System.out.println(Integer.parseInt(takeElement.getAttribute("x")));
+				    					//	takeDims[1][k] = Integer.parseInt(takeElement.getAttribute("y"));
+				    						//takeDims[2][k] = Integer.parseInt(takeElement.getAttribute("h"));
+				    						//takeDims[3][k] = Integer.parseInt(takeElement.getAttribute("w"));
+												System.out.println(k);
+												//k is not always a node so its too high
 											}
 										}
 									}
-    							takeNum++;
   							}
   						}
   						break;
@@ -445,7 +452,7 @@ public class Deadwood {
   			newLocation.setNeighbors(_neighbors);
   			locations.add(newLocation);
   		}
-  	}
+  	} // end of for loop
 
   	// TRAILER ----------------------------------------------------------------->
   	NodeList trailer = doc.getElementsByTagName("trailer");

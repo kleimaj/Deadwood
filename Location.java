@@ -16,9 +16,9 @@ public class Location {
 	boolean isLot;				// (All locations) 1 if the location's name == lot
 	int dims[];
 
-	int ShotMax;				// (Lot only)
+	int shotMax;				// (Lot only)
 	int takeDims[][];
-	int ShotsTaken;				// (Lot only)
+	int shotsTaken;				// (Lot only)
 	Scene currentScene;			// (Lot only)
 	Role[] offCard;				// (Lot only)
 
@@ -47,8 +47,8 @@ public class Location {
 	//
 	public Location(String name, int shotMax,int shotsTaken, Scene currScene, Role[] offCard, int[] dims, int[][] takeDims) {
 		this.name = name;
-		ShotMax = shotMax;
-		ShotsTaken=shotsTaken;
+		this.shotMax = shotMax;
+		this.shotsTaken=shotsTaken;
 		currentScene = currScene;
 		this.offCard = offCard;
 		isLot = true;
@@ -72,7 +72,7 @@ public class Location {
 	// Postconditions:
 	//		- returns ShotsTaken
 	public int getShotsTaken() {
-		return ShotsTaken;
+		return shotsTaken;
 	}
 
 	// getShotsMax
@@ -81,11 +81,11 @@ public class Location {
 	// Postconditions:
 	//		- returns ShotMax
 	public int getShotsMax() {
-		return ShotMax;
+		return shotMax;
 	}
 
 	public void resetShots() {
-		ShotsTaken = 0;
+		shotsTaken = 0;
 	}
 
 	// getName
@@ -104,7 +104,7 @@ public class Location {
 	//		-returns true if scene is wrapped up, false if not
 	public boolean isWrappedUp() {
 		if (isLot) {
-			if (ShotMax == ShotsTaken) {
+			if (shotMax == shotsTaken) {
 				return true;
 			}
 			else {
@@ -179,7 +179,7 @@ public class Location {
 	//		- shot is added
 	//
 	public void addShot() {
-		ShotsTaken+=1;
+		shotsTaken+=1;
 	}
 
 	// setNeighbors
