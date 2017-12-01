@@ -29,6 +29,8 @@ public class Deadwood {
 		ArrayList<Location> locations = getLocations(boardFile);
 		Visual visual = new Visual();
 		visual.setVisible(true);
+		Visual mainMenu = new Visual(0);
+		mainMenu.setVisible(true);
 
 
 		// Assign scenes to locations
@@ -44,12 +46,12 @@ public class Deadwood {
 
 		Board game = new Board(allLocations, deck);
 		Location trailer = game.getTrailer();
-		for (int i = 0; i < numPlayers; i++) {
+		/*for (int i = 0; i < numPlayers; i++) {
 			 String name = console.next();
 			 game.addPlayer(new Player(name, trailer));
-		}
+		}*/
 
-		Controller controller = new Controller(deck, game, visual);
+		//Controller controller = new Controller(deck, game, visual);
 		
 		//Scanner console = new Scanner(System.in);
 
