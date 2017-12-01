@@ -29,8 +29,10 @@ public class Deadwood {
 		ArrayList<Location> locations = getLocations(boardFile);
 		Visual visual = new Visual();
 		visual.setVisible(true);
+
+
 		// Assign scenes to locations
-		for (int i = 0; i < locations.size(); i++) {
+	/*	for (int i = 0; i < locations.size(); i++) {
 			locations.get(i).setScene(deck.draw());
 		}
 
@@ -215,7 +217,7 @@ public class Deadwood {
 			}
 
 		} // end while loop here
-		console.close();
+		console.close(); */
 	}
 
 
