@@ -1,4 +1,4 @@
-mport java.util.*;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.io.*;
 import java.awt.*;
@@ -7,12 +7,16 @@ import javax.swing.ImageIcon;
 import javax.imageio.ImageIO;
 import java.awt.event.*;
 
-public class Controller extends JFrame {
+public class Controller implements ActionListener {
 
     // Attributes
-
+    Visual visual;
+    Board board;
     Deck deck;
-    
+
+    public Controller(Deck deck, Board board, Visual visual){
+
+    }
 
 
 

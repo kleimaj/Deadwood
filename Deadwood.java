@@ -32,16 +32,31 @@ public class Deadwood {
 
 
 		// Assign scenes to locations
-	/*	for (int i = 0; i < locations.size(); i++) {
+		for (int i = 0; i < locations.size(); i++) {
 			locations.get(i).setScene(deck.draw());
 		}
+		Location[] allLocations = new Location[locations.size()];
+		for (int i = 0; i < locations.size(); i++) {
+			allLocations[i] = locations.get(i);
+		}
 
-		Scanner console = new Scanner(System.in);
+		// get num players
 
-		System.out.println("Welcome to Deadwood!");
-		TimeUnit.SECONDS.sleep(1);
+		Board game = new Board(allLocations, deck);
+		Location trailer = game.getTrailer();
+		for (int i = 0; i < numPlayers; i++) {
+			 String name = console.next();
+			 game.addPlayer(new Player(name, trailer));
+		}
 
-		while(true) { //want to play again loop
+		Controller controller = new Controller(deck, game, visual);
+		
+		//Scanner console = new Scanner(System.in);
+
+		//System.out.println("Welcome to Deadwood!");
+	//	TimeUnit.SECONDS.sleep(1);
+
+	/*	while(true) { //want to play again loop
 			System.out.println("How many Players do we have today? (maximum of 8)");
 
 			Location[] allLocations = new Location[locations.size()];
