@@ -11,6 +11,9 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.DocumentBuilder;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
+
+import com.zetcode.Visual;
+
 import org.w3c.dom.Node;
 import org.w3c.dom.Element;
 import java.util.concurrent.TimeUnit;
@@ -24,7 +27,8 @@ public class Deadwood {
 		File boardFile = new File(args[1]);
 		Deck deck = getDeck(cardsFile);
 		ArrayList<Location> locations = getLocations(boardFile);
-
+		Visual visual = new Visual();
+		visual.setVisible(true);
 		// Assign scenes to locations
 		for (int i = 0; i < locations.size(); i++) {
 			locations.get(i).setScene(deck.draw());
