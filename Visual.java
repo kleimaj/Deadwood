@@ -60,7 +60,7 @@ public class Visual extends JFrame{
 		
 		for(int i = 0; i < buttons.length; i++) {
 			JButton button = new JButton(buttons[i]);
-			button.addMouseListener(new BoardMouseListener()); //problem here
+			button.addMouseListener(new MenuMouseListener()); //problem here
 			panel.add(button);
 			panel.add(Box.createRigidArea(new Dimension(0,5)));
 		}
@@ -68,66 +68,51 @@ public class Visual extends JFrame{
 	}
 }
 
-class BoardMouseListener implements MouseListener {
-  
+class MenuMouseListener implements MouseListener {
+	
+	static String command;
+	
     public void mouseClicked(MouseEvent e) {
-
     	JButton button = (JButton) e.getSource();
-    	switch(button.getText()) {
-	    	case "1": 
-
-	    		break;
-	    	case "2": ;
-	    	
-	    	case "3": ;
-	    	
-	    	case "4": ;
-	    	
-	    	case "5": ;
-	    	
-	    	case "6": ;
-	    		
-	    	case "7": ;
-	    		
-	    	case "8": ; //num players
-	    	
-	    	case "Act": ; //action selection
-	    	
-	    	case "Move": ;
-	    	
-	    	case "Rehearse": ;
-	    	
-	    	case "Upgrade": ;
-	    	
-	    	case "Take Role": ;
-    	}
-    	
+    	command = button.getText();
+    }
+    
+    public void mouseExited(MouseEvent e) {
     	
     }
-
-	@Override
-	public void mouseEntered(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void mouseExited(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void mousePressed(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void mouseReleased(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-
+    public void mouseEntered(MouseEvent e) {
+    	
+    }
+    public void mouseReleased(MouseEvent e) {
+    	
+    }
+    public void mousePressed(MouseEvent e) {
+    	
+    }
+    
+   
+    
+    public int getNum() {
+    	return 0;
+    }
+    
+    public String getCommand() {
+    	command = null;
+    	while(command == null) {
+    		try {
+    			Thread.sleep(250);
+    		}catch(InterruptedException e) {}
+    	}
+    	return command;
+    }
 
 }
+
+/*class BoardMouseListener implements MouseListener {
+	
+	public void mouseClicked(MouseEvent e) {
+	
+	}
+	
+}*/
+

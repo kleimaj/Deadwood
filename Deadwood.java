@@ -25,12 +25,19 @@ public class Deadwood {
 		Deck deck = getDeck(cardsFile);
 		ArrayList<Location> locations = getLocations(boardFile);
 		
-		//wait until done
+		Visual mainMenu = new Visual(0);
+		mainMenu.setVisible(true);
+		MenuMouseListener listener = new MenuMouseListener();
+		String command = listener.getCommand();
+		int numPlayers = Integer.parseInt(command);
+		
+		
 		Visual visual = new Visual();
 		visual.setVisible(true);
 
-		Visual mainMenu = new Visual(0);
-		mainMenu.setVisible(true);
+		
+		
+		
 
 		// Assign scenes to locations
 		for (int i = 0; i < locations.size(); i++) {
