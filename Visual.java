@@ -40,7 +40,9 @@ public class Visual extends JFrame{
 		bPane.add(boardLabel, new Integer(1));
 		
 	}
+	
 	public Visual(int number) {
+		
 		setSize(500,300);
 		setTitle("Main Menu");
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
