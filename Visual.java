@@ -41,27 +41,95 @@ public class Visual extends JFrame{
 		
 	}
 	public Visual(int number) {
-		setSize(300,300);
+		setSize(500,300);
 		setTitle("Main Menu");
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
+		setLocation(SCREEN_WIDTH/2 - getWidth()/2, SCREEN_HEIGHT/2 - getHeight()/2);
 		
 		JPanel panel = new JPanel();
 		panel.setLayout(new BoxLayout(panel,BoxLayout.Y_AXIS));
 		panel.setBorder(new EmptyBorder(new Insets(40,60,40,60)));
 		String[] buttons = {"1","2","3","4","5","6","7","8"};
 		
-		JTextPane textPane = new JTextPane();
-		textPane.setContentType("text");
-		textPane.setEditable(false);
-		textPane.setText("Select Number of Players");
-		panel.add(textPane);
+		JLabel textLabel = new JLabel("Select number of players!");
+		//textLabel.setVerticalAlignment(CENTER);
+		panel.add(textLabel);
 		
 		for(int i = 0; i < buttons.length; i++) {
 			JButton button = new JButton(buttons[i]);
-			button.addMouseListener((MouseListener) new Controller()); //problem here
+			button.addMouseListener(new Controller()); //problem here
 			panel.add(button);
 			panel.add(Box.createRigidArea(new Dimension(0,5)));
 		}
 		add(panel);
 	}
+}
+
+class Controller implements MouseListener {
+  
+    public void mouseClicked(ActionEvent e) {
+    	JButton button = (JButton) e.getSource();
+    	switch(button.getText()) {
+	    	case "1": 
+	    		System.out.println("Button 1 pressed");
+	    		break;
+	    	case "2": ;
+	    	
+	    	case "3": ;
+	    	
+	    	case "4": ;
+	    	
+	    	case "5": ;
+	    	
+	    	case "6": ;
+	    		
+	    	case "7": ;
+	    		
+	    	case "8": ; //num players
+	    	
+	    	case "Act": ; //action selection
+	    	
+	    	case "Move": ;
+	    	
+	    	case "Rehearse": ;
+	    	
+	    	case "Upgrade": ;
+	    	
+	    	case "Take Role": ;
+    	}
+    	
+    	
+    }
+
+	@Override
+	public void mouseClicked(MouseEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseExited(MouseEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mousePressed(MouseEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
 }
