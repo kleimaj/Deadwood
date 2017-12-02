@@ -5,6 +5,7 @@ import java.util.concurrent.TimeUnit;
 import java.io.*;
 import java.awt.*;
 import javax.swing.*;
+import javax.swing.border.*;
 import javax.swing.ImageIcon;
 import javax.imageio.ImageIO;
 import java.awt.event.*;
@@ -25,7 +26,7 @@ public class Controller implements MouseListener {
     public void mouseClicked(ActionEvent e) {
     	JButton button = (JButton) e.getSource();
     	switch(button.getText()) {
-    	case "1": ;
+    	case "1": System.out.println("Button 1 pressed");
     		
     	case "2": ;
     	
