@@ -21,6 +21,7 @@ public class Visual extends JFrame{
 	
 	JLayeredPane bPane;
 	
+	
 	public Visual() {
 
 		setSize(SCREEN_WIDTH,SCREEN_HEIGHT);
@@ -59,7 +60,7 @@ public class Visual extends JFrame{
 		
 		for(int i = 0; i < buttons.length; i++) {
 			JButton button = new JButton(buttons[i]);
-			button.addMouseListener(new Controller()); //problem here
+			button.addMouseListener(new BoardMouseListener()); //problem here
 			panel.add(button);
 			panel.add(Box.createRigidArea(new Dimension(0,5)));
 		}
@@ -67,13 +68,14 @@ public class Visual extends JFrame{
 	}
 }
 
-class Controller implements MouseListener {
+class BoardMouseListener implements MouseListener {
   
-    public void mouseClicked(ActionEvent e) {
+    public void mouseClicked(MouseEvent e) {
+
     	JButton button = (JButton) e.getSource();
     	switch(button.getText()) {
 	    	case "1": 
-	    		System.out.println("Button 1 pressed");
+
 	    		break;
 	    	case "2": ;
 	    	
@@ -102,12 +104,6 @@ class Controller implements MouseListener {
     	
     	
     }
-
-	@Override
-	public void mouseClicked(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
 
 	@Override
 	public void mouseEntered(MouseEvent arg0) {
