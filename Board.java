@@ -148,6 +148,17 @@ public class Board {
 		}
 		return trailer;
 	}
+	
+	public Location getLocation(String name) {
+		Location location = null;
+		for (int i = 0; i < locations.length; i++) {
+			if (locations[i].getName().equals(name)) {
+				location = locations[i];
+				break;
+			}
+		}
+		return location;
+	}
 
 
 	//returns true if all scenes are wrapped

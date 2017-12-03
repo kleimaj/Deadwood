@@ -36,6 +36,7 @@ public class Visual extends JFrame{
 	JLabel stats_role;
 	JLabel stats_dollars;
 	JLabel stats_credits;
+	JLabel stats_icon;
 	
 	JButton bMove;
 	JButton bTakeRole;
@@ -51,6 +52,7 @@ public class Visual extends JFrame{
 	ImageIcon die5;
 	ImageIcon die6;
 	ImageIcon die_disabled;
+	ImageIcon player_icon;
 	
 	JTextArea log;
 	
@@ -99,6 +101,12 @@ public class Visual extends JFrame{
 		stats_credits.setBounds(1250, 720, 400, 20);
 		bPane.add(stats_credits, new Integer(2));
 		
+		//player_icon = new ImageIcon("images/dice/g1.png");
+		/*stats_icon = new JLabel();
+		stats_icon.setBounds(1510, 640, 40,40);
+		stats_icon.setIcon(player_icon);
+		bPane.add(stats_icon, new Integer(2));
+		*/
 		ImageIcon wood = new ImageIcon("images/button.jpg");
 		ImageIcon wood_dis = new ImageIcon("images/disabled_button.jpg");
 		bMove = new JButton("Move", wood);
@@ -255,6 +263,11 @@ public class Visual extends JFrame{
 	//		- Updates all player's information on the stats board
 	//		- Moves player token to correct spot
 	public void updateStats(Player player) {
+		player_icon = new ImageIcon("images/dice/"+player.getFileName()); //shows player's icon
+		stats_icon = new JLabel();
+		stats_icon.setBounds(1510, 640, 40,40);
+		stats_icon.setIcon(player_icon);
+		bPane.add(stats_icon, new Integer(2));
 		
 		stats_player.setText("Current Player: " + player.getName());
 		stats_location.setText("Location: " + player.getLocation().getName());

@@ -86,34 +86,43 @@ public class Deadwood {
 			
 		}
 		name = null;
+		String playerFile = null;
 		for (int i = 1; i <= numPlayers; i++) {	
 			switch(i) {
 				case 1:
 					name = "Blue";
+					playerFile = "b1.png";
 					break;		
 				case 2:
 					name = "Cyan";
+					playerFile = "c1.png";
 					break;				
 				case 3:
 					name = "Green";
+					playerFile = "g1.png";
 					break;	
 				case 4:
 					name = "Orange";
+					playerFile = "o1.png";
 					break;		
 				case 5:
 					name = "Pink";
+					playerFile = "p1.png";
 					break;			
 				case 6:
 					name = "Red";
+					playerFile = "r1.png";
 					break;			
 				case 7:
 					name = "Purple";
+					playerFile = "v1.png";
 					break;			
 				case 8:
 					name = "Yellow";
+					playerFile = "y1.png";
 					break;
 			}	
-			game.addPlayer(new Player(name, trailer,rank,fame));
+			game.addPlayer(new Player(name, trailer,rank,fame,playerFile));
 		}
 		
 
@@ -150,8 +159,7 @@ public class Deadwood {
 					while(true) {
 						//Visual.setButtons(player)
 						BoardMouseListener boardListener = new BoardMouseListener();
-						String action = boardListener.getCommand();
-						System.out.println(action);
+						String action = boardListener.getCommand(); //action is name of action (button they pressed)
 						//System.out.println("Select what you want to do: ");
 						//ArrayList<String> availableActions = new ArrayList<String>();
 						//int count = 1;
@@ -195,13 +203,23 @@ public class Deadwood {
 						}*/
 						//String action = availableActions.get(theNum-1);
 						
-						if (action.equals("move")) {
-							currentPlayer.Move(locations);//effect hasMoved = ...
+						if (action.equals("Move")) {
+							//currentPlayer.Move(locations);//effect hasMoved = ...
+							board_view.showExtras(currentPlayer.getLocation().getNeighbors());
+							boardListener = new BoardMouseListener();
+							String subAction = boardListener.getCommand();
+							Location newLocation = game.getLocation(subAction);
+							currentPlayer.setLocation(newLocation); //logically changes player's location
+							board_view.updateStats(currentPlayer); //doesn't work right now
+							
 							if (currentPlayer.getLocation().getName().equals("Office")) { //if the player moves to casting office they can upgrade
 								System.out.println("Would you like to Upgrade? (y/n)");
 								//String reply = console.next();
-								String reply = "";
-								if (reply.equals("y")) {
+								String[] reply = {"Yes","No"};
+								board_view.showExtras(reply);
+								boardListener = new BoardMouseListener();
+								subAction = boardListener.getCommand();
+								if (subAction.equals("Yes")) {
 									currentPlayer.Upgrade();
 								}
 								break;
@@ -209,8 +227,11 @@ public class Deadwood {
 							if (currentPlayer.getLocation().isLot() && currentPlayer.getLocation().isWrappedUp() == false) {
 								System.out.println("Would you like to Take a Role? (y/n)");
 								//String reply = console.next();
-								String reply = "";
-								if (reply.equals("y")) {
+								String[] reply = {"Yes","No"};
+								board_view.showExtras(reply);
+								boardListener = new BoardMouseListener();
+								subAction = boardListener.getCommand();
+								if (reply.equals("Yes")) {
 									currentPlayer.TakeRole();	//can a player move, take a role, and act all in one move? right now no
 									break;
 								}

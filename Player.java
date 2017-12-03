@@ -24,6 +24,7 @@ public class Player implements Comparable<Player> {
 	int fame;						// Player's amount of fame
 	int rehearsePoints;				// Player's rehearse points
 	int score;						// Total score at end of game
+	String filename;
 
 	// Constructor
 
@@ -35,7 +36,7 @@ public class Player implements Comparable<Player> {
 	//		- player's default location is trailer
 	//		- board is ready to be constructed (when all players are constructed)
 	//
-	public Player(String name, Location trailer, int rank, int fame) {
+	public Player(String name, Location trailer, int rank, int fame, String filename) {
 		this.name = name;
 		currentLocation = trailer;
 		currentRole = null;
@@ -44,6 +45,7 @@ public class Player implements Comparable<Player> {
 		this.fame = fame;
 		rehearsePoints = 0;
 		score = 0;
+		this.filename = filename;
 	}
 
 	// Accessors
@@ -110,9 +112,16 @@ public class Player implements Comparable<Player> {
 	public int getRehearsePoints() {
 		return rehearsePoints;
 	}
+	
+	public String getFileName() {
+		return filename;
+	}
 
 	public void resetRehearsePoints() {
 		this.rehearsePoints = 0;
+	}
+	public void setFileName(String newFile) {
+		this.filename = newFile;
 	}
 
 	// getScore
