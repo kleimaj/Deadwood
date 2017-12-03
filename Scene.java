@@ -109,6 +109,10 @@ public class Scene {
 		return cardRoles;
 	}
 	
+	public String getFileName() {
+		return filename;
+	}
+	
 	// getAvailableRoles
 	// Preconditions:
 	//		- none	

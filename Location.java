@@ -99,6 +99,10 @@ public class Location {
 	public String getName() {
 		return name;
 	}
+	
+	public int[] getDims() {
+		return dims;
+	}
 
 	// isWrappedUp
 	// Preconditions:

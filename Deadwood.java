@@ -30,21 +30,24 @@ public class Deadwood {
 		MenuMouseListener listener = new MenuMouseListener();
 		String command = listener.getCommand();
 		int numPlayers = Integer.parseInt(command);
-		
-		
-<<<<<<< HEAD
-		
 
-=======
+
+
 		Visual visual = new Visual();
 		visual.setVisible(true);
->>>>>>> 86865e939a855e3ae294d8f27a514551bf0102a1
-
-		
 	
 		// Assign scenes to locations
 		for (int i = 0; i < locations.size(); i++) {
-			locations.get(i).setScene(deck.draw()); //need to pass dimensions to visual
+			if(locations.get(i).isLot()) { 
+				Scene currentScene = deck.draw();
+				locations.get(i).setScene(currentScene); //need to pass dimensions from location to visual
+				String filename = currentScene.getFileName();
+				int[] dims = locations.get(i).getDims();
+				//System.out.println(dims[0]+", "+dims[1]);
+				visual.showScene(filename, dims);
+				//TimeUnit.SECONDS.sleep(1);
+			}
+			
 			// display cards on locations
 		}
 		Location[] allLocations = new Location[locations.size()];
@@ -127,8 +130,8 @@ public class Deadwood {
 			 game.addPlayer(new Player(name, trailer,rank,fame));
 		}
 		
-		Visual visual = new Visual();
-		visual.setVisible(true);
+		
+		
 
 		//Controller controller = new Controller(deck, game, visual);
 		
@@ -346,12 +349,12 @@ public class Deadwood {
     String scene_desc = "";
     String p_name;
     String p_line = "";
-    int[] dims = new int[4];
+    int[] dims = null;
     int p_lvl;
     LinkedList<Scene> scenes = new LinkedList<Scene>();
 
     for (int i = 0; i < cardList.getLength(); i++) {
-
+    	dims = new int[4];
     	Node cardNode = cardList.item(i);
     	ArrayList<Role> roles = new ArrayList<Role>();
 
@@ -444,12 +447,14 @@ public class Deadwood {
 		int p_lvl = 0;
 		String p_name = "";
 		String p_line = "";
-    int[] dims = new int[4];
-    int[] area = new int[4];
+    int[] dims = null;
+    int[] area = null;
 
   	for (int i = 0; i < setList.getLength(); i++) {
+  		area = new int[4];
+  		dims = new int[4];
   		takeNum = 0;
-			takeDims = null;
+		takeDims = null;
   		parts = null;
   		ArrayList<Role> roles = new ArrayList<Role>();
     	ArrayList<String> neighbors = new ArrayList<String>();
@@ -557,6 +562,7 @@ public class Deadwood {
   		}
   	} // end of for loop
 
+  	area = new int[4];
   	// TRAILER ----------------------------------------------------------------->
   	NodeList trailer = doc.getElementsByTagName("trailer");
   	Node trailerNode = trailer.item(0);
@@ -596,6 +602,7 @@ public class Deadwood {
   	newLocation.setNeighbors(_neighbors);
   	locations.add(newLocation);
 
+  	area = new int[4];
   	// CASTING OFFICE ---------------------------------------------------------->
   	NodeList office = doc.getElementsByTagName("office");
   	Node officeNode = office.item(0);

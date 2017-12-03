@@ -115,6 +115,16 @@ public class Visual extends JFrame{
 		}
 		add(panel);
 	}
+	
+	public void showScene(String filename, int[] dims) {
+		ImageIcon sceneIcon = new ImageIcon("cards/"+filename);
+		JLabel sceneLabel = new JLabel();
+		sceneLabel.setIcon(sceneIcon);
+		sceneLabel.setBounds(dims[0]+10, dims[1]+10, sceneIcon.getIconWidth(), sceneIcon.getIconHeight());
+		bPane.add(sceneLabel,new Integer(2));
+		
+		
+	}
 }
 
 class MenuMouseListener implements MouseListener {
