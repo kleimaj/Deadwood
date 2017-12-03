@@ -16,18 +16,51 @@ public class Visual extends JFrame{
 	private static final int SCREEN_WIDTH = 1600;
 	private static final int SCREEN_HEIGHT = 920;
 	
-	JLabel boardLabel;
-	JLabel background;
+	// ATTRIBUTES 
 	
 	JLayeredPane bPane;
+	
+	JLabel boardLabel;
+	JLabel background;
+	JLabel dieLabel;
+	JLabel player1;
+	JLabel player2;
+	JLabel player3;
+	JLabel player4;
+	JLabel player5;
+	JLabel player6;
+	JLabel player7;
+	JLabel player8;
+	JLabel stats_player;
+	JLabel stats_location;
+	JLabel stats_role;
+	JLabel stats_dollars;
+	JLabel stats_credits;
 	
 	JButton bMove;
 	JButton bTakeRole;
 	JButton bAct;
 	JButton bRehearse;
 	JButton bUpgrade;
+	JButton bExtra1;
+	JButton bExtra2;
+	JButton bExtra3;
+	JButton bExtra4;
+	JButton bExtra5;
+	JButton bExtra6;
+	JButton bExtra7;
+	
+	ImageIcon die1;
+	ImageIcon die2;
+	ImageIcon die3;
+	ImageIcon die4;
+	ImageIcon die5;
+	ImageIcon die6;
+	ImageIcon die_disabled;
 	
 	JTextArea log;
+	
+	// CONSTRUCTORS
 	
 	public Visual() {
 
@@ -37,15 +70,40 @@ public class Visual extends JFrame{
 		bPane = getLayeredPane();
 		
 		background = new JLabel();
-		background.setIcon(new ImageIcon("bkg.jpg"));
+		background.setIcon(new ImageIcon("images/bkg.jpg"));
 		background.setBounds(0,0,SCREEN_WIDTH,SCREEN_HEIGHT);
 		bPane.add(background, new Integer(0));
 		
 		boardLabel = new JLabel();
-		ImageIcon boardIcon = new ImageIcon("board.jpg");
+		ImageIcon boardIcon = new ImageIcon("images/board.jpg");
 		boardLabel.setIcon(boardIcon);
 		boardLabel.setBounds(10,10,boardIcon.getIconWidth(),boardIcon.getIconHeight());
 		bPane.add(boardLabel, new Integer(1));
+		
+		stats_player = new JLabel("Current Player: ", JLabel.LEFT);
+		stats_player.setFont(new Font("Arial", Font.BOLD, 14));
+		stats_player.setBounds(1250, 640, 400, 20);
+		bPane.add(stats_player, new Integer(2));
+		
+		stats_location = new JLabel("Location: ", JLabel.LEFT);
+		stats_location.setFont(new Font("Arial", Font.BOLD, 14));
+		stats_location.setBounds(1250, 660, 400, 20);
+		bPane.add(stats_location, new Integer(2));
+		
+		stats_role = new JLabel("Role: ", JLabel.LEFT);
+		stats_role.setFont(new Font("Arial", Font.BOLD, 14));
+		stats_role.setBounds(1250, 680, 400, 20);
+		bPane.add(stats_role, new Integer(2));
+		
+		stats_dollars = new JLabel("Dollars: ", JLabel.LEFT);
+		stats_dollars.setFont(new Font("Arial", Font.BOLD, 14));
+		stats_dollars.setBounds(1250, 700, 400, 20);
+		bPane.add(stats_dollars, new Integer(2));
+		
+		stats_credits = new JLabel("Credits: ", JLabel.LEFT);
+		stats_credits.setFont(new Font("Arial", Font.BOLD, 14));
+		stats_credits.setBounds(1250, 720, 400, 20);
+		bPane.add(stats_credits, new Integer(2));
 		
 		ImageIcon wood = new ImageIcon("images/button.jpg");
 		ImageIcon wood_dis = new ImageIcon("images/disabled_button.jpg");
@@ -56,6 +114,7 @@ public class Visual extends JFrame{
 		bMove.setForeground(Color.white);
 		bMove.setBounds(1250, 50, 129, 36);
 		bMove.setDisabledIcon(wood_dis);
+		bMove.addMouseListener(new BoardMouseListener());
 		bPane.add(bMove, new Integer(2));
 		
 		bTakeRole = new JButton("Take Role", wood);
@@ -65,6 +124,7 @@ public class Visual extends JFrame{
 		bTakeRole.setForeground(Color.white);
 		bTakeRole.setBounds(1250, 90, 129, 36);
 		bTakeRole.setDisabledIcon(wood_dis);
+		bTakeRole.addMouseListener(new BoardMouseListener());
 		bPane.add(bTakeRole, new Integer(2));	
 		bTakeRole.setEnabled(false);
 		
@@ -75,6 +135,7 @@ public class Visual extends JFrame{
 		bAct.setForeground(Color.white);
 		bAct.setBounds(1250, 130, 129, 36);
 		bAct.setDisabledIcon(wood_dis);
+		bAct.addMouseListener(new BoardMouseListener());
 		bPane.add(bAct, new Integer(2));
 		bAct.setEnabled(false);
 		
@@ -85,6 +146,7 @@ public class Visual extends JFrame{
 		bRehearse.setForeground(Color.white);
 		bRehearse.setBounds(1250, 170, 129, 36);
 		bRehearse.setDisabledIcon(wood_dis);
+		bRehearse.addMouseListener(new BoardMouseListener());
 		bPane.add(bRehearse, new Integer(2));
 		bRehearse.setEnabled(false);
 		
@@ -95,10 +157,57 @@ public class Visual extends JFrame{
 		bUpgrade.setForeground(Color.white);
 		bUpgrade.setBounds(1250, 210, 129, 36);
 		bUpgrade.setDisabledIcon(wood_dis);
+		bUpgrade.addMouseListener(new BoardMouseListener());
 		bPane.add(bUpgrade, new Integer(2));
 		bUpgrade.setEnabled(false);
 		
-		log = new JTextArea("Good morning! Have a great day of acting!");
+		// Extra Buttons (for move and take role)
+		int yCord = 50;
+		for (int i = 1; i <= 7; i++) {
+			JButton button = new JButton("", wood);
+			button.setHorizontalTextPosition(JButton.CENTER);
+			button.setVerticalTextPosition(JButton.CENTER);
+			button.setFont(new Font("Arial", Font.ITALIC, 12));
+			button.setForeground(Color.white);
+			button.setBounds(1400, yCord, 129, 36);
+			button.addMouseListener(new BoardMouseListener());
+			button.setDisabledIcon(wood_dis);
+			bPane.add(button, new Integer(2));
+			button.setVisible(false);
+			button.setEnabled(false);
+			yCord += 40;
+			switch(i) {
+				case 1: bExtra1 = button;
+					break;
+				case 2: bExtra2 = button;
+					break;
+				case 3: bExtra3 = button;
+					break;
+				case 4: bExtra4 = button;
+					break;
+				case 5: bExtra5 = button;
+					break;
+				case 6: bExtra6 = button;
+					break;
+				case 7: bExtra7 = button;
+					break;
+			}
+		}
+		
+		die1 = new ImageIcon("images/Dice/DieOne.png");
+		die2 = new ImageIcon("images/Dice/DieTwo.png");
+		die3 = new ImageIcon("images/Dice/DieThree.png");
+		die4 = new ImageIcon("images/Dice/DieFour.png");
+		die5 = new ImageIcon("images/Dice/DieFive.png");
+		die6 = new ImageIcon("images/Dice/DieSix.png");
+		die_disabled = new ImageIcon("images/Dice/disabled.png");
+		dieLabel = new JLabel();
+		dieLabel.setIcon(die1);
+		dieLabel.setBounds(1250, 420, 85, 85);
+		bPane.add(dieLabel, new Integer(2));
+		
+		
+		log = new JTextArea("Welcome to Deadwood!");
 		log.setBounds(1250,750,300, 150);
 		log.setFont(new Font("Arial", Font.PLAIN, 13));
 		log.setEditable(false);
@@ -120,7 +229,7 @@ public class Visual extends JFrame{
 		panel.setBackground(Color.getHSBColor(255, 191, 122));
 		
 		JLabel textLabel = new JLabel("<html> Welcome to Deadwood.<br>Select number of players!</html>", JLabel.CENTER);
-		textLabel.setFont(new Font("Courier New", Font.ITALIC, 14));
+		textLabel.setFont(new Font("Arial", Font.ITALIC, 14));
 		panel.add(textLabel);
 		
 		String[] buttons = {"1","2","3","4","5","6","7","8"};
@@ -133,16 +242,41 @@ public class Visual extends JFrame{
 		add(panel);
 	}
 	
+	
+	// showScene
+	// Preconditions:
+	//		- A scene is drawn
+	// Postconditions:
+	//		- Scene card is displayed on the given dims
 	public void showScene(String filename, int[] dims) {
+		
 		ImageIcon sceneIcon = new ImageIcon("images/cards/"+filename);
 		JLabel sceneLabel = new JLabel();
 		sceneLabel.setIcon(sceneIcon);
 		sceneLabel.setBounds(dims[0]+10, dims[1]+10, sceneIcon.getIconWidth(), sceneIcon.getIconHeight());
 		bPane.add(sceneLabel,new Integer(2));
+	}
+	
+	
+	// isLot
+	// Preconditions:
+	//		- A player's attribute(s) have changed
+	// Postconditions:
+	//		- Updates all player's information on the stats board
+	//		- Moves player token to correct spot
+	public void updateStats(Player player) {
 		
+		stats_player.setText("Current Player: " + player.getName());
+		stats_location.setText("Location: " + player.getLocation().getName());
+		stats_role.setText("Role: " + player.getRole().getName());
+		stats_dollars.setText("Dollars: " + player.getCurrency());
+		stats_credits.setText("Credits: " + player.getFame());
 		
 	}
 }
+
+
+// LISTENERS
 
 class MenuMouseListener implements MouseListener {
 	
@@ -184,11 +318,24 @@ class MenuMouseListener implements MouseListener {
 
 }
 
-/*class BoardMouseListener implements MouseListener {
+class BoardMouseListener implements MouseListener {
 	
 	public void mouseClicked(MouseEvent e) {
 	
 	}
 	
-}*/
+    public void mouseExited(MouseEvent e) {
+    	
+    }
+    public void mouseEntered(MouseEvent e) {
+    	
+    }
+    public void mouseReleased(MouseEvent e) {
+    	
+    }
+    public void mousePressed(MouseEvent e) {
+    	
+    }
+	
+}
 

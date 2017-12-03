@@ -33,8 +33,8 @@ public class Deadwood {
 
 
 
-		Visual visual = new Visual();
-		visual.setVisible(true);
+		Visual board_view = new Visual();
+		board_view.setVisible(true);
 	
 		// Assign scenes to locations
 		for (int i = 0; i < locations.size(); i++) {
@@ -43,18 +43,15 @@ public class Deadwood {
 				locations.get(i).setScene(currentScene); //need to pass dimensions from location to visual
 				String filename = currentScene.getFileName();
 				int[] dims = locations.get(i).getDims();
-				visual.showScene(filename, dims);
-				TimeUnit.MILLISECONDS.sleep(200);
+				// display cards on locations
+				board_view.showScene(filename, dims);
+				TimeUnit.MILLISECONDS.sleep(50);
 			}
-			
-			// display cards on locations
 		}
 		Location[] allLocations = new Location[locations.size()];
 		for (int i = 0; i < locations.size(); i++) {
 			allLocations[i] = locations.get(i);
 		}
-
-		// get num players
 
 		Board game = new Board(allLocations, deck);
 		Location trailer = game.getTrailer();
@@ -87,102 +84,57 @@ public class Deadwood {
 			rank = 2;// start with rank 2
 			break;
 			
-	}
+		}
 		name = null;
-		for (int i = 1; i <= numPlayers; i++) {
-			
+		for (int i = 1; i <= numPlayers; i++) {	
 			switch(i) {
 				case 1:
 					name = "Blue";
-					break;
-				
+					break;		
 				case 2:
 					name = "Cyan";
-					break;
-					
+					break;				
 				case 3:
 					name = "Green";
-					break;
-					
+					break;	
 				case 4:
 					name = "Orange";
-					break;
-				
+					break;		
 				case 5:
 					name = "Pink";
-					break;
-					
+					break;			
 				case 6:
 					name = "Red";
-					break;
-					
+					break;			
 				case 7:
 					name = "Purple";
-					break;
-					
+					break;			
 				case 8:
 					name = "Yellow";
 					break;
-			
-			}
-			
-			 game.addPlayer(new Player(name, trailer,rank,fame));
+			}	
+			game.addPlayer(new Player(name, trailer,rank,fame));
 		}
 		
-		
-		
 
-		//Controller controller = new Controller(deck, game, visual);
-		
-		//Scanner console = new Scanner(System.in);
-
-		//System.out.println("Welcome to Deadwood!");
-	//	TimeUnit.SECONDS.sleep(1);
-
-	/*	while(true) { //want to play again loop
-			System.out.println("How many Players do we have today? (maximum of 8)");
-
-			Location[] allLocations = new Location[locations.size()];
-			for (int i = 0; i < locations.size(); i++) {
-				allLocations[i] = locations.get(i);
-			}
-
-			int numPlayers;
-			// loops until user inputs valid number of players
-			while (true) {
-				numPlayers = console.nextInt();
-				if (numPlayers > 0 && numPlayers <= 8) {
-					break;
-				} else {
-				System.out.println("Invalid Number of Players, try again");
-
-				}
-			}
-			System.out.println("Input each player's name");
-
-			Board game = new Board(allLocations, deck);
-			Location trailer = game.getTrailer();
-			for (int i = 0; i < numPlayers; i++) {
-				 String name = console.next();
-				 game.addPlayer(new Player(name, trailer));
-
-			}
-			// at this point, the first day starts, scenes need to be added to locations
+		while(true) { //want to play again loop
+			
 			Player[] players = game.getPlayers();
 			// For each day
-			for (int i = 0; i < 4; i++) {
+			for (int i = 0; i < numDays; i++) {
 
-				System.out.println("Day "+i+1);
-				TimeUnit.SECONDS.sleep(1);
 				int index = 0;
 				while(game.isEndDay()==false) {
 					if (index == numPlayers) { // cycles through players
 						index = 0;
 					}
 					Player currentPlayer = players[index];
+					
+					board_view.updateStats(currentPlayer);
+					
 					System.out.println();
 					System.out.println(currentPlayer.getName()+"'s turn!");
-					TimeUnit.SECONDS.sleep(1);
+
 					System.out.println("Player: "+currentPlayer.getName()+" ($"+currentPlayer.getCurrency()+", "+currentPlayer.getFame()+" Fame)");
 					if (currentPlayer.getRole() != null) {
 						System.out.println("Working as "+currentPlayer.getRole().getName()+", '"+currentPlayer.getRole().getDialogue()+"' at Scene "+currentPlayer.getLocation().getScene().getNumber());
@@ -228,7 +180,8 @@ public class Deadwood {
 								System.out.println("Take Role ("+count+")");
 								count++;
 							}
-							theNum = console.nextInt();
+							//theNum = console.nextInt();
+							theNum=0;
 
 							if (theNum <= 0 || theNum > count) {
 								System.out.println("Invalid Action, please try again.");
@@ -242,7 +195,8 @@ public class Deadwood {
 							currentPlayer.Move(locations);//effect hasMoved = ...
 							if (currentPlayer.getLocation().getName().equals("Office")) { //if the player moves to casting office they can upgrade
 								System.out.println("Would you like to Upgrade? (y/n)");
-								String reply = console.next();
+								//String reply = console.next();
+								String reply = "";
 								if (reply.equals("y")) {
 									currentPlayer.Upgrade();
 								}
@@ -250,7 +204,8 @@ public class Deadwood {
 							}
 							if (currentPlayer.getLocation().isLot() && currentPlayer.getLocation().isWrappedUp() == false) {
 								System.out.println("Would you like to Take a Role? (y/n)");
-								String reply = console.next();
+								//String reply = console.next();
+								String reply = "";
 								if (reply.equals("y")) {
 									currentPlayer.TakeRole();	//can a player move, take a role, and act all in one move? right now no
 									break;
@@ -278,7 +233,8 @@ public class Deadwood {
 							currentPlayer.TakeRole();
 							if (currentPlayer.isInRole() == true) {
 								System.out.println("Would you like to Act (1) or Rehearse? (2) ");
-								int reply = console.nextInt();
+								//int reply = console.nextInt();
+								int reply=0;
 								if (reply == 1) {
 									currentPlayer.Act();
 									break;
@@ -299,23 +255,23 @@ public class Deadwood {
 				}
 				game.CycleDay();
 			}
-			//players[1].setCurrency(1); testing purposes
+
 			System.out.println("The game is over here are the results: ");
-			TimeUnit.SECONDS.sleep(1);
+
 			Player winner = game.TallyScore();
-			TimeUnit.SECONDS.sleep(1);
+
 			System.out.println("Congratulations, "+winner.getName()+"!!");
-			TimeUnit.SECONDS.sleep(1);
+
 			System.out.println("Would you like to play again? (y/n)"); //need to make loop
 
-			String playAgain = console.next();
-
+			//String playAgain = console.next();
+			String playAgain = "";
+			
 			if (!playAgain.equals("y")) {
 				break;
 			}
 
 		} // end while loop here
-		console.close(); */
 	}
 
 

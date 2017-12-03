@@ -149,29 +149,6 @@ public class Board {
 		return trailer;
 	}
 
-	// ResetScenes
-	// Preconditions:
-	//
-	//
-	// Postconditions:
-	//
-	//
-	// Notes:
-	//		- Will be called in Cycle Day
-	//
-	//private void resetScenes() {
-	//
-	//}
-
-
-	// Update Day Count
-	// Preconditions:
-	//		- day is cycled
-	// Postconditions:
-	// 		- dayCounter is incremented by 1
-//	private void UpdateDayCount() {
-//		dayCounter++;
-//	}
 
 	//returns true if all scenes are wrapped
 	public boolean isEndDay() {
