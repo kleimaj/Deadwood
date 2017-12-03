@@ -27,6 +27,8 @@ public class Visual extends JFrame{
 	JButton bRehearse;
 	JButton bUpgrade;
 	
+	JTextArea log;
+	
 	public Visual() {
 
 		setSize(SCREEN_WIDTH,SCREEN_HEIGHT);
@@ -53,6 +55,7 @@ public class Visual extends JFrame{
 		bMove.setFont(new Font("Arial", Font.BOLD, 14));
 		bMove.setForeground(Color.white);
 		bMove.setBounds(1250, 50, 129, 36);
+		bMove.setDisabledIcon(wood_dis);
 		bPane.add(bMove, new Integer(2));
 		
 		bTakeRole = new JButton("Take Role", wood);
@@ -61,7 +64,9 @@ public class Visual extends JFrame{
 		bTakeRole.setFont(new Font("Arial", Font.BOLD, 14));
 		bTakeRole.setForeground(Color.white);
 		bTakeRole.setBounds(1250, 90, 129, 36);
+		bTakeRole.setDisabledIcon(wood_dis);
 		bPane.add(bTakeRole, new Integer(2));	
+		bTakeRole.setEnabled(false);
 		
 		bAct = new JButton("Act", wood);
 		bAct.setHorizontalTextPosition(JButton.CENTER);
@@ -69,7 +74,9 @@ public class Visual extends JFrame{
 		bAct.setFont(new Font("Arial", Font.BOLD, 14));
 		bAct.setForeground(Color.white);
 		bAct.setBounds(1250, 130, 129, 36);
+		bAct.setDisabledIcon(wood_dis);
 		bPane.add(bAct, new Integer(2));
+		bAct.setEnabled(false);
 		
 		bRehearse = new JButton("Rehearse", wood);
 		bRehearse.setHorizontalTextPosition(JButton.CENTER);
@@ -77,7 +84,9 @@ public class Visual extends JFrame{
 		bRehearse.setFont(new Font("Arial", Font.BOLD, 14));
 		bRehearse.setForeground(Color.white);
 		bRehearse.setBounds(1250, 170, 129, 36);
+		bRehearse.setDisabledIcon(wood_dis);
 		bPane.add(bRehearse, new Integer(2));
+		bRehearse.setEnabled(false);
 		
 		bUpgrade = new JButton("Upgrade", wood);
 		bUpgrade.setHorizontalTextPosition(JButton.CENTER);
@@ -85,9 +94,17 @@ public class Visual extends JFrame{
 		bUpgrade.setFont(new Font("Arial", Font.BOLD, 14));
 		bUpgrade.setForeground(Color.white);
 		bUpgrade.setBounds(1250, 210, 129, 36);
+		bUpgrade.setDisabledIcon(wood_dis);
 		bPane.add(bUpgrade, new Integer(2));
 		bUpgrade.setEnabled(false);
-		bUpgrade.setDisabledIcon(wood_dis);
+		
+		log = new JTextArea("Good morning! Have a great day of acting!");
+		log.setBounds(1250,750,300, 150);
+		log.setFont(new Font("Arial", Font.PLAIN, 13));
+		log.setEditable(false);
+		log.setLineWrap(true);
+		log.setBorder(new EmptyBorder(new Insets(3,3,3,3)));
+		bPane.add(log, new Integer(2));
 	}
 	
 	public Visual(int number) {
@@ -117,7 +134,7 @@ public class Visual extends JFrame{
 	}
 	
 	public void showScene(String filename, int[] dims) {
-		ImageIcon sceneIcon = new ImageIcon("cards/"+filename);
+		ImageIcon sceneIcon = new ImageIcon("images/cards/"+filename);
 		JLabel sceneLabel = new JLabel();
 		sceneLabel.setIcon(sceneIcon);
 		sceneLabel.setBounds(dims[0]+10, dims[1]+10, sceneIcon.getIconWidth(), sceneIcon.getIconHeight());

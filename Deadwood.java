@@ -43,9 +43,8 @@ public class Deadwood {
 				locations.get(i).setScene(currentScene); //need to pass dimensions from location to visual
 				String filename = currentScene.getFileName();
 				int[] dims = locations.get(i).getDims();
-				//System.out.println(dims[0]+", "+dims[1]);
 				visual.showScene(filename, dims);
-				//TimeUnit.SECONDS.sleep(1);
+				TimeUnit.MILLISECONDS.sleep(200);
 			}
 			
 			// display cards on locations
