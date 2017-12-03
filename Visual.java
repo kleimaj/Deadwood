@@ -21,6 +21,11 @@ public class Visual extends JFrame{
 	
 	JLayeredPane bPane;
 	
+	JButton bMove;
+	JButton bTakeRole;
+	JButton bAct;
+	JButton bRehearse;
+	JButton bUpgrade;
 	
 	public Visual() {
 
@@ -40,11 +45,54 @@ public class Visual extends JFrame{
 		boardLabel.setBounds(10,10,boardIcon.getIconWidth(),boardIcon.getIconHeight());
 		bPane.add(boardLabel, new Integer(1));
 		
+		ImageIcon wood = new ImageIcon("images/button.jpg");
+		ImageIcon wood_dis = new ImageIcon("images/disabled_button.jpg");
+		bMove = new JButton("Move", wood);
+		bMove.setHorizontalTextPosition(JButton.CENTER);
+		bMove.setVerticalTextPosition(JButton.CENTER);
+		bMove.setFont(new Font("Arial", Font.BOLD, 14));
+		bMove.setForeground(Color.white);
+		bMove.setBounds(1250, 50, 129, 36);
+		bPane.add(bMove, new Integer(2));
+		
+		bTakeRole = new JButton("Take Role", wood);
+		bTakeRole.setHorizontalTextPosition(JButton.CENTER);
+		bTakeRole.setVerticalTextPosition(JButton.CENTER);
+		bTakeRole.setFont(new Font("Arial", Font.BOLD, 14));
+		bTakeRole.setForeground(Color.white);
+		bTakeRole.setBounds(1250, 90, 129, 36);
+		bPane.add(bTakeRole, new Integer(2));	
+		
+		bAct = new JButton("Act", wood);
+		bAct.setHorizontalTextPosition(JButton.CENTER);
+		bAct.setVerticalTextPosition(JButton.CENTER);
+		bAct.setFont(new Font("Arial", Font.BOLD, 14));
+		bAct.setForeground(Color.white);
+		bAct.setBounds(1250, 130, 129, 36);
+		bPane.add(bAct, new Integer(2));
+		
+		bRehearse = new JButton("Rehearse", wood);
+		bRehearse.setHorizontalTextPosition(JButton.CENTER);
+		bRehearse.setVerticalTextPosition(JButton.CENTER);
+		bRehearse.setFont(new Font("Arial", Font.BOLD, 14));
+		bRehearse.setForeground(Color.white);
+		bRehearse.setBounds(1250, 170, 129, 36);
+		bPane.add(bRehearse, new Integer(2));
+		
+		bUpgrade = new JButton("Upgrade", wood);
+		bUpgrade.setHorizontalTextPosition(JButton.CENTER);
+		bUpgrade.setVerticalTextPosition(JButton.CENTER);
+		bUpgrade.setFont(new Font("Arial", Font.BOLD, 14));
+		bUpgrade.setForeground(Color.white);
+		bUpgrade.setBounds(1250, 210, 129, 36);
+		bPane.add(bUpgrade, new Integer(2));
+		bUpgrade.setEnabled(false);
+		bUpgrade.setDisabledIcon(wood_dis);
 	}
 	
 	public Visual(int number) {
 		
-		setSize(500,300);
+		setSize(300,300);
 		setTitle("Main Menu");
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setLocation(SCREEN_WIDTH/2 - getWidth()/2, SCREEN_HEIGHT/2 - getHeight()/2);
@@ -52,15 +100,16 @@ public class Visual extends JFrame{
 		JPanel panel = new JPanel();
 		panel.setLayout(new BoxLayout(panel,BoxLayout.Y_AXIS));
 		panel.setBorder(new EmptyBorder(new Insets(40,60,40,60)));
-		String[] buttons = {"1","2","3","4","5","6","7","8"};
+		panel.setBackground(Color.getHSBColor(255, 191, 122));
 		
-		JLabel textLabel = new JLabel("Select number of players!");
-		//textLabel.setVerticalAlignment(CENTER);
+		JLabel textLabel = new JLabel("<html> Welcome to Deadwood.<br>Select number of players!</html>", JLabel.CENTER);
+		textLabel.setFont(new Font("Courier New", Font.ITALIC, 14));
 		panel.add(textLabel);
 		
-		for(int i = 0; i < buttons.length; i++) {
+		String[] buttons = {"1","2","3","4","5","6","7","8"};
+		for(int i = 1; i < buttons.length; i++) {
 			JButton button = new JButton(buttons[i]);
-			button.addMouseListener(new MenuMouseListener()); //problem here
+			button.addMouseListener(new MenuMouseListener()); 
 			panel.add(button);
 			panel.add(Box.createRigidArea(new Dimension(0,5)));
 		}

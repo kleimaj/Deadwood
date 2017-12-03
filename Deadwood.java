@@ -36,9 +36,7 @@ public class Deadwood {
 		visual.setVisible(true);
 
 		
-		
-		
-
+	
 		// Assign scenes to locations
 		for (int i = 0; i < locations.size(); i++) {
 			locations.get(i).setScene(deck.draw());
