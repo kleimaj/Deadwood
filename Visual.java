@@ -268,7 +268,12 @@ public class Visual extends JFrame{
 		
 		stats_player.setText("Current Player: " + player.getName());
 		stats_location.setText("Location: " + player.getLocation().getName());
-		stats_role.setText("Role: " + player.getRole().getName());
+		if(player.isInRole()) {
+			stats_role.setText("Role: " + player.getRole().getName());
+		}
+		else {
+			stats_role.setText("Role: ");
+		}
 		stats_dollars.setText("Dollars: " + player.getCurrency());
 		stats_credits.setText("Credits: " + player.getFame());
 		
@@ -320,8 +325,13 @@ class MenuMouseListener implements MouseListener {
 
 class BoardMouseListener implements MouseListener {
 	
-	public void mouseClicked(MouseEvent e) {
+	static String command;
 	
+	public void mouseClicked(MouseEvent e) {
+		JButton button = (JButton) e.getSource();
+		if(button.isEnabled()) {
+    	command = button.getText();
+		}
 	}
 	
     public void mouseExited(MouseEvent e) {
@@ -335,6 +345,15 @@ class BoardMouseListener implements MouseListener {
     }
     public void mousePressed(MouseEvent e) {
     	
+    }
+    public String getCommand() {
+    	command = null;
+    	while(command == null) {
+    		try {
+    			Thread.sleep(250);
+    		}catch(InterruptedException e) {}
+    	}
+    	return command;
     }
 	
 }

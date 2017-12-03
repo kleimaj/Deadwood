@@ -132,11 +132,10 @@ public class Deadwood {
 					
 					board_view.updateStats(currentPlayer);
 					
-					System.out.println();
-					System.out.println(currentPlayer.getName()+"'s turn!");
+					//System.out.println(currentPlayer.getName()+"'s turn!");
 
 					System.out.println("Player: "+currentPlayer.getName()+" ($"+currentPlayer.getCurrency()+", "+currentPlayer.getFame()+" Fame)");
-					if (currentPlayer.getRole() != null) {
+				/*	if (currentPlayer.getRole() != null) {
 						System.out.println("Working as "+currentPlayer.getRole().getName()+", '"+currentPlayer.getRole().getDialogue()+"' at Scene "+currentPlayer.getLocation().getScene().getNumber());
 					}
 					if (currentPlayer.getLocation().isLot()) {
@@ -145,16 +144,20 @@ public class Deadwood {
 					}
 					if (currentPlayer.getLocation().isLot()==false) {
 						System.out.println(currentPlayer.name+" is currently in the "+currentPlayer.getLocation().getName());
-					}
+					}*/
 
 					//Start loop 1
 					while(true) {
+						//Visual.setButtons(player)
+						BoardMouseListener boardListener = new BoardMouseListener();
+						String action = boardListener.getCommand();
+						System.out.println(action);
 						//System.out.println("Select what you want to do: ");
-						ArrayList<String> availableActions = new ArrayList<String>();
-						int count = 1;
-						int theNum = 0;
-						System.out.println("Select (the number) what you want to do: ");
-						while(true) {
+						//ArrayList<String> availableActions = new ArrayList<String>();
+						//int count = 1;
+						//int theNum = 0;
+						//System.out.println("Select (the number) what you want to do: ");
+						/*while(true) {
 							if (currentPlayer.isInRole()==false) {//+condition hasMoved == false && endTurn == false
 								availableActions.add("move");
 								System.out.println("Move ("+count+")");
@@ -189,8 +192,9 @@ public class Deadwood {
 							else {
 								break;
 							}
-						}
-						String action = availableActions.get(theNum-1);
+						}*/
+						//String action = availableActions.get(theNum-1);
+						
 						if (action.equals("move")) {
 							currentPlayer.Move(locations);//effect hasMoved = ...
 							if (currentPlayer.getLocation().getName().equals("Office")) { //if the player moves to casting office they can upgrade
