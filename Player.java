@@ -35,13 +35,13 @@ public class Player implements Comparable<Player> {
 	//		- player's default location is trailer
 	//		- board is ready to be constructed (when all players are constructed)
 	//
-	public Player(String name, Location trailer) {
+	public Player(String name, Location trailer, int rank, int fame) {
 		this.name = name;
 		currentLocation = trailer;
 		currentRole = null;
-		rank = 1;
+		this.rank = rank;
 		currency = 0;
-		fame = 0;
+		this.fame = fame;
 		rehearsePoints = 0;
 		score = 0;
 	}

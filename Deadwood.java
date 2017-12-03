@@ -32,8 +32,8 @@ public class Deadwood {
 		int numPlayers = Integer.parseInt(command);
 		
 		
-		Visual visual = new Visual();
-		visual.setVisible(true);
+		
+
 
 		
 		
@@ -41,7 +41,7 @@ public class Deadwood {
 
 		// Assign scenes to locations
 		for (int i = 0; i < locations.size(); i++) {
-			locations.get(i).setScene(deck.draw());
+			locations.get(i).setScene(deck.draw()); //need to pass dimensions to visual
 			// display cards on locations
 		}
 		Location[] allLocations = new Location[locations.size()];
@@ -53,10 +53,79 @@ public class Deadwood {
 
 		Board game = new Board(allLocations, deck);
 		Location trailer = game.getTrailer();
-		/*for (int i = 0; i < numPlayers; i++) {
-			 String name = console.next();
-			 game.addPlayer(new Player(name, trailer));
-		}*/
+		int numDays = 4;
+		String name;
+		int rank = 1;
+		int fame = 0;
+		
+		switch(numPlayers) {
+		case 2: //play 3 days
+			numDays = 3;
+			break;
+		case 3: 
+			numDays = 3;
+			break; //play 3 days
+		
+		case 5: 
+			fame = 2;
+			break; //start with 2 credits
+		
+		case 6: 
+			fame = 4;
+			break; //start with 4 credits
+		
+		case 7: 
+			rank = 2;
+			break; //start with rank 2
+		
+		case 8: 
+			rank = 2;// start with rank 2
+			break;
+			
+	}
+		name = null;
+		for (int i = 1; i <= numPlayers; i++) {
+			
+			switch(i) {
+				case 1:
+					name = "Blue";
+					break;
+				
+				case 2:
+					name = "Cyan";
+					break;
+					
+				case 3:
+					name = "Green";
+					break;
+					
+				case 4:
+					name = "Orange";
+					break;
+				
+				case 5:
+					name = "Pink";
+					break;
+					
+				case 6:
+					name = "Red";
+					break;
+					
+				case 7:
+					name = "Purple";
+					break;
+					
+				case 8:
+					name = "Yellow";
+					break;
+			
+			}
+			
+			 game.addPlayer(new Player(name, trailer,rank,fame));
+		}
+		
+		Visual visual = new Visual();
+		visual.setVisible(true);
 
 		//Controller controller = new Controller(deck, game, visual);
 		
