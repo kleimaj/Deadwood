@@ -32,8 +32,13 @@ public class Deadwood {
 		int numPlayers = Integer.parseInt(command);
 		
 		
+<<<<<<< HEAD
 		
 
+=======
+		Visual visual = new Visual();
+		visual.setVisible(true);
+>>>>>>> 86865e939a855e3ae294d8f27a514551bf0102a1
 
 		
 	
