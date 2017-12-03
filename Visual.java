@@ -42,13 +42,7 @@ public class Visual extends JFrame{
 	JButton bAct;
 	JButton bRehearse;
 	JButton bUpgrade;
-	JButton bExtra1;
-	JButton bExtra2;
-	JButton bExtra3;
-	JButton bExtra4;
-	JButton bExtra5;
-	JButton bExtra6;
-	JButton bExtra7;
+	JButton[] extraButtons;
 	
 	ImageIcon die1;
 	ImageIcon die2;
@@ -162,6 +156,7 @@ public class Visual extends JFrame{
 		bUpgrade.setEnabled(false);
 		
 		// Extra Buttons (for move and take role)
+		extraButtons = new JButton[7];
 		int yCord = 50;
 		for (int i = 1; i <= 7; i++) {
 			JButton button = new JButton("", wood);
@@ -175,23 +170,8 @@ public class Visual extends JFrame{
 			bPane.add(button, new Integer(2));
 			button.setVisible(false);
 			button.setEnabled(false);
+			extraButtons[i-1] = button;
 			yCord += 40;
-			switch(i) {
-				case 1: bExtra1 = button;
-					break;
-				case 2: bExtra2 = button;
-					break;
-				case 3: bExtra3 = button;
-					break;
-				case 4: bExtra4 = button;
-					break;
-				case 5: bExtra5 = button;
-					break;
-				case 6: bExtra6 = button;
-					break;
-				case 7: bExtra7 = button;
-					break;
-			}
 		}
 		
 		die1 = new ImageIcon("images/Dice/DieOne.png");
@@ -258,7 +238,17 @@ public class Visual extends JFrame{
 	}
 	
 	
-	// isLot
+	public void discardScene() {
+		
+	}
+	
+	
+	public void placeShotToken() {
+		
+	}
+	
+	
+	// updateStats
 	// Preconditions:
 	//		- A player's attribute(s) have changed
 	// Postconditions:
@@ -277,7 +267,27 @@ public class Visual extends JFrame{
 		stats_dollars.setText("Dollars: " + player.getCurrency());
 		stats_credits.setText("Credits: " + player.getFame());
 		
+		// move player token on or off a role
+		
 	}
+	
+	
+	// showExtras
+	// Preconditions:
+	//		- Player has clicked on either take role or move
+	// Postconditions:
+	//		- Reveals the correct amount of buttons
+	//		- Properly labels the buttons
+	public void showExtras(String[] labels) {
+		
+		int numButtons = labels.length;
+		for (int i = 0; i < numButtons; i++) {
+			extraButtons[i].setText(labels[i]);
+			extraButtons[i].setVisible(true);
+			extraButtons[i].setEnabled(true);
+		}
+	}
+	
 }
 
 
