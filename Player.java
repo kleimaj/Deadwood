@@ -154,6 +154,47 @@ public class Player implements Comparable<Player> {
 			return false;
 		}
 	}
+	
+	public boolean[] allActions() { //same format as buttons
+		boolean[] actions = new boolean[5];
+		if (this.isInRole()) { //if they're in a role
+			actions[0] = false; //cant move
+			actions[1] = false; //cant take a role
+			actions[2] = true; //able to act
+			if (this.rehearsePoints < this.currentLocation.getScene().getBudget()) {
+				actions[3] = true; //able to rehearse																	
+			}
+			else {
+				actions[3] = false;
+			}
+			actions[4] = false;
+		}
+		else { //if not in role
+			actions[0] = true;
+			if (this.currentLocation.isLot()) {
+				ArrayList<Role> roles = this.currentLocation.getAllLotRoles(this.rank);
+				if (roles.size() == 0) {
+					actions[1] = false;
+				}
+				else {
+					actions[1] = true;
+				}
+			}
+			else {
+				actions[1] = false;
+			}
+			actions[2] = false;
+			actions[3] = false;
+			
+			if (this.isInCastingOffice()) {
+				actions[4] = true;
+			}
+			else {
+				actions[4] = false;
+			}
+		}
+		return actions;
+	}
 
 	// Upgrade
 	// Preconditions:
@@ -457,7 +498,7 @@ public class Player implements Comparable<Player> {
 				ArrayList<Role> onCard = new ArrayList<Role>();
 				onCard = currentLocation.getScene().getAvailableRoles();
 
-				Scanner RoleManager = new Scanner(System.in);
+				//Scanner RoleManager = new Scanner(System.in);
 
 
 				while (this.currentRole == null) {
@@ -478,7 +519,7 @@ public class Player implements Comparable<Player> {
 						System.out.println(i + ". " + "'"+ onCard.get(i - idx).getName() + "' - Rank is: " + onCard.get(i - idx).getRank() + ".");
 					}
 
-					int playerIndex = RoleManager.nextInt();
+					int playerIndex = 0;//RoleManager.nextInt();
 
 					if (playerIndex >= 1 && playerIndex <=onCard.size()+idx) {
 						// check if oncard or off card
@@ -503,7 +544,7 @@ public class Player implements Comparable<Player> {
 					}
 					else {
 						System.out.println("Not a valid index, try again");
-						TimeUnit.SECONDS.sleep(2);
+						//TimeUnit.SECONDS.sleep(2);
 
 					}
 				} // end of while loop
@@ -546,6 +587,7 @@ public class Player implements Comparable<Player> {
 	//
 	public void setRole(Role newRole) {
 		currentRole = newRole;
+		newRole.roleTaken();
 	}
 
 	// SetCurrency

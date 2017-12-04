@@ -178,6 +178,21 @@ public class Location {
 			return null;
 		}
 	}
+	//will return all roles that are not taken and that are of equal or less rank than rank
+	public ArrayList<Role> getAllLotRoles(int rank){
+		ArrayList<Role> returnedRoles = new ArrayList<Role>();
+		ArrayList<Role> offCardRoles = this.getRoles();
+		ArrayList<Role> onCard = this.currentScene.getAvailableRoles();
+
+		offCardRoles.addAll(onCard);
+		
+		for(int i = 0; i < offCardRoles.size(); i++) {
+			if (offCardRoles.get(i).getRank() <= rank) {
+				returnedRoles.add(offCardRoles.get(i));
+			}
+		}
+		return returnedRoles;
+	}
 
 	// addShot
 	// Preconditions:

@@ -125,7 +125,8 @@ public class Deadwood {
 			game.addPlayer(new Player(name, trailer,rank,fame,playerFile));
 		}
 		
-
+		board_view.createTokens(numPlayers);
+		
 		while(true) { //want to play again loop
 			
 			Player[] players = game.getPlayers();
@@ -139,7 +140,11 @@ public class Deadwood {
 					}
 					Player currentPlayer = players[index];
 					
-					board_view.updateStats(currentPlayer);
+					board_view.updateStats(currentPlayer, index);
+					
+					boolean[] actions = currentPlayer.allActions();
+					
+					board_view.updateButtons(actions);
 					
 					//System.out.println(currentPlayer.getName()+"'s turn!");
 
@@ -210,7 +215,7 @@ public class Deadwood {
 							String subAction = boardListener.getCommand();
 							Location newLocation = game.getLocation(subAction);
 							currentPlayer.setLocation(newLocation); //logically changes player's location
-							board_view.updateStats(currentPlayer); //doesn't work right now
+							board_view.updateStats(currentPlayer, index); //doesn't work right now
 							
 							if (currentPlayer.getLocation().getName().equals("Office")) { //if the player moves to casting office they can upgrade
 								System.out.println("Would you like to Upgrade? (y/n)");
@@ -225,19 +230,41 @@ public class Deadwood {
 								break;
 							}
 							if (currentPlayer.getLocation().isLot() && currentPlayer.getLocation().isWrappedUp() == false) {
+								//need to get all available roles
+								ArrayList<Role> roles = currentPlayer.getLocation().getAllLotRoles(currentPlayer.getRank());
+								if (roles.size() == 0) { //will end turn if no available roles
+									break;
+								}
 								System.out.println("Would you like to Take a Role? (y/n)");
 								//String reply = console.next();
 								String[] reply = {"Yes","No"};
 								board_view.showExtras(reply);
 								boardListener = new BoardMouseListener();
 								subAction = boardListener.getCommand();
-								if (reply.equals("Yes")) {
-									currentPlayer.TakeRole();	//can a player move, take a role, and act all in one move? right now no
-									break;
+								if (subAction.equals("Yes")) {
+									
+									//currentPlayer.TakeRole();	//can a player move, take a role, and act all in one move? right now no
+									String[] allRoles = new String[roles.size()];
+									for (int j = 0; j < roles.size(); j++) {
+										allRoles[j] = roles.get(j).getName();
+									}
+									board_view.showExtras(allRoles);
+									boardListener = new BoardMouseListener();
+									subAction = boardListener.getCommand();
+									Role chosenRole = null;
+									for (int j = 0; j < roles.size(); j++) {
+										if (subAction.equals(roles.get(j).getName())) {
+											chosenRole = roles.get(j);
+										}
+									}
+									currentPlayer.setRole(chosenRole);
+									board_view.updateStats(currentPlayer, index);
+									//chosenRole.roleTaken();
+									break; //after they take role
 								}
-								break;
+								break; //if they dont want to take role
 							}
-							break;
+							break; //end of move break
 						}
 						if (action.equals("upgrade")) {
 							currentPlayer.Upgrade();//effect endTurn = ...    //can player upgrade then move? if yes, can they take a role after?
@@ -275,6 +302,8 @@ public class Deadwood {
 						}
 					}
 					//End Loop 1
+					String[] reset = new String[0];
+					board_view.showExtras(reset);
 					index++; //end of player's turn
 
 				}

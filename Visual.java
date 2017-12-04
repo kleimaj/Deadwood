@@ -37,6 +37,7 @@ public class Visual extends JFrame{
 	JLabel stats_dollars;
 	JLabel stats_credits;
 	JLabel stats_icon;
+	JLabel[] player_tokens;
 	
 	JButton bMove;
 	JButton bTakeRole;
@@ -44,6 +45,7 @@ public class Visual extends JFrame{
 	JButton bRehearse;
 	JButton bUpgrade;
 	JButton[] extraButtons;
+	JButton[] buttons;
 	
 	ImageIcon die1;
 	ImageIcon die2;
@@ -101,12 +103,13 @@ public class Visual extends JFrame{
 		stats_credits.setBounds(1250, 720, 400, 20);
 		bPane.add(stats_credits, new Integer(2));
 		
-		//player_icon = new ImageIcon("images/dice/g1.png");
-		/*stats_icon = new JLabel();
+		stats_icon = new JLabel();
 		stats_icon.setBounds(1510, 640, 40,40);
 		stats_icon.setIcon(player_icon);
 		bPane.add(stats_icon, new Integer(2));
-		*/
+		
+		buttons = new JButton[5];
+		
 		ImageIcon wood = new ImageIcon("images/button.jpg");
 		ImageIcon wood_dis = new ImageIcon("images/disabled_button.jpg");
 		bMove = new JButton("Move", wood);
@@ -118,6 +121,7 @@ public class Visual extends JFrame{
 		bMove.setDisabledIcon(wood_dis);
 		bMove.addMouseListener(new BoardMouseListener());
 		bPane.add(bMove, new Integer(2));
+		buttons[0] = bMove;
 		
 		bTakeRole = new JButton("Take Role", wood);
 		bTakeRole.setHorizontalTextPosition(JButton.CENTER);
@@ -129,6 +133,7 @@ public class Visual extends JFrame{
 		bTakeRole.addMouseListener(new BoardMouseListener());
 		bPane.add(bTakeRole, new Integer(2));	
 		bTakeRole.setEnabled(false);
+		buttons[1] = bTakeRole;
 		
 		bAct = new JButton("Act", wood);
 		bAct.setHorizontalTextPosition(JButton.CENTER);
@@ -140,6 +145,7 @@ public class Visual extends JFrame{
 		bAct.addMouseListener(new BoardMouseListener());
 		bPane.add(bAct, new Integer(2));
 		bAct.setEnabled(false);
+		buttons[2] = bAct;
 		
 		bRehearse = new JButton("Rehearse", wood);
 		bRehearse.setHorizontalTextPosition(JButton.CENTER);
@@ -151,6 +157,7 @@ public class Visual extends JFrame{
 		bRehearse.addMouseListener(new BoardMouseListener());
 		bPane.add(bRehearse, new Integer(2));
 		bRehearse.setEnabled(false);
+		buttons[3] = bRehearse;
 		
 		bUpgrade = new JButton("Upgrade", wood);
 		bUpgrade.setHorizontalTextPosition(JButton.CENTER);
@@ -162,6 +169,7 @@ public class Visual extends JFrame{
 		bUpgrade.addMouseListener(new BoardMouseListener());
 		bPane.add(bUpgrade, new Integer(2));
 		bUpgrade.setEnabled(false);
+		buttons[4] = bUpgrade;
 		
 		// Extra Buttons (for move and take role)
 		extraButtons = new JButton[7];
@@ -245,6 +253,18 @@ public class Visual extends JFrame{
 		bPane.add(sceneLabel,new Integer(2));
 	}
 	
+	public void createTokens(int numPlayers) {
+		
+		player_tokens = new JLabel[numPlayers];
+		for (int i = 0; i < numPlayers; i++) {
+			JLabel thisPlayer = new JLabel();
+			bPane.add(thisPlayer, new Integer(2));
+			thisPlayer.setVisible(false);
+			player_tokens[i] = thisPlayer;
+		}	
+		
+	}
+	
 	
 	public void discardScene() {
 		
@@ -262,13 +282,26 @@ public class Visual extends JFrame{
 	// Postconditions:
 	//		- Updates all player's information on the stats board
 	//		- Moves player token to correct spot
-	public void updateStats(Player player) {
+	public void updateStats(Player player, int num) {
 		player_icon = new ImageIcon("images/dice/"+player.getFileName()); //shows player's icon
-		stats_icon = new JLabel();
-		stats_icon.setBounds(1510, 640, 40,40);
 		stats_icon.setIcon(player_icon);
-		bPane.add(stats_icon, new Integer(2));
 		
+		if (player.isInRole()) {
+			player_tokens[num].setVisible(true);
+			int[] roledims = player.getRole().getDims();
+		}
+		player_tokens[num].setIcon(player_icon);
+		int playerx;
+		int playery;
+		if (player.getRole().isOnCard()) {
+			playery = roledims[0];
+			playerx = roledims[1];
+		} else {
+			playerx=0;
+		}
+		
+		player_tokens[num].setBounds(playerx,playery,40,40); // set the icon to correct bounds using player's attributes
+
 		stats_player.setText("Current Player: " + player.getName());
 		stats_location.setText("Location: " + player.getLocation().getName());
 		if(player.isInRole()) {
@@ -292,12 +325,29 @@ public class Visual extends JFrame{
 	//		- Reveals the correct amount of buttons
 	//		- Properly labels the buttons
 	public void showExtras(String[] labels) {
-		
+		//needs to get rid of extra buttons after
 		int numButtons = labels.length;
-		for (int i = 0; i < numButtons; i++) {
+		for (int i = 0; i < 7; i++) {
+			if (i < numButtons) { //set these buttons to visible
 			extraButtons[i].setText(labels[i]);
 			extraButtons[i].setVisible(true);
 			extraButtons[i].setEnabled(true);
+			}
+			else { //any buttons after disappear
+				extraButtons[i].setVisible(false);
+				extraButtons[i].setEnabled(false);
+			}
+		}
+	}
+	
+	public void updateButtons(boolean[] actions) {
+		for (int i = 0; i < actions.length; i++) {
+			if (actions[i] == true) {
+				buttons[i].setEnabled(true);
+			}
+			else {
+				buttons[i].setEnabled(false);
+			}
 		}
 	}
 	

@@ -49,6 +49,10 @@ public class Role {
 		return name;
 	}
 	
+	public int[] getDims() {
+		return dims;
+	}
+	
 	// getDialogue
 	// Preconditions:
 	//		- none	
