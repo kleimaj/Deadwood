@@ -257,7 +257,7 @@ public class Visual extends JFrame{
 	//		- A scene is drawn
 	// Postconditions:
 	//		- Scene card is displayed on the given dims
-	public void showScene(String filename, int[] dims) {
+	public void showScene(String filename, int[] dims, int layer) {
 		
 		ImageIcon sceneIcon = new ImageIcon("images/cards/"+filename);
 		JLabel sceneLabel = new JLabel();
@@ -273,7 +273,7 @@ public class Visual extends JFrame{
 		player_tokens = new JLabel[numPlayers];
 		for (int i = 0; i < numPlayers; i++) {
 			JLabel thisPlayer = new JLabel();
-			bPane.add(thisPlayer, new Integer(3));
+			bPane.add(thisPlayer, new Integer(50));
 			thisPlayer.setVisible(false);
 			player_tokens[i] = thisPlayer;
 		}	

@@ -49,7 +49,7 @@ public class Board {
 		Location trailer = null;
 
 		for (int i = 0; i < locations.length; i++) {
-			if (locations[i].getName().equals("Trailer")) { // may need to change this after parsing xml
+			if (locations[i].getName().equals("trailer")) { 
 				trailer = locations[i];
 			}
 			if (locations[i].isLot()) { // reset scenes
@@ -141,7 +141,7 @@ public class Board {
 		Location trailer = null;
 		for (int i = 0; i < locations.length; i++) {
 			//System.out.println(locations[i].getName());
-			if (locations[i].getName().equals("Trailer")) {
+			if (locations[i].getName().equals("trailer")) {
 				trailer = locations[i];
 				break;
 			}

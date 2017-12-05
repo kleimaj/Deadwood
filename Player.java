@@ -150,7 +150,7 @@ public class Player implements Comparable<Player> {
 	}
 
 	public boolean isInCastingOffice() {
-		if (currentLocation.getName().equals("Office")) {
+		if (currentLocation.getName().equals("office")) {
 			return true;
 		}
 		else {
@@ -288,7 +288,7 @@ public class Player implements Comparable<Player> {
 	public boolean Upgrade() throws InterruptedException {
 
 		boolean validMove = false;
-		if (currentLocation.getName().equals("Office")) {
+		if (currentLocation.getName().equals("office")) {
 			rank = this.getRank();
 			if (rank == 6) {
 				System.out.println("You cannot Upgrade anymore!");
@@ -423,12 +423,12 @@ public class Player implements Comparable<Player> {
 				int UserMove = MoveManager.nextInt()-1; //index of neighbor
 				Location neighbor = null;
 				for (int i = 0; i < locations.size(); i++){
-					if(neighbors[UserMove].equals("trailer")&&locations.get(i).getName().equals("Trailer")) {//for lowercase trailer
+					if(neighbors[UserMove].equals("trailer")&&locations.get(i).getName().equals("trailer")) {//for lowercase trailer
 						neighbor = locations.get(i);
 						this.setLocation(neighbor);
 						validMove = true;
 					}
-					if (neighbors[UserMove].equals("office")&&locations.get(i).getName().equals("Office")) {
+					if (neighbors[UserMove].equals("office")&&locations.get(i).getName().equals("office")) {
 						neighbor = locations.get(i);
 						this.setLocation(neighbor);
 						validMove = true;
@@ -655,6 +655,8 @@ public class Player implements Comparable<Player> {
 		rank = newRank;
 		
 		String firstLetter = this.name.substring(0, 1);
+		
+		firstLetter = firstLetter.toLowerCase();
 		
 		this.setFileName(firstLetter+newRank+".png"); //changes filename
 		

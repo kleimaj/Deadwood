@@ -82,41 +82,65 @@ public class Deadwood {
 				case 1:
 					name = "Blue";
 					playerFile = "b1.png";
+					if (numPlayers >= 7) {
+						playerFile = "b2.png";
+					}
 					break;		
 				case 2:
 					name = "Cyan";
 					playerFile = "c1.png";
+					if (numPlayers >= 7) {
+						playerFile = "c2.png";
+					}
 					break;				
 				case 3:
 					name = "Green";
 					playerFile = "g1.png";
+					if (numPlayers >= 7) {
+						playerFile = "g2.png";
+					}
 					break;	
 				case 4:
 					name = "Orange";
 					playerFile = "o1.png";
+					if (numPlayers >= 7) {
+						playerFile = "o2.png";
+					}
 					break;		
 				case 5:
 					name = "Pink";
 					playerFile = "p1.png";
+					if (numPlayers >= 7) {
+						playerFile = "p2.png";
+					}
 					break;			
 				case 6:
 					name = "Red";
 					playerFile = "r1.png";
+					if (numPlayers >= 7) {
+						playerFile = "r2.png";
+					}
 					break;			
 				case 7:
 					name = "Purple";
 					playerFile = "v1.png";
+					if (numPlayers >= 7) {
+						playerFile = "v2.png";
+					}
 					break;			
 				case 8:
 					name = "Yellow";
 					playerFile = "y1.png";
+					if (numPlayers >= 7) {
+						playerFile = "y2.png";
+					}
 					break;
 			}	
 			game.addPlayer(new Player(name, trailer,rank,fame,playerFile));
 		}
 		
 		board_view.createTokens(numPlayers);
-		
+		int layer = 2;
 		while(true) { //want to play again loop
 			
 			Player[] players = game.getPlayers();
@@ -130,9 +154,10 @@ public class Deadwood {
 						String filename = currentScene.getFileName();
 						int[] dims = locations.get(j).getDims();
 						// display cards on locations
-						board_view.showScene(filename, dims);
+						board_view.showScene(filename, dims, layer);
 						TimeUnit.MILLISECONDS.sleep(50);
 					}
+					layer++;
 				}
 
 				int index = 0;
@@ -441,11 +466,11 @@ public class Deadwood {
 							TimeUnit.MILLISECONDS.sleep(50);
 							board_view.setLog("You rolled a "+diceRoll+"!");
 							board_view.appendLog('\n'+"Along with your Rehearsal Points: "+currentPlayer.getRehearsePoints());
-							board_view.appendLog('\n'+"Your overall dice roll = "+overAllRoll);
-							TimeUnit.MILLISECONDS.sleep(50);
+							board_view.appendLog('\n'+"Your overall dice roll = "+overAllRoll+'\n');
+							TimeUnit.MILLISECONDS.sleep(2000);
 							Role theRole = currentPlayer.getRole();
 							if (overAllRoll < budget) { //they failed
-								board_view.setLog("Unfortunately, you did not roll at least a "+diceRoll);
+								board_view.setLog("Unfortunately, you did not roll at least a "+diceRoll+'\n');
 								if (theRole.isOnCard()) {
 									board_view.appendLog("You do not win anything...");
 								}
@@ -466,12 +491,15 @@ public class Deadwood {
 								}
 								currentPlayer.getLocation().addShot();
 								//here need to add shot token in visual
-								TimeUnit.MILLISECONDS.sleep(50);
 							}
+							TimeUnit.MILLISECONDS.sleep(2000);
 							if (currentPlayer.getLocation().getShotsTaken() == currentPlayer.getLocation().getShotsMax()) {
 								Scene wrapScene = currentPlayer.getLocation().getScene();
 								game.WrapScene(currentPlayer.getLocation());
-								board_view.updateStats(currentPlayer, index);
+								
+								for (int j = 0; j < players.length; j++) {
+								board_view.updateStats(players[j], j);
+								}
 								board_view.discardScene(wrapScene);
 								//need to take players off scenes.
 							}
@@ -859,7 +887,7 @@ public class Deadwood {
   	_neighbors = new String[neighbors.size()];
 		_neighbors = neighbors.toArray(_neighbors);
 
-  	Location newLocation = new Location("Trailer", area);
+  	Location newLocation = new Location("trailer", area);
   	newLocation.setNeighbors(_neighbors);
   	locations.add(newLocation);
 
@@ -902,7 +930,7 @@ public class Deadwood {
   	_neighbors = new String[neighbors.size()];
 		_neighbors = neighbors.toArray(_neighbors);
 
-		newLocation = new Location("Office", area);
+		newLocation = new Location("office", area);
   	newLocation.setNeighbors(_neighbors);
   	locations.add(newLocation);
 
