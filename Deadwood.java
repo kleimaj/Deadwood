@@ -470,7 +470,7 @@ public class Deadwood {
 							TimeUnit.MILLISECONDS.sleep(2000);
 							Role theRole = currentPlayer.getRole();
 							if (overAllRoll < budget) { //they failed
-								board_view.setLog("Unfortunately, you did not roll at least a "+diceRoll+'\n');
+								board_view.setLog("Unfortunately, you did not roll at least a "+budget+'\n');
 								if (theRole.isOnCard()) {
 									board_view.appendLog("You do not win anything...");
 								}
