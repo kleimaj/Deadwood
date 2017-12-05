@@ -10,6 +10,7 @@ import javax.swing.border.*;
 import javax.swing.ImageIcon;
 import javax.imageio.ImageIO;
 import java.awt.event.*;
+import java.util.ArrayList;
 
 public class Visual extends JFrame{
 	
@@ -34,6 +35,7 @@ public class Visual extends JFrame{
 	JLabel stats_player;
 	JLabel stats_location;
 	JLabel stats_role;
+	JLabel stats_rehpts;
 	JLabel stats_dollars;
 	JLabel stats_credits;
 	JLabel stats_icon;
@@ -58,6 +60,8 @@ public class Visual extends JFrame{
 	
 	JTextArea log;
 	
+	ArrayList<JLabel> sceneCards;
+	
 	// CONSTRUCTORS
 	
 	public Visual() {
@@ -80,18 +84,23 @@ public class Visual extends JFrame{
 		
 		stats_player = new JLabel("Current Player: ", JLabel.LEFT);
 		stats_player.setFont(new Font("Arial", Font.BOLD, 14));
-		stats_player.setBounds(1250, 640, 400, 20);
+		stats_player.setBounds(1250, 620, 400, 20);
 		bPane.add(stats_player, new Integer(2));
 		
 		stats_location = new JLabel("Location: ", JLabel.LEFT);
 		stats_location.setFont(new Font("Arial", Font.BOLD, 14));
-		stats_location.setBounds(1250, 660, 400, 20);
+		stats_location.setBounds(1250, 640, 400, 20);
 		bPane.add(stats_location, new Integer(2));
 		
 		stats_role = new JLabel("Role: ", JLabel.LEFT);
 		stats_role.setFont(new Font("Arial", Font.BOLD, 14));
-		stats_role.setBounds(1250, 680, 400, 20);
+		stats_role.setBounds(1250, 660, 400, 20);
 		bPane.add(stats_role, new Integer(2));
+		
+		stats_rehpts = new JLabel("Rehearsal Points: ", JLabel.LEFT);
+		stats_rehpts .setFont(new Font("Arial", Font.BOLD, 14));
+		stats_rehpts .setBounds(1250, 680, 400, 20);
+		bPane.add(stats_rehpts , new Integer(2));
 		
 		stats_dollars = new JLabel("Dollars: ", JLabel.LEFT);
 		stats_dollars.setFont(new Font("Arial", Font.BOLD, 14));
@@ -210,6 +219,9 @@ public class Visual extends JFrame{
 		log.setLineWrap(true);
 		log.setBorder(new EmptyBorder(new Insets(3,3,3,3)));
 		bPane.add(log, new Integer(2));
+		
+		sceneCards = new ArrayList<JLabel>();
+		
 
 	}
 	
@@ -251,7 +263,9 @@ public class Visual extends JFrame{
 		JLabel sceneLabel = new JLabel();
 		sceneLabel.setIcon(sceneIcon);
 		sceneLabel.setBounds(dims[0]+10, dims[1]+10, sceneIcon.getIconWidth(), sceneIcon.getIconHeight());
+		sceneLabel.setName(filename);
 		bPane.add(sceneLabel,new Integer(2));
+		sceneCards.add(sceneLabel);
 	}
 	
 	public void createTokens(int numPlayers) {
@@ -259,7 +273,7 @@ public class Visual extends JFrame{
 		player_tokens = new JLabel[numPlayers];
 		for (int i = 0; i < numPlayers; i++) {
 			JLabel thisPlayer = new JLabel();
-			bPane.add(thisPlayer, new Integer(2));
+			bPane.add(thisPlayer, new Integer(3));
 			thisPlayer.setVisible(false);
 			player_tokens[i] = thisPlayer;
 		}	
@@ -270,11 +284,23 @@ public class Visual extends JFrame{
 		log.setText(text);
 	}
 	
-	
-	public void discardScene() {
-		
+	public void appendLog(String text) {
+		log.append(text);
 	}
 	
+	
+	public void discardScene(Scene scene) {
+		String name = scene.getFileName();
+		for (int i = 0; i < sceneCards.size(); i++) {
+			if (name == sceneCards.get(i).getName()) {
+				sceneCards.get(i).setVisible(false);
+			}
+		}
+	}
+	
+	public void resetScenes() {
+		sceneCards = new ArrayList<JLabel>();
+	}
 	
 	public void placeShotToken() {
 		
@@ -289,39 +315,37 @@ public class Visual extends JFrame{
 	//		- Moves player token to correct spot
 	public void updateStats(Player player, int num) {
 		player_icon = new ImageIcon("images/dice/"+player.getFileName()); //shows player's icon
-		stats_icon.setIcon(player_icon);
-		/*
-		int[] roledims = new int[4];
-		if (player.isInRole()) {
-			player_tokens[num].setVisible(true);
-			roledims = player.getRole().getDims();
-		}
 		player_tokens[num].setIcon(player_icon);
-		int playerx;
-		int playery;
-		
-		if (player.getRole().isOnCard()) {
-			playery = roledims[0];
-			playerx = roledims[1];
+		stats_icon.setIcon(player_icon);
+
+		if (player.isInRole()) {
+			stats_role.setText("Role: " + player.getRole().getName());
+			player_tokens[num].setVisible(true);
+			
+			int[] roledims = player.getRole().getDims();
+			int[] locationdims = player.getLocation().getDims();
+			int playerx = 0;
+			int playery = 0;
+			
+			if (player.getRole().isOnCard()) {
+				playerx = roledims[0] + locationdims[0] + 10;
+				playery = roledims[1] + locationdims[1] + 10;
+			} else {
+				playerx = roledims[0] + 11;
+				playery = roledims[1] + 11;
+			}
+			player_tokens[num].setBounds(playerx,playery,40,40); // set the icon to correct bounds using player's attributes
 		} else {
-			playerx=0;
-			playery=0; //??? need to look over this code
-		}
+			stats_role.setText("Role: ");
+			player_tokens[num].setVisible(false);
+		} 
 		
-		player_tokens[num].setBounds(playerx,playery,40,40); // set the icon to correct bounds using player's attributes
-		*/
+		
 		stats_player.setText("Current Player: " + player.getName());
 		stats_location.setText("Location: " + player.getLocation().getName());
-		if(player.isInRole()) {
-			stats_role.setText("Role: " + player.getRole().getName());
-		}
-		else {
-			stats_role.setText("Role: ");
-		}
+		stats_rehpts.setText("Rehearsal Points: " + player.getRehearsePoints());
 		stats_dollars.setText("Dollars: " + player.getCurrency());
 		stats_credits.setText("Credits: " + player.getFame());
-		
-		// move player token on or off a role
 		
 	}
 	

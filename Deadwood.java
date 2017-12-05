@@ -37,17 +37,7 @@ public class Deadwood {
 		board_view.setVisible(true);
 	
 		// Assign scenes to locations
-		for (int i = 0; i < locations.size(); i++) {
-			if(locations.get(i).isLot()) { 
-				Scene currentScene = deck.draw();
-				locations.get(i).setScene(currentScene); //need to pass dimensions from location to visual
-				String filename = currentScene.getFileName();
-				int[] dims = locations.get(i).getDims();
-				// display cards on locations
-				board_view.showScene(filename, dims);
-				TimeUnit.MILLISECONDS.sleep(50);
-			}
-		}
+		
 		Location[] allLocations = new Location[locations.size()];
 		for (int i = 0; i < locations.size(); i++) {
 			allLocations[i] = locations.get(i);
@@ -131,7 +121,19 @@ public class Deadwood {
 			
 			Player[] players = game.getPlayers();
 			// For each day
-			for (int i = 0; i < numDays; i++) {
+			for (int i = 0; i < numDays; i++) {//days
+				//scene cards
+				for (int j = 0; j < locations.size(); j++) {
+					if(locations.get(j).isLot()) { 
+						Scene currentScene = deck.draw();
+						locations.get(j).setScene(currentScene); //need to pass dimensions from location to visual
+						String filename = currentScene.getFileName();
+						int[] dims = locations.get(j).getDims();
+						// display cards on locations
+						board_view.showScene(filename, dims);
+						TimeUnit.MILLISECONDS.sleep(50);
+					}
+				}
 
 				int index = 0;
 				while(game.isEndDay()==false) {
@@ -431,9 +433,47 @@ public class Deadwood {
 							break;
 						}
 						if (action.equals("Act")) {   //random num dice roll, 
-							currentPlayer.Act();//effect endTurn = ...
+							//currentPlayer.Act();//effect endTurn = ...
+							int diceRoll = 1+(int)(6*Math.random());
+							int budget = currentPlayer.getLocation().getScene().getBudget();
+							int overAllRoll = diceRoll+currentPlayer.getRehearsePoints();
+							board_view.setLog("In order to succeed, you must roll greater than or equal to "+budget+"!");
+							TimeUnit.MILLISECONDS.sleep(50);
+							board_view.setLog("You rolled a "+diceRoll+"!");
+							board_view.appendLog('\n'+"Along with your Rehearsal Points: "+currentPlayer.getRehearsePoints());
+							board_view.appendLog('\n'+"Your overall dice roll = "+overAllRoll);
+							TimeUnit.MILLISECONDS.sleep(50);
+							Role theRole = currentPlayer.getRole();
+							if (overAllRoll < budget) { //they failed
+								board_view.setLog("Unfortunately, you did not roll at least a "+diceRoll);
+								if (theRole.isOnCard()) {
+									board_view.appendLog("You do not win anything...");
+								}
+								else {
+									board_view.appendLog("Because you're an Off-Card Actor, you win $1 !");
+									currentPlayer.setCurrency(currentPlayer.getCurrency()+1);
+								}
+							}
+							else {
+								if (theRole.isOnCard()) {
+									board_view.appendLog("You earned yourself 2 Fame!");
+									currentPlayer.setFame(currentPlayer.getFame()+2);
+								}
+								else {
+									board_view.appendLog("You earned yourself $1 and 1 Fame!");
+									currentPlayer.setFame(currentPlayer.getFame()+1);
+									currentPlayer.setCurrency(currentPlayer.getCurrency()+1);
+								}
+								currentPlayer.getLocation().addShot();
+								//here need to add shot token in visual
+								TimeUnit.MILLISECONDS.sleep(50);
+							}
 							if (currentPlayer.getLocation().getShotsTaken() == currentPlayer.getLocation().getShotsMax()) {
+								Scene wrapScene = currentPlayer.getLocation().getScene();
 								game.WrapScene(currentPlayer.getLocation());
+								board_view.updateStats(currentPlayer, index);
+								board_view.discardScene(wrapScene);
+								//need to take players off scenes.
 							}
 							break;
 						}
@@ -498,24 +538,6 @@ public class Deadwood {
 								break;
 							}
 							
-							/*
-							currentPlayer.TakeRole();
-							if (currentPlayer.isInRole() == true) {
-								System.out.println("Would you like to Act (1) or Rehearse? (2) ");
-								//int reply = console.nextInt();
-								int reply=0;
-								if (reply == 1) {
-									currentPlayer.Act();
-									break;
-								}
-								else if (reply == 2) {
-									currentPlayer.Rehearse();
-									break;
-								}
-								else {
-									break;
-								}
-							}*/
 						}
 					}
 					//End Loop 1
@@ -524,16 +546,28 @@ public class Deadwood {
 					index++; //end of player's turn
 
 				}
+				if (i != numDays-1) { //doesn't cycle if last day
 				game.CycleDay();
+				//need to reset scenes, remove all shot tokens
+				board_view.resetScenes();
+				}
 			}
 
 			System.out.println("The game is over here are the results: ");
+			board_view.setLog("The game is over, here are the results: ");
 
-			Player winner = game.TallyScore();
+			ArrayList<Player> endGame = game.TallyScore();
+			int count = 1;
+			for(int i=0; i < endGame.size(); i++) {
+				board_view.appendLog("#"+count+endGame.get(i).getName()+" Score: "+endGame.get(i).getScore());
+				count++;
+			}
 
-			System.out.println("Congratulations, "+winner.getName()+"!!");
+			System.out.println("Congratulations, "+endGame.get(0).getName()+"!!");
+			board_view.appendLog('\n'+'\n'+"Congratulations, +"+endGame.get(0).getName()+"!!");
+			board_view.appendLog('\n'+"Would you like to play again?");
 
-			System.out.println("Would you like to play again? (y/n)"); //need to make loop
+			System.out.println("Would you like to play again?)"); //need to make loop
 
 			//String playAgain = console.next();
 			String playAgain = "";
@@ -580,7 +614,7 @@ public class Deadwood {
     LinkedList<Scene> scenes = new LinkedList<Scene>();
 
     for (int i = 0; i < cardList.getLength(); i++) {
-    	dims = new int[4];
+
     	Node cardNode = cardList.item(i);
     	ArrayList<Role> roles = new ArrayList<Role>();
 
@@ -592,7 +626,7 @@ public class Deadwood {
 	    	NodeList pList = cardNode.getChildNodes();
 
 	    	for (int p = 0; p < pList.getLength(); p++) {
-
+	        	dims = new int[4];
 	    		Node pNode = pList.item(p);
 	    		if (pNode.getNodeType() == Node.ELEMENT_NODE) {
 	    			Element pElement = (Element) pNode;
@@ -678,7 +712,6 @@ public class Deadwood {
 
   	for (int i = 0; i < setList.getLength(); i++) {
   		area = new int[4];
-  		dims = new int[4];
   		takeNum = 0;
 		takeDims = null;
   		parts = null;
@@ -724,6 +757,7 @@ public class Deadwood {
 									}
 									NodeList takeList2 = takeNode.getChildNodes();
 									for (int t = 0; t < takeList2.getLength(); t++) {
+									takeDims = new int[4][takeNum];
 				    				Node takeNode2 = takeList2.item(t);
 				    				if (takeNode2.getNodeType() == Node.ELEMENT_NODE) {
 											Element takeElement = (Element) takeNode2;
@@ -742,6 +776,7 @@ public class Deadwood {
   					case "parts":
   						NodeList partsList = tNode.getChildNodes();
   						for (int p = 0; p < partsList.getLength(); p++) {
+  							dims = new int[4];
   							Node partNode = partsList.item(p);
   							if (partNode.getNodeType() == Node.ELEMENT_NODE) {
   								Element pElement = (Element) partNode;
@@ -765,7 +800,7 @@ public class Deadwood {
   				    					}
   				    				}
   								}
-    							Role newRole = new Role(p_name, p_line, p_lvl, false, null);
+    							Role newRole = new Role(p_name, p_line, p_lvl, false, dims);
     							roles.add(newRole);
   							}
   						}

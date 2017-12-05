@@ -99,7 +99,7 @@ public class Board {
 			}
 		}
 		if (bonus == true) {
-			Bonus(givenLocation,theScene);
+			//Bonus(givenLocation,theScene);
 		}
 
 		// wrap the scene
@@ -262,7 +262,7 @@ public class Board {
 	// Notes:
 	//		- if there is a tie, winner goes to player who had the latest turn
 	//
-	public Player TallyScore() {
+	public ArrayList<Player> TallyScore() {
 
 		for (int i = 0; i < players.size(); i++) {
 			players.get(i).setScore();
@@ -282,7 +282,7 @@ public class Board {
 			count++;
 		}
 
-		return winner;
+		return players;
 	}
 
 }

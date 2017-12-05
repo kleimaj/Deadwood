@@ -176,7 +176,7 @@ public class Player implements Comparable<Player> {
 			actions[0] = true;
 			if (this.currentLocation.isLot()) {
 				ArrayList<Role> roles = this.currentLocation.getAllLotRoles(this.rank);
-				if (roles.size() == 0) {
+				if (roles.size() == 0 || this.currentLocation.isWrappedUp()) {
 					actions[1] = false;
 				}
 				else {
@@ -672,7 +672,9 @@ public class Player implements Comparable<Player> {
 	//
 	public void setRole(Role newRole) {
 		currentRole = newRole;
+		if (newRole != null) {
 		newRole.roleTaken();
+		}
 	}
 
 	// SetCurrency
