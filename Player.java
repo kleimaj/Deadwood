@@ -120,6 +120,9 @@ public class Player implements Comparable<Player> {
 	public void resetRehearsePoints() {
 		this.rehearsePoints = 0;
 	}
+	public void setRehearsePoints(int points) {
+		this.rehearsePoints = points;
+	}
 	public void setFileName(String newFile) {
 		this.filename = newFile;
 	}
@@ -186,7 +189,7 @@ public class Player implements Comparable<Player> {
 			actions[2] = false;
 			actions[3] = false;
 			
-			if (this.isInCastingOffice()) {
+			if (this.isInCastingOffice()&&this.canUpgrade()) { //need to check for more things (make new method in player called canUpgrade() returns boolean
 				actions[4] = true;
 			}
 			else {
@@ -194,6 +197,83 @@ public class Player implements Comparable<Player> {
 			}
 		}
 		return actions;
+	}
+	
+	public boolean canUpgrade() {
+		switch(rank) {
+		case 1:
+			if (currency >= 4 || fame >= 5) {
+				return true;
+			}
+			else {
+				return false;
+			}
+		case 2:
+			if (currency >= 10 || fame >= 10) {
+				return true;
+			}
+			else {
+				return false;
+			}
+		case 3:
+			if (currency >= 18 || fame >= 15) {
+				return true;
+			}
+			else {
+				return false;
+			}
+		case 4:
+			if (currency >= 28 || fame >= 20) {
+				return true;
+			}
+			else {
+				return false;
+			}
+		case 5:
+			if (currency >= 40 || fame >= 25) {
+				return true;
+			}
+			else {
+				return false;
+			}
+		}
+		return false; //this means they're rank 6
+	}
+	
+	public String[] getAvailableRanks() {
+		ArrayList<String> ranks = new ArrayList<String>();
+		for (int i = this.rank; i < 7; i++) {
+			switch(i) {
+				case 1:
+					if (currency >= 4 || fame >= 5) {
+						ranks.add("2");
+						break;
+					}
+				case 2:
+					if (currency >= 10 || fame >= 10) {
+						ranks.add("3");
+						break;
+					}
+				case 3:
+					if (currency >= 18 || fame >=15) {
+						ranks.add("4");
+						break;
+					}
+				case 4:
+					if (currency >= 28 || fame >= 20) {
+						ranks.add("5");
+						break;
+					}
+				case 5:
+					if (currency >= 40 || fame >= 25) {
+						ranks.add("6");
+						break;
+					}
+			}
+		}
+		String[] returnedRanks = ranks.toArray(new String[ranks.size()]);
+		
+		return returnedRanks;
 	}
 
 	// Upgrade
@@ -571,8 +651,13 @@ public class Player implements Comparable<Player> {
 	// Notes:
 	//		- will be called in Upgrade()
 	//
-	private void setRank(int newRank) {
+	public void setRank(int newRank) {
 		rank = newRank;
+		
+		String firstLetter = this.name.substring(0, 1);
+		
+		this.setFileName(firstLetter+newRank+".png"); //changes filename
+		
 	}
 
 	// SetRole
@@ -610,7 +695,7 @@ public class Player implements Comparable<Player> {
 	//
 	// Notes:
 	//
-	private void setFame(int newFame) {
+	public void setFame(int newFame) {
 		fame = newFame;
 	}
 

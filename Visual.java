@@ -210,6 +210,7 @@ public class Visual extends JFrame{
 		log.setLineWrap(true);
 		log.setBorder(new EmptyBorder(new Insets(3,3,3,3)));
 		bPane.add(log, new Integer(2));
+
 	}
 	
 	public Visual(int number) {
@@ -265,6 +266,10 @@ public class Visual extends JFrame{
 		
 	}
 	
+	public void setLog(String text) {
+		log.setText(text);
+	}
+	
 	
 	public void discardScene() {
 		
@@ -285,23 +290,26 @@ public class Visual extends JFrame{
 	public void updateStats(Player player, int num) {
 		player_icon = new ImageIcon("images/dice/"+player.getFileName()); //shows player's icon
 		stats_icon.setIcon(player_icon);
-		
+		/*
+		int[] roledims = new int[4];
 		if (player.isInRole()) {
 			player_tokens[num].setVisible(true);
-			int[] roledims = player.getRole().getDims();
+			roledims = player.getRole().getDims();
 		}
 		player_tokens[num].setIcon(player_icon);
 		int playerx;
 		int playery;
+		
 		if (player.getRole().isOnCard()) {
 			playery = roledims[0];
 			playerx = roledims[1];
 		} else {
 			playerx=0;
+			playery=0; //??? need to look over this code
 		}
 		
 		player_tokens[num].setBounds(playerx,playery,40,40); // set the icon to correct bounds using player's attributes
-
+		*/
 		stats_player.setText("Current Player: " + player.getName());
 		stats_location.setText("Location: " + player.getLocation().getName());
 		if(player.isInRole()) {

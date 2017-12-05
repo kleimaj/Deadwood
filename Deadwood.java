@@ -142,6 +142,8 @@ public class Deadwood {
 					
 					board_view.updateStats(currentPlayer, index);
 					
+					board_view.setLog(currentPlayer.getName()+"'s turn!"+ '\n'+ "Select what you want to do!");
+					
 					boolean[] actions = currentPlayer.allActions();
 					
 					board_view.updateButtons(actions);
@@ -212,13 +214,15 @@ public class Deadwood {
 							//currentPlayer.Move(locations);//effect hasMoved = ...
 							board_view.showExtras(currentPlayer.getLocation().getNeighbors());
 							boardListener = new BoardMouseListener();
+							board_view.setLog("Select where you'd like to Move!");
 							String subAction = boardListener.getCommand();
 							Location newLocation = game.getLocation(subAction);
 							currentPlayer.setLocation(newLocation); //logically changes player's location
 							board_view.updateStats(currentPlayer, index); //doesn't work right now
 							
-							if (currentPlayer.getLocation().getName().equals("Office")) { //if the player moves to casting office they can upgrade
+							/*if (currentPlayer.getLocation().getName().equals("Office")) { //if the player moves to casting office they can upgrade
 								System.out.println("Would you like to Upgrade? (y/n)");
+								board_view.setLog("Would you like to Upgrade?");
 								//String reply = console.next();
 								String[] reply = {"Yes","No"};
 								board_view.showExtras(reply);
@@ -228,7 +232,7 @@ public class Deadwood {
 									currentPlayer.Upgrade();
 								}
 								break;
-							}
+							}*/
 							if (currentPlayer.getLocation().isLot() && currentPlayer.getLocation().isWrappedUp() == false) {
 								//need to get all available roles
 								ArrayList<Role> roles = currentPlayer.getLocation().getAllLotRoles(currentPlayer.getRank());
@@ -236,6 +240,7 @@ public class Deadwood {
 									break;
 								}
 								System.out.println("Would you like to Take a Role? (y/n)");
+								board_view.setLog("Would you like to Take a Role?");
 								//String reply = console.next();
 								String[] reply = {"Yes","No"};
 								board_view.showExtras(reply);
@@ -250,6 +255,7 @@ public class Deadwood {
 									}
 									board_view.showExtras(allRoles);
 									boardListener = new BoardMouseListener();
+									board_view.setLog("Which Role would you like to take?");
 									subAction = boardListener.getCommand();
 									Role chosenRole = null;
 									for (int j = 0; j < roles.size(); j++) {
@@ -266,22 +272,233 @@ public class Deadwood {
 							}
 							break; //end of move break
 						}
-						if (action.equals("upgrade")) {
-							currentPlayer.Upgrade();//effect endTurn = ...    //can player upgrade then move? if yes, can they take a role after?
-							//break;
+						if (action.equals("Upgrade")) {
+							//currentPlayer.Upgrade();//effect endTurn = ...    //can player upgrade then move? if yes, can they take a role after?
+							int playerRank = currentPlayer.getRank();
+							int[] moneyUp = {4,10,18,28,40};
+							int[] fameUp = {5,10,15,20,25};
+							board_view.setLog("Select the Rank you'd like to Upgrade to!");
+							board_view.showExtras(currentPlayer.getAvailableRanks()); //displays available ranks in extra buttons
+							
+							boardListener = new BoardMouseListener();
+							String chosenRank = boardListener.getCommand();
+							
+							boolean moneyAndFame = false;
+							int currency = currentPlayer.getCurrency();
+							int playerFame = currentPlayer.getFame();
+							switch(chosenRank) {
+								case "2":
+									if (currency >= 4 && playerFame >= 5) { //money and fame
+										moneyAndFame = true;
+										break;
+									}
+									else if (currency >= 4) { //just money
+										currentPlayer.setCurrency(currency - 4);
+										currentPlayer.setRank(2);
+										break;
+									}
+									else { //just fame
+										currentPlayer.setFame(playerFame - 5);
+										currentPlayer.setRank(2);
+										break;
+									}
+								case "3":
+									if (currency >= 10 && playerFame >= 10) { //money and fame
+										moneyAndFame = true;
+										break;
+									}
+									else if (currency >= 10) { //just money
+										currentPlayer.setCurrency(currency - 10);
+										currentPlayer.setRank(3);
+										break;
+									}
+									else { //just fame
+										currentPlayer.setFame(playerFame - 10);
+										currentPlayer.setRank(3);
+										break;
+									}
+								case "4":
+									if (currency >= 18 && playerFame >= 15) { //money and fame
+										moneyAndFame = true;
+										break;
+									}
+									else if (currency >= 18) { //just money
+										currentPlayer.setCurrency(currency - 18);
+										currentPlayer.setRank(4);
+										break;
+									}
+									else { //just fame
+										currentPlayer.setFame(playerFame - 15);
+										currentPlayer.setRank(4);
+										break;
+									}
+								case "5":
+									if (currency >= 28 && playerFame >= 20) { //money and fame
+										moneyAndFame = true;
+										break;
+									}
+									else if (currency >= 28) { //just money
+										currentPlayer.setCurrency(currency - 28);
+										currentPlayer.setRank(5);
+										break;
+									}
+									else { //just fame
+										currentPlayer.setFame(playerFame - 20);
+										currentPlayer.setRank(5);
+										break;
+									}
+								case "6":
+									if (currency >= 40 && playerFame >= 25) { //money and fame
+										moneyAndFame = true;
+										break;
+									}
+									else if (currency >= 40) { //just money
+										currentPlayer.setCurrency(currency - 40);
+										currentPlayer.setRank(6);
+										break;
+									}
+									else { //just fame
+										currentPlayer.setFame(playerFame - 25);
+										currentPlayer.setRank(6);
+										break;
+									}
+							}
+							if (moneyAndFame == true) {
+								String[] extraActions = {"Money", "Fame"};
+								board_view.setLog("Select a payment option for Upgrading!");
+								boardListener = new BoardMouseListener();
+								String method = boardListener.getCommand();
+								
+								switch(chosenRank) {
+									case "2":
+										if (method.equals("Money")) {
+											currentPlayer.setCurrency(currency - 4);
+											currentPlayer.setRank(2);
+											break;
+										}
+										else {
+											currentPlayer.setFame(playerFame - 5);
+											currentPlayer.setRank(2);
+											break;
+										}
+									case "3":
+										if (method.equals("Money")) {
+											currentPlayer.setCurrency(currency - 10);
+											currentPlayer.setRank(3);
+											break;
+										}
+										else {
+											currentPlayer.setFame(playerFame - 10);
+											currentPlayer.setRank(3);
+											break;
+										}
+									case "4":
+										if (method.equals("Money")) {
+											currentPlayer.setCurrency(currency - 18);
+											currentPlayer.setRank(4);
+											break;
+										}
+										else {
+											currentPlayer.setFame(playerFame - 15);
+											currentPlayer.setRank(4);
+											break;
+										}
+									case "5":
+										if (method.equals("Money")) {
+											currentPlayer.setCurrency(currency - 28);
+											currentPlayer.setRank(5);
+											break;
+										}
+										else {
+											currentPlayer.setFame(playerFame - 20);
+											currentPlayer.setRank(5);
+											break;
+										}
+									case "6":
+										if (method.equals("Money")) {
+											currentPlayer.setCurrency(currency - 40);
+											currentPlayer.setRank(6);
+											break;
+										}
+										else {
+											currentPlayer.setFame(playerFame - 25);
+											currentPlayer.setRank(6);
+											break;
+										}
+								}
+							}
+
+							break;
 						}
-						if (action.equals("act")) {
+						if (action.equals("Act")) {   //random num dice roll, 
 							currentPlayer.Act();//effect endTurn = ...
 							if (currentPlayer.getLocation().getShotsTaken() == currentPlayer.getLocation().getShotsMax()) {
 								game.WrapScene(currentPlayer.getLocation());
 							}
 							break;
 						}
-						if (action.equals("rehearse")) {
-							currentPlayer.Rehearse();//effect endTurn = ...
+						if (action.equals("Rehearse")) {
+							//currentPlayer.Rehearse();//effect endTurn = ...
+							int rehearsePoints = currentPlayer.getRehearsePoints();
+							if (rehearsePoints < currentPlayer.getLocation().getScene().budget){
+								currentPlayer.setRehearsePoints(rehearsePoints+1);
+								System.out.println(currentPlayer.getName()+" now has "+rehearsePoints+" Rehearse Points");
+								board_view.setLog(currentPlayer.getName()+" now has "+rehearsePoints+" Rehearse Points");
+
+							} else {
+								System.out.println("Unable to Rehearse anymore!"); //should never happen
+							}
 							break;
 						}
-						if (action.equals("take role")) {
+						if (action.equals("Take Role")) {
+							ArrayList<Role> roles = currentPlayer.getLocation().getAllLotRoles(currentPlayer.getRank());
+							String[] allRoles = new String[roles.size()];
+							for (int j = 0; j < roles.size(); j++) {
+								allRoles[j] = roles.get(j).getName();
+							}
+							board_view.showExtras(allRoles);
+							boardListener = new BoardMouseListener();
+							board_view.setLog("Which Role would you like to take?");
+							String subAction = boardListener.getCommand();
+							Role chosenRole = null;
+							for (int j = 0; j < roles.size(); j++) {
+								if (subAction.equals(roles.get(j).getName())) {
+									chosenRole = roles.get(j);
+								}
+							}
+							currentPlayer.setRole(chosenRole);
+							board_view.updateStats(currentPlayer, index);
+							
+							//need to ask if they want to Act or Rehearse?
+							board_view.setLog("Would you like to Act or Rehearse?"+'\n'+"Select Act, Rehearse, or Neither");
+							boolean[] setButtons = {false, false, true, true, false};
+							String[] neither = {"Neither"};
+							board_view.updateButtons(setButtons);
+							board_view.showExtras(neither);
+							boardListener = new BoardMouseListener();
+							subAction = boardListener.getCommand();
+							//need to figure out input
+							
+							if (subAction.equals("Act")) {
+								break;
+							}
+							else if (subAction.equals("Rehearse")) {
+								int rehearsePoints = currentPlayer.getRehearsePoints();
+								if (rehearsePoints < currentPlayer.getLocation().getScene().budget){
+									currentPlayer.setRehearsePoints(rehearsePoints+1);
+									System.out.println(currentPlayer.getName()+" now has "+rehearsePoints+" Rehearse Points");
+									board_view.setLog(currentPlayer.getName()+" now has "+rehearsePoints+" Rehearse Points");
+
+								} else {
+									System.out.println("Unable to Rehearse anymore!"); //should never happen
+								}
+								break;
+							}
+							else {
+								break;
+							}
+							
+							/*
 							currentPlayer.TakeRole();
 							if (currentPlayer.isInRole() == true) {
 								System.out.println("Would you like to Act (1) or Rehearse? (2) ");
@@ -298,7 +515,7 @@ public class Deadwood {
 								else {
 									break;
 								}
-							}
+							}*/
 						}
 					}
 					//End Loop 1
