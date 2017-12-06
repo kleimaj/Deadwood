@@ -29,6 +29,7 @@ public class Deadwood {
 		mainMenu.setVisible(true);
 		MenuMouseListener listener = new MenuMouseListener();
 		String command = listener.getCommand();
+		mainMenu.setVisible(false);
 		int numPlayers = Integer.parseInt(command);
 
 
@@ -333,6 +334,7 @@ public class Deadwood {
 							}
 							if (moneyAndFame == true) {
 								String[] extraActions = {"Money", "Fame"};
+								board_view.showExtras(extraActions);
 								board_view.setLog("Select a payment option for Upgrading!");
 								boardListener = new BoardMouseListener();
 								String method = boardListener.getCommand();
