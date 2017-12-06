@@ -24,7 +24,7 @@ public class Deadwood {
 		File boardFile = new File(args[1]);
 		Deck deck = getDeck(cardsFile);
 		ArrayList<Location> locations = getLocations(boardFile);
-		
+
 		Visual mainMenu = new Visual(0);
 		mainMenu.setVisible(true);
 		MenuMouseListener listener = new MenuMouseListener();
@@ -35,9 +35,9 @@ public class Deadwood {
 
 		Visual board_view = new Visual();
 		board_view.setVisible(true);
-	
+
 		// Assign scenes to locations
-		
+
 		Location[] allLocations = new Location[locations.size()];
 		for (int i = 0; i < locations.size(); i++) {
 			allLocations[i] = locations.get(i);
@@ -49,35 +49,35 @@ public class Deadwood {
 		String name;
 		int rank = 1;
 		int fame = 0;
-		
+
 		switch(numPlayers) {
 		case 2: //play 3 days
 			numDays = 3;
 			break;
-		case 3: 
+		case 3:
 			numDays = 3;
 			break; //play 3 days
-		
-		case 5: 
+
+		case 5:
 			fame = 2;
 			break; //start with 2 credits
-		
-		case 6: 
+
+		case 6:
 			fame = 4;
 			break; //start with 4 credits
-		
-		case 7: 
+
+		case 7:
 			rank = 2;
 			break; //start with rank 2
-		
-		case 8: 
+
+		case 8:
 			rank = 2;// start with rank 2
 			break;
-			
+
 		}
 		name = null;
 		String playerFile = null;
-		for (int i = 1; i <= numPlayers; i++) {	
+		for (int i = 1; i <= numPlayers; i++) {
 			switch(i) {
 				case 1:
 					name = "Blue";
@@ -85,49 +85,49 @@ public class Deadwood {
 					if (numPlayers >= 7) {
 						playerFile = "b2.png";
 					}
-					break;		
+					break;
 				case 2:
 					name = "Cyan";
 					playerFile = "c1.png";
 					if (numPlayers >= 7) {
 						playerFile = "c2.png";
 					}
-					break;				
+					break;
 				case 3:
 					name = "Green";
 					playerFile = "g1.png";
 					if (numPlayers >= 7) {
 						playerFile = "g2.png";
 					}
-					break;	
+					break;
 				case 4:
 					name = "Orange";
 					playerFile = "o1.png";
 					if (numPlayers >= 7) {
 						playerFile = "o2.png";
 					}
-					break;		
+					break;
 				case 5:
 					name = "Pink";
 					playerFile = "p1.png";
 					if (numPlayers >= 7) {
 						playerFile = "p2.png";
 					}
-					break;			
+					break;
 				case 6:
 					name = "Red";
 					playerFile = "r1.png";
 					if (numPlayers >= 7) {
 						playerFile = "r2.png";
 					}
-					break;			
+					break;
 				case 7:
 					name = "Purple";
 					playerFile = "v1.png";
 					if (numPlayers >= 7) {
 						playerFile = "v2.png";
 					}
-					break;			
+					break;
 				case 8:
 					name = "Yellow";
 					playerFile = "y1.png";
@@ -135,20 +135,20 @@ public class Deadwood {
 						playerFile = "y2.png";
 					}
 					break;
-			}	
+			}
 			game.addPlayer(new Player(name, trailer,rank,fame,playerFile));
 		}
-		
+
 		board_view.createTokens(numPlayers);
 		int layer = 2;
 		while(true) { //want to play again loop
-			
+
 			Player[] players = game.getPlayers();
 			// For each day
 			for (int i = 0; i < numDays; i++) {//days
 				//scene cards
 				for (int j = 0; j < locations.size(); j++) {
-					if(locations.get(j).isLot()) { 
+					if(locations.get(j).isLot()) {
 						Scene currentScene = deck.draw();
 						locations.get(j).setScene(currentScene); //need to pass dimensions from location to visual
 						String filename = currentScene.getFileName();
@@ -166,16 +166,14 @@ public class Deadwood {
 						index = 0;
 					}
 					Player currentPlayer = players[index];
-					
+
 					board_view.updateStats(currentPlayer, index);
-					
+
 					board_view.setLog(currentPlayer.getName()+"'s turn!"+ '\n'+ "Select what you want to do!");
-					
+
 					boolean[] actions = currentPlayer.allActions();
-					
+
 					board_view.updateButtons(actions);
-					
-					//System.out.println(currentPlayer.getName()+"'s turn!");
 
 					System.out.println("Player: "+currentPlayer.getName()+" ($"+currentPlayer.getCurrency()+", "+currentPlayer.getFame()+" Fame)");
 				/*	if (currentPlayer.getRole() != null) {
@@ -189,54 +187,11 @@ public class Deadwood {
 						System.out.println(currentPlayer.name+" is currently in the "+currentPlayer.getLocation().getName());
 					}*/
 
-					//Start loop 1
 					while(true) {
-						//Visual.setButtons(player)
 						BoardMouseListener boardListener = new BoardMouseListener();
 						String action = boardListener.getCommand(); //action is name of action (button they pressed)
-						//System.out.println("Select what you want to do: ");
-						//ArrayList<String> availableActions = new ArrayList<String>();
-						//int count = 1;
-						//int theNum = 0;
-						//System.out.println("Select (the number) what you want to do: ");
-						/*while(true) {
-							if (currentPlayer.isInRole()==false) {//+condition hasMoved == false && endTurn == false
-								availableActions.add("move");
-								System.out.println("Move ("+count+")");
-								count++;
-							}
-							if (currentPlayer.isInCastingOffice()) {
-								availableActions.add("upgrade");
-								System.out.println("Upgrade ("+count+")");
-								count++;
-							}
-							if (currentPlayer.isInRole()) {//+condition hasMoved == false
-								availableActions.add("act");
-								System.out.println("Act ("+count+")");
-								count++;
-							}
-							if (currentPlayer.isInRole() && currentPlayer.getRehearsePoints()+1 < currentPlayer.getLocation().getScene().getBudget()) {//+ condition hasMoved == false
-								availableActions.add("rehearse");
-								System.out.println("Rehearse ("+count+")");
-								count++;
-							}
-							if (currentPlayer.isInRole() == false && currentPlayer.getLocation().isWrappedUp() == false && currentPlayer.getLocation().isLot()==true) {
-								availableActions.add("take role");
-								System.out.println("Take Role ("+count+")");
-								count++;
-							}
-							//theNum = console.nextInt();
-							theNum=0;
 
-							if (theNum <= 0 || theNum > count) {
-								System.out.println("Invalid Action, please try again.");
-							}
-							else {
-								break;
-							}
-						}*/
-						//String action = availableActions.get(theNum-1);
-						
+
 						if (action.equals("Move")) {
 							//currentPlayer.Move(locations);//effect hasMoved = ...
 							board_view.showExtras(currentPlayer.getLocation().getNeighbors());
@@ -246,20 +201,7 @@ public class Deadwood {
 							Location newLocation = game.getLocation(subAction);
 							currentPlayer.setLocation(newLocation); //logically changes player's location
 							board_view.updateStats(currentPlayer, index); //doesn't work right now
-							
-							/*if (currentPlayer.getLocation().getName().equals("Office")) { //if the player moves to casting office they can upgrade
-								System.out.println("Would you like to Upgrade? (y/n)");
-								board_view.setLog("Would you like to Upgrade?");
-								//String reply = console.next();
-								String[] reply = {"Yes","No"};
-								board_view.showExtras(reply);
-								boardListener = new BoardMouseListener();
-								subAction = boardListener.getCommand();
-								if (subAction.equals("Yes")) {
-									currentPlayer.Upgrade();
-								}
-								break;
-							}*/
+
 							if (currentPlayer.getLocation().isLot() && currentPlayer.getLocation().isWrappedUp() == false) {
 								//need to get all available roles
 								ArrayList<Role> roles = currentPlayer.getLocation().getAllLotRoles(currentPlayer.getRank());
@@ -268,13 +210,13 @@ public class Deadwood {
 								}
 								System.out.println("Would you like to Take a Role? (y/n)");
 								board_view.setLog("Would you like to Take a Role?");
-								//String reply = console.next();
+
 								String[] reply = {"Yes","No"};
 								board_view.showExtras(reply);
 								boardListener = new BoardMouseListener();
 								subAction = boardListener.getCommand();
 								if (subAction.equals("Yes")) {
-									
+
 									//currentPlayer.TakeRole();	//can a player move, take a role, and act all in one move? right now no
 									String[] allRoles = new String[roles.size()];
 									for (int j = 0; j < roles.size(); j++) {
@@ -292,7 +234,6 @@ public class Deadwood {
 									}
 									currentPlayer.setRole(chosenRole);
 									board_view.updateStats(currentPlayer, index);
-									//chosenRole.roleTaken();
 									break; //after they take role
 								}
 								break; //if they dont want to take role
@@ -306,10 +247,10 @@ public class Deadwood {
 							int[] fameUp = {5,10,15,20,25};
 							board_view.setLog("Select the Rank you'd like to Upgrade to!");
 							board_view.showExtras(currentPlayer.getAvailableRanks()); //displays available ranks in extra buttons
-							
+
 							boardListener = new BoardMouseListener();
 							String chosenRank = boardListener.getCommand();
-							
+
 							boolean moneyAndFame = false;
 							int currency = currentPlayer.getCurrency();
 							int playerFame = currentPlayer.getFame();
@@ -395,7 +336,7 @@ public class Deadwood {
 								board_view.setLog("Select a payment option for Upgrading!");
 								boardListener = new BoardMouseListener();
 								String method = boardListener.getCommand();
-								
+
 								switch(chosenRank) {
 									case "2":
 										if (method.equals("Money")) {
@@ -457,20 +398,26 @@ public class Deadwood {
 
 							break;
 						}
-						if (action.equals("Act")) {   //random num dice roll, 
+
+						if (action.equals("Act")) {
+
 							//currentPlayer.Act();//effect endTurn = ...
 							int diceRoll = 1+(int)(6*Math.random());
 							int budget = currentPlayer.getLocation().getScene().getBudget();
 							int overAllRoll = diceRoll+currentPlayer.getRehearsePoints();
+
 							board_view.setLog("In order to succeed, you must roll greater than or equal to "+budget+"!");
-							TimeUnit.MILLISECONDS.sleep(50);
+							TimeUnit.MILLISECONDS.sleep(500);
+							board_view.rollDice(diceRoll);
+						//	TimeUnit.MILLISECONDS.sleep(1000);
 							board_view.setLog("You rolled a "+diceRoll+"!");
+
 							board_view.appendLog('\n'+"Along with your Rehearsal Points: "+currentPlayer.getRehearsePoints());
 							board_view.appendLog('\n'+"Your overall dice roll = "+overAllRoll+'\n');
 							TimeUnit.MILLISECONDS.sleep(2000);
 							Role theRole = currentPlayer.getRole();
 							if (overAllRoll < budget) { //they failed
-								board_view.setLog("Unfortunately, you did not roll at least a "+diceRoll+'\n');
+								board_view.setLog("Unfortunately, you did not roll at least a "+budget+'\n');
 								if (theRole.isOnCard()) {
 									board_view.appendLog("You do not win anything...");
 								}
@@ -496,7 +443,7 @@ public class Deadwood {
 							if (currentPlayer.getLocation().getShotsTaken() == currentPlayer.getLocation().getShotsMax()) {
 								Scene wrapScene = currentPlayer.getLocation().getScene();
 								game.WrapScene(currentPlayer.getLocation());
-								
+
 								for (int j = 0; j < players.length; j++) {
 								board_view.updateStats(players[j], j);
 								}
@@ -536,7 +483,7 @@ public class Deadwood {
 							}
 							currentPlayer.setRole(chosenRole);
 							board_view.updateStats(currentPlayer, index);
-							
+
 							//need to ask if they want to Act or Rehearse?
 							board_view.setLog("Would you like to Act or Rehearse?"+'\n'+"Select Act, Rehearse, or Neither");
 							boolean[] setButtons = {false, false, true, true, false};
@@ -546,7 +493,7 @@ public class Deadwood {
 							boardListener = new BoardMouseListener();
 							subAction = boardListener.getCommand();
 							//need to figure out input
-							
+
 							if (subAction.equals("Act")) {
 								break;
 							}
@@ -565,7 +512,7 @@ public class Deadwood {
 							else {
 								break;
 							}
-							
+
 						}
 					}
 					//End Loop 1
@@ -599,7 +546,7 @@ public class Deadwood {
 
 			//String playAgain = console.next();
 			String playAgain = "";
-			
+
 			if (!playAgain.equals("y")) {
 				break;
 			}
