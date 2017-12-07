@@ -52,12 +52,12 @@ public class Board {
 			if (locations[i].getName().equals("trailer")) { 
 				trailer = locations[i];
 			}
-			if (locations[i].isLot()) { // reset scenes
+			/*if (locations[i].isLot()) { // reset scenes
 				deck.discard(locations[i].getScene()); // discards currentScene in Location
 				locations[i].setScene(deck.draw());// sets a new random scene in Location
 				locations[i].resetShots();
 				locations[i].getScene().unWrap();
-			}
+			}*/
 		}
 
 		// change all player locations to trailer
@@ -67,7 +67,7 @@ public class Board {
 
 		//UpdateDayCount();
 		System.out.println("A new day is dawning...");
-		TimeUnit.SECONDS.sleep(2);
+		//TimeUnit.SECONDS.sleep(2);
 
 	}
 
@@ -85,7 +85,7 @@ public class Board {
 	// Notes:
 	// 		- will call Bonus if anyone is on-card
 	//
-	public void WrapScene(Location givenLocation) throws InterruptedException {
+	public void WrapScene(Location givenLocation,Visual visual) throws InterruptedException {
 
 		// check if any player is onCard
 		Scene theScene = givenLocation.getScene();
@@ -99,7 +99,7 @@ public class Board {
 			}
 		}
 		if (bonus == true) {
-			//Bonus(givenLocation,theScene);
+			Bonus(givenLocation,theScene,visual);
 		}
 
 		// wrap the scene
@@ -116,6 +116,7 @@ public class Board {
 
 		if (isEndDay()==false) {
 		System.out.println("Scene is Over! All Players participating in '"+ theScene.getName()+ "' must Move!");
+		visual.setLog("Scene is Over! All Players participating in '"+ theScene.getName()+ "' must Move!");
 		TimeUnit.SECONDS.sleep(2);
 
 		} else {
@@ -179,9 +180,10 @@ public class Board {
 	// Postconditions:
 	//		- players receive bonus payout
 	//
-	private void Bonus(Location givenLocation,Scene theScene ) throws InterruptedException {
+	private void Bonus(Location givenLocation,Scene theScene,Visual visual ) throws InterruptedException {
 
 		System.out.println("Bonus Time!");
+		visual.setLog("Bonus Time!"+'\n');
 		TimeUnit.SECONDS.sleep(1);
 
 		// oncard player payout
@@ -217,6 +219,8 @@ public class Board {
 		for (int i = diceRolls.length -1; i >=0; i--) {
 			if(onActors[count] != null) {
 				onActors[count].setCurrency(onActors[count].getCurrency()+diceRolls[i]);
+				visual.appendLog(onActors[count].getName()+" earns a bonus of $"+diceRolls[i]+'\n');
+				TimeUnit.SECONDS.sleep(1);
 			}
 
 			count--;
@@ -226,7 +230,8 @@ public class Board {
 		}
 		for (int i = 0; i < onActors.length; i++) {
 			if (onActors[i] != null) {
-				System.out.println(onActors[i].getName()+" now has currency of "+onActors[i].getCurrency());
+				System.out.println(onActors[i].getName()+" now has currency of $"+onActors[i].getCurrency());
+				visual.appendLog(onActors[i].getName()+" now has currency of $"+onActors[i].getCurrency()+'\n');
 				TimeUnit.SECONDS.sleep(1);
 
 			}
@@ -239,14 +244,18 @@ public class Board {
 		for (int i = 0; i < offCard.length; i++) {
 			for (int j = 0; j < players.size(); j++) {
 				// if one of these roles is equal to a player's, pay them
-				if (players.get(j).getRole().getName().equals(offCard[i].getName())) {
-					int payout = offCard[i].getRank();
-					System.out.println(players.get(j).getName()+" earns a bonus of $"+payout);
-					TimeUnit.SECONDS.sleep(1);
-					players.get(j).setCurrency(payout+players.get(j).getCurrency());
-					System.out.println(players.get(j).getName()+" now has a currency of $"+players.get(j).getCurrency());
-					TimeUnit.SECONDS.sleep(1);
-
+				if (players.get(j).isInRole()) {
+					if (players.get(j).getRole().getName().equals(offCard[i].getName())) {
+						int payout = offCard[i].getRank();
+						System.out.println(players.get(j).getName()+" earns a bonus of $"+payout);
+						visual.appendLog(players.get(j).getName()+" earns a bonus of $"+payout+'\n');
+						TimeUnit.SECONDS.sleep(1);
+						players.get(j).setCurrency(payout+players.get(j).getCurrency());
+						visual.appendLog(players.get(j).getName()+" now has a currency of $"+players.get(j).getCurrency()+'\n');
+						System.out.println(players.get(j).getName()+" now has a currency of $"+players.get(j).getCurrency());
+						TimeUnit.SECONDS.sleep(1);
+	
+					}
 				}
 			}
 		}

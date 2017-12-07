@@ -164,7 +164,7 @@ public class Player implements Comparable<Player> {
 			actions[0] = false; //cant move
 			actions[1] = false; //cant take a role
 			actions[2] = true; //able to act
-			if (this.rehearsePoints < this.currentLocation.getScene().getBudget()) {
+			if (this.rehearsePoints < this.currentLocation.getScene().getBudget()-1) {
 				actions[3] = true; //able to rehearse																	
 			}
 			else {
@@ -718,6 +718,22 @@ public class Player implements Comparable<Player> {
 		System.out.println(name+" is now in "+newLocation.getName());
 		TimeUnit.SECONDS.sleep(1);
 
+	}
+	public void resetStats(int numPlayers) {
+		this.currency = 0;
+		this.fame = 0;
+		this.setRank(1);
+		
+		if (numPlayers == 5) {
+			this.fame = 2;
+		}
+		else if(numPlayers == 6) {
+			this.fame = 4;
+		}
+		else if(numPlayers == 7 || numPlayers == 8) {
+			this.setRank(2);
+			
+		}
 	}
 
 	// SetLocation

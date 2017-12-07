@@ -183,7 +183,7 @@ public class Visual extends JFrame{
 		bUpgrade.setEnabled(false);
 		buttons[4] = bUpgrade;
 
-		// Extra Buttons (for move and take role)
+		// Extra Buttons (for move and take role, upgrade)
 		extraButtons = new JButton[7];
 		int yCord = 50;
 		for (int i = 1; i <= 7; i++) {
@@ -339,7 +339,6 @@ public class Visual extends JFrame{
 	public void placeShotTokens() {
 
 	}
-
 
 	// updateStats
 	// Preconditions:

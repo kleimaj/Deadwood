@@ -143,23 +143,29 @@ public class Deadwood {
 		board_view.createTokens(numPlayers);
 		int layer = 2;
 		while(true) { //want to play again loop
-
 			Player[] players = game.getPlayers();
+			for (int i = 0; i < players.length; i++) {
+				players[i].resetStats(numPlayers);
+			}
 			// For each day
 			for (int i = 0; i < numDays; i++) {//days
 				//scene cards
 				for (int j = 0; j < locations.size(); j++) {
 					if(locations.get(j).isLot()) {
 						Scene currentScene = deck.draw();
+						deck.discard(locations.get(j).getScene());
 						locations.get(j).setScene(currentScene); //need to pass dimensions from location to visual
+						locations.get(j).resetShots();
+						locations.get(j).getScene().unWrap();
 						String filename = currentScene.getFileName();
 						int[] dims = locations.get(j).getDims();
 						// display cards on locations
 						board_view.showScene(filename, dims, layer);
 						TimeUnit.MILLISECONDS.sleep(50);
 					}
-					layer++;
+					//layer++;
 				}
+				layer++;
 
 				int index = 0;
 				while(game.isEndDay()==false) {
@@ -196,6 +202,7 @@ public class Deadwood {
 						if (action.equals("Move")) {
 							//currentPlayer.Move(locations);//effect hasMoved = ...
 							board_view.showExtras(currentPlayer.getLocation().getNeighbors());
+							board_view.updateButtons(new boolean[] {false,false,false,false,false}); //removes move button
 							boardListener = new BoardMouseListener();
 							board_view.setLog("Select where you'd like to Move!");
 							String subAction = boardListener.getCommand();
@@ -225,7 +232,7 @@ public class Deadwood {
 									}
 									board_view.showExtras(allRoles);
 									boardListener = new BoardMouseListener();
-									board_view.setLog("Which Role would you like to take?");
+									board_view.setLog("Which Role would you like to take?");TimeUnit.SECONDS.sleep(1);
 									subAction = boardListener.getCommand();
 									Role chosenRole = null;
 									for (int j = 0; j < roles.size(); j++) {
@@ -243,6 +250,7 @@ public class Deadwood {
 						}
 						if (action.equals("Upgrade")) {
 							//currentPlayer.Upgrade();//effect endTurn = ...    //can player upgrade then move? if yes, can they take a role after?
+							board_view.updateButtons(new boolean[] {false,false,false,false,false});
 							int playerRank = currentPlayer.getRank();
 							int[] moneyUp = {4,10,18,28,40};
 							int[] fameUp = {5,10,15,20,25};
@@ -404,6 +412,7 @@ public class Deadwood {
 						if (action.equals("Act")) {
 
 							//currentPlayer.Act();//effect endTurn = ...
+							board_view.updateButtons(new boolean[] {false,false,false,false,false});
 							int diceRoll = 1+(int)(6*Math.random());
 							int budget = currentPlayer.getLocation().getScene().getBudget();
 							int overAllRoll = diceRoll+currentPlayer.getRehearsePoints();
@@ -444,8 +453,9 @@ public class Deadwood {
 							TimeUnit.MILLISECONDS.sleep(2000);
 							if (currentPlayer.getLocation().getShotsTaken() == currentPlayer.getLocation().getShotsMax()) {
 								Scene wrapScene = currentPlayer.getLocation().getScene();
-								game.WrapScene(currentPlayer.getLocation());
-
+								game.WrapScene(currentPlayer.getLocation(),board_view);
+								//check for bonus
+								
 								for (int j = 0; j < players.length; j++) {
 								board_view.updateStats(players[j], j);
 								}
@@ -456,6 +466,7 @@ public class Deadwood {
 						}
 						if (action.equals("Rehearse")) {
 							//currentPlayer.Rehearse();//effect endTurn = ...
+							board_view.updateButtons(new boolean[] {false,false,false,false,false});
 							int rehearsePoints = currentPlayer.getRehearsePoints();
 							if (rehearsePoints < currentPlayer.getLocation().getScene().budget){
 								currentPlayer.setRehearsePoints(rehearsePoints+1);
@@ -468,6 +479,7 @@ public class Deadwood {
 							break;
 						}
 						if (action.equals("Take Role")) {
+							board_view.updateButtons(new boolean[] {false,false,false,false,false});
 							ArrayList<Role> roles = currentPlayer.getLocation().getAllLotRoles(currentPlayer.getRank());
 							String[] allRoles = new String[roles.size()];
 							for (int j = 0; j < roles.size(); j++) {
@@ -505,6 +517,7 @@ public class Deadwood {
 									currentPlayer.setRehearsePoints(rehearsePoints+1);
 									System.out.println(currentPlayer.getName()+" now has "+rehearsePoints+" Rehearse Points");
 									board_view.setLog(currentPlayer.getName()+" now has "+rehearsePoints+" Rehearse Points");
+									TimeUnit.MILLISECONDS.sleep(1000);
 
 								} else {
 									System.out.println("Unable to Rehearse anymore!"); //should never happen
@@ -523,7 +536,12 @@ public class Deadwood {
 					index++; //end of player's turn
 
 				}
+				board_view.setLog("The Day is Over"+'\n');
+				TimeUnit.MILLISECONDS.sleep(100);
+				
 				if (i != numDays-1) { //doesn't cycle if last day
+					board_view.appendLog("A New Day is Dawning...");
+					TimeUnit.MILLISECONDS.sleep(100);
 				game.CycleDay();
 				//need to reset scenes, remove all shot tokens
 				board_view.resetScenes();
@@ -531,29 +549,42 @@ public class Deadwood {
 			}
 
 			System.out.println("The game is over here are the results: ");
-			board_view.setLog("The game is over, here are the results: ");
+			board_view.setLog("The game is over, here are the results: "+'\n');
+			TimeUnit.MILLISECONDS.sleep(100);
 
 			ArrayList<Player> endGame = game.TallyScore();
 			int count = 1;
 			for(int i=0; i < endGame.size(); i++) {
-				board_view.appendLog("#"+count+endGame.get(i).getName()+" Score: "+endGame.get(i).getScore());
+				board_view.appendLog("#"+count+endGame.get(i).getName()+" Score: "+endGame.get(i).getScore()+'\n');
 				count++;
+				TimeUnit.MILLISECONDS.sleep(50);
 			}
-
+			TimeUnit.MILLISECONDS.sleep(100);
 			System.out.println("Congratulations, "+endGame.get(0).getName()+"!!");
-			board_view.appendLog('\n'+'\n'+"Congratulations, +"+endGame.get(0).getName()+"!!");
+			board_view.appendLog("\n");
+			board_view.appendLog("Congratulations, "+endGame.get(0).getName()+"!!");
+			TimeUnit.MILLISECONDS.sleep(50);
 			board_view.appendLog('\n'+"Would you like to play again?");
+			
 
 			System.out.println("Would you like to play again?)"); //need to make loop
 
 			//String playAgain = console.next();
-			String playAgain = "";
+			String[] playAgain = {"Yes","No"};
+			board_view.showExtras(playAgain);
+			BoardMouseListener boardListener = new BoardMouseListener();
+			String answer = boardListener.getCommand();
 
-			if (!playAgain.equals("y")) {
+			if (answer.equals("No")) {
+				board_view.setLog("Thanks for playing Deadwood!");
+				TimeUnit.MILLISECONDS.sleep(2000);
 				break;
 			}
+			String[] reset = new String[0];
+			board_view.showExtras(reset);
 
 		} // end while loop here
+		board_view.dispose();
 	}
 
 
