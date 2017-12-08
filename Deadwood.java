@@ -20,8 +20,8 @@ public class Deadwood {
 	public static void main(String[] args) throws InterruptedException {
 		// TODO Auto-generated method stub
 
-		File cardsFile = new File(args[0]);
-		File boardFile = new File(args[1]);
+		File cardsFile = new File("cards.xml");
+		File boardFile = new File("board.xml");
 		Deck deck = getDeck(cardsFile);
 		ArrayList<Location> locations = getLocations(boardFile);
 
@@ -42,6 +42,9 @@ public class Deadwood {
 		Location[] allLocations = new Location[locations.size()];
 		for (int i = 0; i < locations.size(); i++) {
 			allLocations[i] = locations.get(i);
+			if (locations.get(i).isLot()) {
+				board_view.placeShotTokens(locations.get(i));
+			}
 		}
 
 		Board game = new Board(allLocations, deck);
@@ -149,6 +152,9 @@ public class Deadwood {
 			}
 			// For each day
 			for (int i = 0; i < numDays; i++) {//days
+				board_view.incrementDay(i+1);
+				//shotMarkers
+				board_view.resetShotTokens();
 				//scene cards
 				for (int j = 0; j < locations.size(); j++) {
 					if(locations.get(j).isLot()) {
@@ -232,7 +238,7 @@ public class Deadwood {
 									}
 									board_view.showExtras(allRoles);
 									boardListener = new BoardMouseListener();
-									board_view.setLog("Which Role would you like to take?");TimeUnit.SECONDS.sleep(1);
+									board_view.setLog("Which Role would you like to take?");
 									subAction = boardListener.getCommand();
 									Role chosenRole = null;
 									for (int j = 0; j < roles.size(); j++) {
@@ -448,6 +454,9 @@ public class Deadwood {
 									currentPlayer.setCurrency(currentPlayer.getCurrency()+1);
 								}
 								currentPlayer.getLocation().addShot();
+								board_view.addShot(currentPlayer.getLocation());
+								int shots = currentPlayer.getLocation().getShotsTaken();
+								//int currentDims = currentPlayer.getLocation().getTa
 								//here need to add shot token in visual
 							}
 							TimeUnit.MILLISECONDS.sleep(2000);
@@ -765,7 +774,6 @@ public class Deadwood {
 									}
 									NodeList takeList2 = takeNode.getChildNodes();
 									for (int t = 0; t < takeList2.getLength(); t++) {
-									takeDims = new int[4][takeNum];
 				    				Node takeNode2 = takeList2.item(t);
 				    				if (takeNode2.getNodeType() == Node.ELEMENT_NODE) {
 											Element takeElement = (Element) takeNode2;

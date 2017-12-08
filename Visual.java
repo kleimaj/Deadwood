@@ -40,8 +40,11 @@ public class Visual extends JFrame{
 	JLabel stats_dollars;
 	JLabel stats_credits;
 	JLabel stats_icon;
+	JLabel stats_dayCounter;
 	JLabel[] player_tokens;
-	JLabel[] shots;
+	
+	//Shot Tokens
+	JLabel[][] shots = new JLabel[10][3];
 
 	JButton bMove;
 	JButton bTakeRole;
@@ -57,7 +60,7 @@ public class Visual extends JFrame{
 	ImageIcon die4;
 	ImageIcon die5;
 	ImageIcon die6;
-	//ImageIcon die_disabled;
+	
 	ImageIcon player_icon;
 	ImageIcon shot_icon;
 
@@ -119,6 +122,12 @@ public class Visual extends JFrame{
 		stats_icon.setBounds(1510, 640, 40,40);
 		stats_icon.setIcon(player_icon);
 		bPane.add(stats_icon, new Integer(2));
+		
+		stats_dayCounter = new JLabel("Day: ", JLabel.LEFT);
+		stats_dayCounter.setFont(new Font("Arial", Font.BOLD, 14));
+		stats_dayCounter.setBounds(1250, 20, 400, 20);
+		bPane.add(stats_dayCounter, new Integer(2));
+		
 
 		buttons = new JButton[5];
 
@@ -208,7 +217,7 @@ public class Visual extends JFrame{
 		die4 = new ImageIcon("images/Dice/DieFour.png");
 		die5 = new ImageIcon("images/Dice/DieFive.png");
 		die6 = new ImageIcon("images/Dice/DieSix.png");
-		//die_disabled = new ImageIcon("images/Dice/disabled.png");
+		
 		dieLabel = new JLabel();
 		dieLabel.setIcon(die1);
 		dieLabel.setBounds(1250, 420, 85, 85);
@@ -336,8 +345,76 @@ public class Visual extends JFrame{
 	}
 
 
-	public void placeShotTokens() {
-
+	public void placeShotTokens(Location location) { //must be a lot
+		
+		int[][] dims = location.getTakeDims();
+		int row = getLocationRow(location.getName());
+		for (int i = 0; i < location.getShotsMax(); i++) {
+			JLabel takeLabel = new JLabel();
+			takeLabel.setIcon(shot_icon);
+			int shotx = dims[0][i]+10;
+			int shoty = dims[1][i]+10;
+			takeLabel.setBounds(shotx, shoty, 47, 47);
+			bPane.add(takeLabel, new Integer(50));
+			takeLabel.setVisible(false);
+			shots[row][i] = takeLabel;
+			
+		}
+	}
+	
+	public void resetShotTokens() {
+		for (int i = 0; i < shots.length; i++) {
+			for (int j = 0; j < shots[i].length;j++) {
+				if (shots[i][j] != null) {
+					shots[i][j].setVisible(false);
+				}
+			}
+		}
+	}
+	
+	public void addShot(Location location) {
+		int shotNum = location.getShotsTaken();
+		int row = getLocationRow(location.getName());
+		shots[row][shotNum-1].setVisible(true);
+	}
+	
+	public int getLocationRow(String name) {
+		switch(name) {
+			case "Train Station":
+				return 0;
+				
+			case "Secret Hideout":
+				return 1;
+				
+			case "Church":
+				return 2;
+				
+			case "Hotel":
+				return 3;
+				
+			case "Main Street":
+				return 4;
+				
+			case "Jail":
+				return 5;
+				
+			case "General Store":
+				return 6;
+				
+			case "Ranch":
+				return 7;
+				
+			case "Bank":
+				return 8;
+				
+			case "Saloon":
+				return 9;
+				
+		}
+		return 0;
+	}
+	public void incrementDay(int numDay) {
+		stats_dayCounter.setText("Day: "+numDay);
 	}
 
 	// updateStats
@@ -449,7 +526,7 @@ public class Visual extends JFrame{
 					dieLabel.setIcon(die3);
 					break;
 				case 4:
-					dieLabel.setIcon(die5);
+					dieLabel.setIcon(die4);
 					break;
 				case 5:
 					dieLabel.setIcon(die5);
@@ -478,7 +555,7 @@ public class Visual extends JFrame{
 				dieLabel.setIcon(die3);
 				break;
 			case 4:
-				dieLabel.setIcon(die5);
+				dieLabel.setIcon(die4);
 				break;
 			case 5:
 				dieLabel.setIcon(die5);

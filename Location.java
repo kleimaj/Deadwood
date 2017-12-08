@@ -68,6 +68,10 @@ public class Location {
 	public boolean isLot() {
 		return isLot;
 	}
+	
+	public int[][] getTakeDims(){
+		return takeDims;
+	}
 
 	// getShotsTaken
 	// Preconditions:
@@ -157,6 +161,7 @@ public class Location {
 	public Role[] getAllRoles() {
 		return offCard;
 	}
+	
 
 	// getRoles
 	// Preconditions:
